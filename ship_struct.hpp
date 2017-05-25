@@ -22,12 +22,15 @@ class Ship_struct
 {
 private:
 	typedef int Group_type;
-	Group_type Group;
 	Base_block_type Base;
+	Group_type Group;
 	Advanced_block_type Advance;
 public:
-	explicit Ship_struct(Group_type, Base_block_type, Advanced_block_type = not_advance_block);
-	
+	explicit Ship_struct(Base_block_type = empty_block, Group_type = 0, Advanced_block_type = not_advance_block);
+	Group_type Get_group() const;
+	friend Ship_struct Create_block(Base_block_type, Group_type, Advanced_block_type);
 };
+
+Ship_struct Create_block(Base_block_type, Ship_struct::Group_type, Advanced_block_type);
 
 #endif
