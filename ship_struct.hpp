@@ -1,6 +1,10 @@
 #ifndef SHIP_STRUCT__
 #define SHIP_STRUCT__
 
+#include <vector>
+#include <iterator>
+
+
 enum Base_block_type{
 	empty_block = 0,
 	weapon_block = 1,
@@ -18,19 +22,41 @@ enum Advanced_block_type{
 	outside_and_cabin_block = 23
 };
 
-class Ship_struct
+class Group_type;
+
+class Ship_types
 {
-private:
-	typedef int Group_type;
-	Base_block_type Base;
-	Group_type Group;
-	Advanced_block_type Advance;
 public:
-	explicit Ship_struct(Base_block_type = empty_block, Group_type = 0, Advanced_block_type = not_advance_block);
-	Group_type Get_group() const;
-	friend Ship_struct Create_block(Base_block_type, Group_type, Advanced_block_type);
+	virtual ~Ship_types() = 0;
+protected:
+
+	typedef std::vector<Group_type> Groups_type;
+	
 };
 
-Ship_struct Create_block(Base_block_type, Ship_struct::Group_type, Advanced_block_type);
+class Group_type : public Ship_types
+{
+private:
+	typedef int Number_type;
+	Number_type Number;
+	bool Cover = false;
+public:
+	explicit Group_type(int);
+	Number_type Get_number();
+};
+
+class Ship_struct : public Ship_types
+{
+private:
+	Base_block_type Base;
+	Groups_type::iterator Group;
+	Advanced_block_type Advance;
+public:
+	explicit Ship_struct(Base_block_type, Groups_type::iterator, Advanced_block_type);
+	Groups_type::iterator Get_group();
+	friend Ship_struct Create_block(Base_block_type, Groups_type::iterator, Advanced_block_type);
+};
+
+Ship_struct Create_block(Base_block_type, Ship_struct::Groups_type::iterator , Advanced_block_type);
 
 #endif

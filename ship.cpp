@@ -1,11 +1,15 @@
 #include "ship.hpp"
 
 #include<iostream>
-#include<iterator>
 
-Ship::Ship(Block_size_type size)
+Ship::Ship(Block_size_type bsize_, Group_size_type gsize_)
 {
-	Blocks.resize(size);
+	Blocks.resize(bsize_);
+//	Groups.resize(gsize_);
+	for(Group_size_type i = 0; i<gsize_; ++i)
+		{
+			Groups.push_back(Group_type(i));
+		};
 };
 
 void Ship::Debug_print()
@@ -14,14 +18,19 @@ void Ship::Debug_print()
 	{
 		for(int b = 0, size = Blocks[i].size(); b<size; ++b)
 		{
-			if(Blocks[i][b].Get_group()!=0) 
+			
+			//auto a1 = Blocks[i][b].Get_group();
+			
+			
+			if( Blocks[i][b].Get_group()->Get_number() != 0) 
 			{
-				std::cout<<"0"<<Blocks[i][b].Get_group();
+				std::cout<<"0"<<Blocks[i][b].Get_group()->Get_number();
 			}
 			else
 			{
 				std::cout<<"  ";
 			}
+			
 		};
 		std::cout<<std::endl;
 	};
@@ -30,4 +39,11 @@ void Ship::Debug_print()
 void Ship::AddShipStructInLine(Line_number_type Line, Ship_struct Block)
 {
 	Blocks[Line].push_back(Block);
+};
+
+Ship_types::Groups_type::iterator Ship::Return_group(Group_size_type Number)
+{
+	Ship_types::Groups_type::iterator it;
+	it = Groups.begin() + Number;
+	return it;
 };

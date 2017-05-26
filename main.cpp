@@ -18,7 +18,7 @@ int main()
 	Biba_ship.AddShipStructInLine(0, ddr);*/
 	
 	
-	CreateHawkMK1();
+	Ship Ship1=CreateHawkMK1();
 	
 	return 0;
 };
