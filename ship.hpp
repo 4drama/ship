@@ -8,11 +8,11 @@
 
 
 
-class Ship : public Ship_types
+class Ship : private Ship_types
 {
 private:
 	typedef std::vector<std::vector<Ship_struct> > Blocks_type;
-//	typedef std::vector<Group_type> Groups_type;			Перенесено в абстрактный класс
+//	typedef std::vector<Group_type> Groups_type;//			Перенесено в абстрактный класс
 	typedef int Block_size_type;
 	typedef int Line_number_type;
 	typedef int Group_size_type;
@@ -24,7 +24,10 @@ public:
 	void AddShipStructInLine(Line_number_type, Ship_struct);
 	void Debug_print();
 	Groups_type::iterator Return_group(Group_size_type);
+	Blocks_type* Get_blocks();
+	
 };
+
 
 
 #endif

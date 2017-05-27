@@ -2,6 +2,8 @@
 
 #include<iostream>
 
+
+
 Ship::Ship(Block_size_type bsize_, Group_size_type gsize_)
 {
 	Blocks.resize(bsize_);
@@ -14,6 +16,7 @@ Ship::Ship(Block_size_type bsize_, Group_size_type gsize_)
 
 void Ship::Debug_print()
 {
+	
 	for(int i = 0, size = Blocks.size(); i<size; ++i)
 	{
 		for(int b = 0, size = Blocks[i].size(); b<size; ++b)
@@ -24,7 +27,13 @@ void Ship::Debug_print()
 			
 			if( Blocks[i][b].Get_group()->Get_number() != 0) 
 			{
-				std::cout<<"0"<<Blocks[i][b].Get_group()->Get_number();
+				int a1;
+				a1 = 0;
+				if(!Blocks[i][b].Struct_get_item() == 0)
+				{
+					a1 = 1;
+				};
+				std::cout<<a1<<Blocks[i][b].Get_group()->Get_number();
 			}
 			else
 			{
@@ -46,4 +55,9 @@ Ship_types::Groups_type::iterator Ship::Return_group(Group_size_type Number)
 	Ship_types::Groups_type::iterator it;
 	it = Groups.begin() + Number;
 	return it;
+};
+
+Ship::Blocks_type* Ship::Get_blocks()
+{
+	return &Blocks;
 };

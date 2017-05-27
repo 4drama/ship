@@ -1,4 +1,7 @@
 #include "collector.hpp"
+#include "set_item.hpp"
+//#include <utility>
+#include <iostream>
 
 
 int main()
@@ -18,7 +21,24 @@ int main()
 	Biba_ship.AddShipStructInLine(0, ddr);*/
 	
 	
-	Ship Ship1=CreateHawkMK1();
+	//std::pair<int,int> a1(10,20);
 	
+	//std::cout << a1.first;
+	/*
+	int* A;
+	int B;
+	
+	B = 10;
+	A = &B;
+	
+	std::cout << *A;
+	*/
+	
+	Ship Ship1 = CreateHawkMK1();	
+	Item Bib(200, 1, 3);
+	Set_item(Ship1, Bib, up, 1, 2);
+	
+	std::cout << std::endl;
+		
 	return 0;
 };
