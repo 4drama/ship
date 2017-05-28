@@ -57,7 +57,31 @@ Ship_types::Groups_type::iterator Ship::Return_group(Group_size_type Number)
 	return it;
 };
 
+/*
 Ship::Blocks_type* Ship::Get_blocks()
 {
 	return &Blocks;
+};
+*/
+
+bool Ship::Block_check_struct_item(Item& Item_pointer_, Block_size_type X_call_, Block_size_type Y_call_, Turn_item_type Turn_)
+{
+	if(	   Item_pointer_.Get_base() == Blocks[Y_call_][X_call_].Get_first_type()
+		|| Item_pointer_.Get_base() == Blocks[Y_call_][X_call_].Get_second_type()
+		|| Item_pointer_.Get_base() == no_matter_block)
+	{
+		return true;
+	};
+		
+	return false;
+};
+
+void Ship::Block_set_struct_item(Set_item& Set_item_pointer_, Block_size_type X_call_, Block_size_type Y_call_)
+{
+	Blocks[Y_call_][X_call_].Struct_set_item(Set_item_pointer_);
+};
+
+void Ship::Block_reser_struct_item(Block_size_type x, Block_size_type y)
+{
+	Blocks[x][y].Reset_ptr();
 };

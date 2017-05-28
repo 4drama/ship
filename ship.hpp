@@ -24,8 +24,10 @@ public:
 	void AddShipStructInLine(Line_number_type, Ship_struct);
 	void Debug_print();
 	Groups_type::iterator Return_group(Group_size_type);
-	Blocks_type* Get_blocks();
-	
+//	Blocks_type* Get_blocks();
+	bool Block_check_struct_item(Item&, Block_size_type, Block_size_type, Turn_item_type);
+	void Block_set_struct_item(Set_item&, Block_size_type, Block_size_type);
+	void Block_reser_struct_item(Block_size_type, Block_size_type);
 };
 
 

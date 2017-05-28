@@ -35,10 +35,17 @@ int main()
 	*/
 	
 	Ship Ship1 = CreateHawkMK1();	
-	Item Bib(200, 1, 3);
-	Set_item(Ship1, Bib, up, 1, 2);
+	Item_main_engine Bib(1000, 3, 9);
+	{
+	Set_item A1 = Set_item(Ship1, Bib, down_turn, 0, 13);
 	
 	std::cout << std::endl;
-		
+	
+	Ship1.Debug_print();
+	
+	
+	}
+	Ship1.Debug_print();
+	
 	return 0;
 };

@@ -25,7 +25,7 @@ protected:
 
 #include <iterator>
 
-
+/*
 enum Base_block_type{
 	empty_block = 0,
 	weapon_block = 1,
@@ -46,7 +46,7 @@ enum Advanced_block_type{
 	outside_engine_to_down_block = 24,
 	cabin_block = 3,
 //	outside_and_cabin_block = 23
-};
+};*/
 
 
 /*
@@ -75,7 +75,9 @@ public:
 class Ship_struct : public Ship_types
 {
 private:
-	Base_block_type Base;
+	Base_block_type First_base;
+	Base_block_type Second_base = empty_block;
+	
 	Groups_type::iterator Group;
 	Advanced_block_type Advance;
 	Set_item* Set_item_pointer = nullptr;
@@ -88,6 +90,10 @@ public:
 	void Struct_set_item(Set_item&);
 	void Struct_destroy_item();
 	Set_item* Struct_get_item();
+	void Reset_ptr();
+	
+	Base_block_type Get_first_type() const;
+	Base_block_type Get_second_type() const;
 };
 
 Ship_struct Create_block(Base_block_type, Ship_struct::Groups_type::iterator , Advanced_block_type);
