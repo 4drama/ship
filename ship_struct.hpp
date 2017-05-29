@@ -79,7 +79,11 @@ private:
 	Base_block_type Second_base = empty_block;
 	
 	Groups_type::iterator Group;
-	Advanced_block_type Advance;
+	
+	Advanced_block_type firstAdvance;
+//	Advanced_block_type secondAdvance = not_advance_block;
+	Turn_item_type turnTo = no_matter_turn;
+	
 	Set_item* Set_item_pointer = nullptr;
 public:
 	explicit Ship_struct(Base_block_type, Groups_type::iterator, Advanced_block_type);
@@ -94,6 +98,8 @@ public:
 	
 	Base_block_type Get_first_type() const;
 	Base_block_type Get_second_type() const;
+	Turn_item_type getTurnTo() const;
+	Advanced_block_type getFirstAdvance() const;
 };
 
 Ship_struct Create_block(Base_block_type, Ship_struct::Groups_type::iterator , Advanced_block_type);

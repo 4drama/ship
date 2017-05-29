@@ -249,7 +249,7 @@ Ship CreateHawkMK1()
 	Biba_ship.AddShipStructInLine(21, Create_block(engine_block, Biba_ship.Return_group(8), not_advance_block));
 	
 	
-	Biba_ship.Debug_print();
+//	Biba_ship.Debug_print();
 	
 	return Biba_ship;
 };

@@ -28,6 +28,11 @@ public:
 	bool Block_check_struct_item(Item&, Block_size_type, Block_size_type, Turn_item_type);
 	void Block_set_struct_item(Set_item&, Block_size_type, Block_size_type);
 	void Block_reser_struct_item(Block_size_type, Block_size_type);
+	
+	void setItem(Item&, Turn_item_type, Block_size_type, Block_size_type);
+	void destroyItem(Block_size_type, Block_size_type);
+	
+	~Ship();
 };
 
 

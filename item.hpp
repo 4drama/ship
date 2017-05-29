@@ -29,13 +29,14 @@ enum Turn_item_type{
 	right_turn = 2,
 	up_turn = 3,
 	down_turn = 4,
+	no_matter_turn = 5,
 };
 
 
 
 
-
-
+//===================================================================
+//=====================ABSTRACT_CLASS================================
 class Item
 {
 protected:	
@@ -46,14 +47,16 @@ private:
 	Weight_type Weight;
 	Item_size_type Size_width;
 	Item_size_type Size_height;
-	bool Turn_matter;
+	bool Turn_matter_advance;
 	
 public:
 	virtual ~Item() = 0;
 	
 	virtual Base_block_type Get_base() const;
+	virtual Turn_item_type getTurnItem() const;
+	virtual Advanced_block_type getAdvanceBlock() const;
 	
-	bool Get_turn_matter() const;
+	bool Get_turn_matter_advance() const;
 	
 	Item_size_type Get_width() const;
 	Item_size_type Get_height() const;
@@ -63,22 +66,32 @@ protected:
 	
 	
 };
+//-------------------------------------------------------------------
 
+
+
+//===================================================================
+//=====================MAIN_ENGINE===================================
 class Item_main_engine : public Item
 {
 private:
 
 	const Base_block_type Base = engine_block;
+	const Turn_item_type turnItem = down_turn;
 	
 public:
 
 	Base_block_type Get_base() const;
+	Turn_item_type getTurnItem() const;
 	
 	Item_main_engine(Weight_type, Item_size_type, Item_size_type);
 	
 };
+//-------------------------------------------------------------------
 
 
+//===================================================================
+//=====================HELP_ENGINE===================================
 class Item_help_engine : public Item
 {
 private:
@@ -90,7 +103,9 @@ public:
 	
 	Item_help_engine(Weight_type, Item_size_type, Item_size_type);
 	
+	Advanced_block_type getAdvanceBlock() const;
 };
+//-------------------------------------------------------------------
 
 
 #endif

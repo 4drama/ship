@@ -18,7 +18,7 @@ Group_type::Number_type Group_type::Get_number()
 };
 
 Ship_struct::Ship_struct(Base_block_type Base_, Ship_types::Groups_type::iterator Group_, Advanced_block_type Advance_):
-Group(Group_), Advance(Advance_)
+Group(Group_), firstAdvance(Advance_)
 {
 	if(Base_ == inside_and_engine_block)
 	{
@@ -34,6 +34,27 @@ Group(Group_), Advance(Advance_)
 	{
 		First_base = Base_;
 	};
+	
+	if(Advance_ == outside_engine_to_left_block)
+	{
+		turnTo = left_turn;
+		firstAdvance = outside_engine_block;
+	}
+	else if(Advance_ == outside_engine_to_right_block)
+	{
+		turnTo = right_turn;
+		firstAdvance = outside_engine_block;
+	}
+	else if(Advance_ == outside_engine_to_up_block)
+	{
+		turnTo = up_turn;
+		firstAdvance = outside_engine_block;
+	}
+	else if(Advance_ == outside_engine_to_down_block)
+	{
+		turnTo = down_turn;
+		firstAdvance = outside_engine_block;
+	}
 };
 
 Ship_types::Groups_type::iterator Ship_struct::Get_group()
@@ -71,6 +92,16 @@ Base_block_type Ship_struct::Get_first_type() const
 Base_block_type Ship_struct::Get_second_type() const
 {
 	return Second_base;
+};
+
+Turn_item_type Ship_struct::getTurnTo() const
+{
+	return turnTo;
+};
+
+Advanced_block_type Ship_struct::getFirstAdvance() const
+{
+	return firstAdvance;
 };
 
 void Ship_struct::Reset_ptr()
