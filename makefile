@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall -std=c++11
 LDFLAGS=
-SOURCES=main.cpp item.cpp ship_struct.cpp ship.cpp collector.cpp set_item.cpp
+SOURCES=main.cpp item.cpp ship_struct.cpp ship.cpp collector.cpp set_item.cpp 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=ship
 

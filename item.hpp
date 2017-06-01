@@ -16,10 +16,10 @@ enum Advanced_block_type{
 	not_advance_block = 0,
 	gate_block = 1,
 	outside_engine_block = 2,
-	outside_engine_to_left_block = 21,
-	outside_engine_to_right_block = 22,
-	outside_engine_to_up_block = 23,
-	outside_engine_to_down_block = 24,
+//	outside_engine_to_left_block = 21,
+//	outside_engine_to_right_block = 22,
+//	outside_engine_to_up_block = 23,
+//	outside_engine_to_down_block = 24,
 	cabin_block = 3,
 //	outside_and_cabin_block = 23
 };
@@ -36,7 +36,7 @@ enum Turn_item_type{
 
 
 //===================================================================
-//=====================ABSTRACT_CLASS================================
+//=====================ABSTRACT_ITEM_CLASS===========================
 class Item
 {
 protected:	

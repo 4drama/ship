@@ -4,7 +4,7 @@
 
 
 //===================================================================
-//=====================ABSTRACT_CLASS================================
+//=====================ABSTRACT_ITEM_CLASS===========================
 Item::Item
 (Weight_type Weight_, Item_size_type Size_width_, Item_size_type Size_height_, bool Turn_matter_advance_)
 : Weight(Weight_), Size_width(Size_width_), Size_height(Size_height_), Turn_matter_advance(Turn_matter_advance_)

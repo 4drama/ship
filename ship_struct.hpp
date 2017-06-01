@@ -49,18 +49,6 @@ enum Advanced_block_type{
 };*/
 
 
-/*
-class Ship_types
-{
-public:
-	virtual ~Ship_types() = 0;
-protected:
-
-	typedef std::vector<Group_type> Groups_type;
-	
-};
-*/
-
 class Group_type : private Ship_types
 {
 private:
@@ -84,17 +72,24 @@ private:
 //	Advanced_block_type secondAdvance = not_advance_block;
 	Turn_item_type turnTo = no_matter_turn;
 	
-	Set_item* Set_item_pointer = nullptr;
+//	Set_item* Set_item_pointer = nullptr;
+	int keyItem = 0;
 public:
-	explicit Ship_struct(Base_block_type, Groups_type::iterator, Advanced_block_type);
+	explicit Ship_struct(Base_block_type, Groups_type::iterator, Advanced_block_type, Turn_item_type = no_matter_turn);
 	
-	friend Ship_struct Create_block(Base_block_type, Groups_type::iterator, Advanced_block_type);
+//	friend Ship_struct Create_block(Base_block_type, Groups_type::iterator, Advanced_block_type);
 	
 	Groups_type::iterator Get_group();
-	void Struct_set_item(Set_item&);
-	void Struct_destroy_item();
-	Set_item* Struct_get_item();
-	void Reset_ptr();
+	
+//	void Struct_set_item(Set_item&);
+//	void Struct_destroy_item();
+//	Set_item* Struct_get_item();
+
+	void setKey(int);
+	void destroyKey();
+	int getKey() const;
+
+//	void Reset_ptr();
 	
 	Base_block_type Get_first_type() const;
 	Base_block_type Get_second_type() const;
@@ -102,7 +97,7 @@ public:
 	Advanced_block_type getFirstAdvance() const;
 };
 
-Ship_struct Create_block(Base_block_type, Ship_struct::Groups_type::iterator , Advanced_block_type);
+//Ship_struct Create_block(Base_block_type, Ship_struct::Groups_type::iterator , Advanced_block_type);
 
 
 

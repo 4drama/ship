@@ -25,10 +25,11 @@ private:
 	
 public:
 	
+	
 	Set_item(Ship&, Item&, Turn_item_type, X_call, Y_call);
 	~Set_item();
 	
-	
+	void addKeyingStruct(int, int);
 };
 
 
