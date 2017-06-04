@@ -6,7 +6,7 @@
 Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, Turn_item_type Turn_, X_call X_call_, Y_call Y_call_)
 				: Ship_pointer(&Ship_pointer_), Item_pointer(&Item_pointer_), Turn(Turn_)
 {
-	std::cout << "Debug: Set_item Constructor begin" <<std::endl;
+//	std::cout << "Debug: Set_item Constructor begin" <<std::endl;
 //	std::cout << " Set_item constuctor" <<std::endl;
 	
 	auto width = Item_pointer_.Get_width();
@@ -78,12 +78,12 @@ Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, Turn_item_type Turn
 	};
 //	std::cout << " end check" <<std::endl;
 	Ship_pointer_.setStatus();
-	std::cout << "Debug: Set_item Constructor end" <<std::endl;
+//	std::cout << "Debug: Set_item Constructor end" <<std::endl;
 };
 
 Set_item::~Set_item()
 {
-	std::cout << "Debug: Set_item Destructor" <<std::endl;
+//	std::cout << "Debug: Set_item Destructor" <<std::endl;
 	for ( auto it = Cells.begin(); it!=Cells.end(); it++ )
 	{
 		//std::cout << it->first << " " << it->second << std::endl;
@@ -93,6 +93,6 @@ Set_item::~Set_item()
 
 void Set_item::addKeyingStruct(int x, int y)
 {
-	std::cout << "Debug: Set_item addKeyingStruct." << x << " " << y << std::endl;
+//	std::cout << "Debug: Set_item addKeyingStruct." << x << " " << y << std::endl;
 	Cells.push_back( std::make_pair (x, y) );
 };

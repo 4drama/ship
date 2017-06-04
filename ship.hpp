@@ -21,7 +21,7 @@ private:
 	Groups_type Groups;
 	
 	ml1::KeyList<Set_item> itemsList;
-	bool keyStatus = false;
+	bool keyFlag = false;
 	
 public:
 	
@@ -38,7 +38,7 @@ public:
 	void Block_reser_struct_item(Block_size_type, Block_size_type);
 	
 	void setItem(Item&, Turn_item_type, Block_size_type, Block_size_type);
-	void destroyItem(Block_size_type, Block_size_type);
+	void removeItem(Block_size_type, Block_size_type);
 	
 	void setStatus();
 	

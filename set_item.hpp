@@ -25,6 +25,7 @@ private:
 	
 public:
 	
+	Set_item(const Set_item&) = delete ;
 	
 	Set_item(Ship&, Item&, Turn_item_type, X_call, Y_call);
 	~Set_item();

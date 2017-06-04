@@ -61,7 +61,7 @@ Ship CreateHawkMK1()
 	Biba_ship.AddShipStructInLine(4, Ship_struct(weapon_block, Biba_ship.Return_group(2), not_advance_block));
 	Biba_ship.AddShipStructInLine(4, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
 	
-	Biba_ship.AddShipStructInLine(5, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(1), outside_engine_block, up_turn));
+	Biba_ship.AddShipStructInLine(5, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(4), outside_engine_block, up_turn));
 	Biba_ship.AddShipStructInLine(5, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(1), not_advance_block));
 	Biba_ship.AddShipStructInLine(5, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(1), not_advance_block));
 	Biba_ship.AddShipStructInLine(5, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
@@ -70,9 +70,9 @@ Ship CreateHawkMK1()
 	Biba_ship.AddShipStructInLine(5, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
 	Biba_ship.AddShipStructInLine(5, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(2), not_advance_block));
 	Biba_ship.AddShipStructInLine(5, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(2), not_advance_block));
-	Biba_ship.AddShipStructInLine(5, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(2), outside_engine_block, up_turn));
+	Biba_ship.AddShipStructInLine(5, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(6), outside_engine_block, up_turn));
 	
-	Biba_ship.AddShipStructInLine(6, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(1), outside_engine_block, up_turn));
+	Biba_ship.AddShipStructInLine(6, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(4), outside_engine_block, up_turn));
 	Biba_ship.AddShipStructInLine(6, Ship_struct(inside_block, Biba_ship.Return_group(1), not_advance_block));
 	Biba_ship.AddShipStructInLine(6, Ship_struct(inside_block, Biba_ship.Return_group(1), not_advance_block));
 	Biba_ship.AddShipStructInLine(6, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
@@ -81,40 +81,40 @@ Ship CreateHawkMK1()
 	Biba_ship.AddShipStructInLine(6, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
 	Biba_ship.AddShipStructInLine(6, Ship_struct(inside_block, Biba_ship.Return_group(2), not_advance_block));
 	Biba_ship.AddShipStructInLine(6, Ship_struct(inside_block, Biba_ship.Return_group(2), not_advance_block));
-	Biba_ship.AddShipStructInLine(6, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(2), outside_engine_block, up_turn));
+	Biba_ship.AddShipStructInLine(6, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(6), outside_engine_block, up_turn));
 	
-	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(1), outside_engine_block, left_turn));
-	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_block, Biba_ship.Return_group(1), outside_engine_block, left_turn));
+	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(4), outside_engine_block, left_turn));
+	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_block, Biba_ship.Return_group(4), outside_engine_block, left_turn));
 	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_block, Biba_ship.Return_group(1), not_advance_block));
 	Biba_ship.AddShipStructInLine(7, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
 	Biba_ship.AddShipStructInLine(7, Ship_struct(citizen_block, Biba_ship.Return_group(3), cabin_block));
 	Biba_ship.AddShipStructInLine(7, Ship_struct(citizen_block, Biba_ship.Return_group(3), cabin_block));
 	Biba_ship.AddShipStructInLine(7, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
 	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_block, Biba_ship.Return_group(2), not_advance_block));
-	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_block, Biba_ship.Return_group(2), outside_engine_block, right_turn));
-	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(2), outside_engine_block, right_turn));
+	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_block, Biba_ship.Return_group(6), outside_engine_block, right_turn));
+	Biba_ship.AddShipStructInLine(7, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(6), outside_engine_block, right_turn));
 	
-	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(1), outside_engine_block, left_turn));
-	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_block, Biba_ship.Return_group(1), outside_engine_block, left_turn));
+	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(4), outside_engine_block, left_turn));
+	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_block, Biba_ship.Return_group(4), outside_engine_block, left_turn));
 	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_block, Biba_ship.Return_group(1), not_advance_block));
 	Biba_ship.AddShipStructInLine(8, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
 	Biba_ship.AddShipStructInLine(8, Ship_struct(citizen_block, Biba_ship.Return_group(3), gate_block));
 	Biba_ship.AddShipStructInLine(8, Ship_struct(citizen_block, Biba_ship.Return_group(3), gate_block));
 	Biba_ship.AddShipStructInLine(8, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
 	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_block, Biba_ship.Return_group(2), not_advance_block));
-	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_block, Biba_ship.Return_group(2), outside_engine_block, right_turn));
-	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(2), outside_engine_block, right_turn));
+	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_block, Biba_ship.Return_group(6), outside_engine_block, right_turn));
+	Biba_ship.AddShipStructInLine(8, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(6), outside_engine_block, right_turn));
 	
-	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(1), outside_engine_block, left_turn));
-	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_block, Biba_ship.Return_group(1), outside_engine_block, left_turn));
+	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(4), outside_engine_block, left_turn));
+	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_block, Biba_ship.Return_group(4), outside_engine_block, left_turn));
 	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_block, Biba_ship.Return_group(1), not_advance_block));
 	Biba_ship.AddShipStructInLine(9, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
 	Biba_ship.AddShipStructInLine(9, Ship_struct(citizen_block, Biba_ship.Return_group(3), not_advance_block));
 	Biba_ship.AddShipStructInLine(9, Ship_struct(citizen_block, Biba_ship.Return_group(3), not_advance_block));
 	Biba_ship.AddShipStructInLine(9, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));
 	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_block, Biba_ship.Return_group(2), not_advance_block));
-	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_block, Biba_ship.Return_group(2), outside_engine_block, right_turn));
-	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(2), outside_engine_block, right_turn));
+	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_block, Biba_ship.Return_group(6), outside_engine_block, right_turn));
+	Biba_ship.AddShipStructInLine(9, Ship_struct(inside_and_weapon_block, Biba_ship.Return_group(6), outside_engine_block, right_turn));
 	
 	Biba_ship.AddShipStructInLine(10, Ship_struct(inside_block, Biba_ship.Return_group(4), outside_engine_block, left_turn));
 	Biba_ship.AddShipStructInLine(10, Ship_struct(inside_block, Biba_ship.Return_group(4), outside_engine_block, left_turn));

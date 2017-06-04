@@ -15,6 +15,7 @@ Ship::Ship(Block_size_type bsize_, Group_size_type gsize_) : itemsList(bsize_*bs
 
 void Ship::Debug_print()
 {
+	std::cout << std::endl << "==============DEBUG_PRINT:==============" << std::endl;
 	
 	for(int i = 0, size = Blocks.size(); i<size; ++i)
 	{
@@ -42,6 +43,7 @@ void Ship::Debug_print()
 		};
 		std::cout<<std::endl;
 	};
+	std::cout << "========================================" << std::endl << std::endl;
 };
 
 void Ship::AddShipStructInLine(Line_number_type Line, Ship_struct Block)
@@ -113,7 +115,7 @@ void Ship::Block_set_struct_item(Set_item& Set_item_pointer_, Block_size_type X_
 void Ship::Block_reser_struct_item(Block_size_type x, Block_size_type y)
 {
 //	Blocks[x][y].Reset_ptr();
-	std::cout << "Debug: call destroy key. "<< x <<" " << y << std::endl;
+//	std::cout << "Debug: call destroy key. "<< x <<" " << y << std::endl;
 	Blocks[x][y].destroyKey();
 };
 
@@ -121,19 +123,19 @@ void Ship::Block_reser_struct_item(Block_size_type x, Block_size_type y)
 
 void Ship::setItem(Item& Itm, Turn_item_type Turn_, Block_size_type X_call_, Block_size_type Y_call_)
 {
-	std::cout << "Debug: Ship::setItem begin" <<std::endl;
-	int key = itemsList.add(Set_item(*this, Itm, Turn_, X_call_, Y_call_));
-	
-	if(!keyStatus)
+//	std::cout << "Debug: Ship::setItem begin" <<std::endl;
+	int key = itemsList.add(new Set_item(*this, Itm, Turn_, X_call_, Y_call_));
+
+	if(!keyFlag)
 	{
 		itemsList.erase(key);
 		return;
 	};
-
+//	std::cout << "Debug: Ship::setItem step 1" << std::endl;
 	auto width = Itm.Get_width();
 	auto height = Itm.Get_height();
-	
-	auto a1 = itemsList.find(key);
+//	std::cout << "Debug: Ship::setItem step 2" << std::endl;
+	auto* a1 = itemsList.find(key);
 	
 	if (Turn_ == left_turn || Turn_ == right_turn )
 	{
@@ -141,7 +143,7 @@ void Ship::setItem(Item& Itm, Turn_item_type Turn_, Block_size_type X_call_, Blo
 		{
 			for(int y=Y_call_, yto=Y_call_+width; y<yto; ++y)
 			{
-				a1.addKeyingStruct(x, y);
+				a1->addKeyingStruct(x, y);
 				Blocks[y][x].setKey(key);
 			};						
 		};
@@ -152,24 +154,24 @@ void Ship::setItem(Item& Itm, Turn_item_type Turn_, Block_size_type X_call_, Blo
 		{
 			for(int y=Y_call_, yto=Y_call_+height; y<yto; ++y)
 			{
-				a1.addKeyingStruct(x, y);
+				a1->addKeyingStruct(x, y);
 				Blocks[y][x].setKey(key);
 			};						
 		};
 	}
 	
-	keyStatus = false;
-	std::cout << "Debug: Ship::setItem end" <<std::endl;
+	keyFlag = false;
+//	std::cout << "Debug: Ship::setItem end" <<std::endl;
 	//new Set_item(*this, Itm, Tu, x, y);
 };
 
 
 
-void Ship::destroyItem(Block_size_type x, Block_size_type y)
+void Ship::removeItem(Block_size_type x, Block_size_type y)
 {	
 	int key = Blocks[y][x].getKey();
 	
-	Blocks[y][x].destroyKey();
+//	Blocks[y][x].destroyKey();
 	
 /*	if(!Blocks[y][x].Struct_get_item() == 0)
 	{				
@@ -180,7 +182,7 @@ void Ship::destroyItem(Block_size_type x, Block_size_type y)
 	
 void Ship::setStatus()
 {
-	keyStatus = true;
+	keyFlag = true;
 };
 	
 	
