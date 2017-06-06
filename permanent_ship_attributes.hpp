@@ -1,7 +1,29 @@
 #ifndef PERMANENT_SHIP_ATTRIBUTES__
 #define PERMANENT_SHIP_ATTRIBUTES__
 
+#include <vector>
 #include <cmath>
+#include "enum_types.hpp"
+
+
+struct MoveEngines
+{
+	
+	typedef int Position_type;
+	typedef int Power_type;
+	typedef int Speed_type;
+	
+	int position;
+	Turn_item_type turn;
+	int power;
+	int speed;
+	
+	MoveEngines(Position_type, Turn_item_type, Power_type, Speed_type);
+	
+};
+
+
+
 struct PermanentShipAttributes
 {
 	
@@ -19,6 +41,8 @@ struct PermanentShipAttributes
 	double maxSpeed;
 //	double currentSpeed;
 	double accelerationSpeed;
+	
+	std::vector<MoveEngines> moveEnginesList;
 	
 	double leftTurnEngineCapacity = 1000; //turn engine capacity (sum LeftDown and RightUp)
 	double rightTurnEngineCapacity = 1000; //turn engine capacity (sum LeftUp and RightDown)

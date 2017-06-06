@@ -2,13 +2,7 @@
 #define SHIP_ATTRIBUTES__
 
 #include "permanent_ship_attributes.hpp"
-
-enum Action
-{
-	idle,
-	forwardMovement,
-	backwardMovement
-};
+#include "enum_types.hpp"
 
 struct ShipAttributes
 {

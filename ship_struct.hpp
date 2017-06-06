@@ -25,30 +25,6 @@ protected:
 
 #include <iterator>
 
-/*
-enum Base_block_type{
-	empty_block = 0,
-	weapon_block = 1,
-	inside_block = 2,
-	engine_block = 3,
-	citizen_block = 4,
-	inside_and_weapon_block = 21,
-	inside_and_engine_block = 23
-};
-
-enum Advanced_block_type{
-	not_advance_block = 0,
-	gate_block = 1,
-//	outside_block = 2,
-	outside_engine_to_left_block = 21,
-	outside_engine_to_right_block = 22,
-	outside_engine_to_up_block = 23,
-	outside_engine_to_down_block = 24,
-	cabin_block = 3,
-//	outside_and_cabin_block = 23
-};*/
-
-
 class Group_type : private Ship_types
 {
 private:

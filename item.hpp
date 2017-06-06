@@ -1,39 +1,8 @@
 #ifndef ITEM__
 #define ITEM__
 
-enum Base_block_type{
-	empty_block = 0,
-	weapon_block = 1,
-	inside_block = 2,
-	engine_block = 3,
-	citizen_block = 4,
-	no_matter_block = 5,
-	inside_and_weapon_block = 21,
-	inside_and_engine_block = 23
-};
-
-enum Advanced_block_type{
-	not_advance_block = 0,
-	gate_block = 1,
-	outside_engine_block = 2,
-//	outside_engine_to_left_block = 21,
-//	outside_engine_to_right_block = 22,
-//	outside_engine_to_up_block = 23,
-//	outside_engine_to_down_block = 24,
-	cabin_block = 3,
-//	outside_and_cabin_block = 23
-};
-
-enum Turn_item_type{
-	left_turn = 1,
-	right_turn = 2,
-	up_turn = 3,
-	down_turn = 4,
-	no_matter_turn = 5,
-};
-
-
-
+#include "ship_attributes.hpp"
+#include "enum_types.hpp"
 
 //===================================================================
 //=====================ABSTRACT_ITEM_CLASS===========================
@@ -42,12 +11,29 @@ class Item
 protected:	
 	typedef int Weight_type;
 	typedef int Item_size_type;	
+	typedef int Durability_type;
+	typedef int Damage_type;
+	typedef int Area_type;
+	
+	typedef int Power_type;
+	typedef int Max_speed_type;
+	typedef int Acceleration_type;
+	
+	typedef int Energy_type;
+	typedef int Cooling_type;
+	
+	Weight_type Weight;
 	
 private:	
-	Weight_type Weight;
+	
+	
 	Item_size_type Size_width;
 	Item_size_type Size_height;
 	bool Turn_matter_advance;
+	
+	int durability;
+	int destroyDamage;
+	int destroyArea;
 	
 public:
 	virtual ~Item() = 0;
@@ -56,15 +42,17 @@ public:
 	virtual Turn_item_type getTurnItem() const;
 	virtual Advanced_block_type getAdvanceBlock() const;
 	
+	virtual void addAttributes(ShipAttributes&, Turn_item_type, int) const;
+	virtual void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const;
+	virtual void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const;
+	
 	bool Get_turn_matter_advance() const;
 	
 	Item_size_type Get_width() const;
 	Item_size_type Get_height() const;
 	
 protected:	
-	Item(Weight_type, Item_size_type, Item_size_type, bool);
-	
-	
+	Item(Weight_type, Item_size_type, Item_size_type, bool, Durability_type, Damage_type, Area_type);	
 };
 //-------------------------------------------------------------------
 
@@ -79,15 +67,36 @@ private:
 	const Base_block_type Base = engine_block;
 	const Turn_item_type turnItem = down_turn;
 	
+	Power_type power;
+	Max_speed_type maxSpeed;
+	Acceleration_type acceleration;
+	
+	ItemMode maxMode = modeAverage;
+	
+	//===Low mode	
+	Energy_type energyNeedLow;
+	Cooling_type coolingNeedLow;
+	
+	//===Average mode		
+	Energy_type energyNeedAverage;
+	Cooling_type coolingNeedAverage;
+	
 public:
-
+	
+	Item_main_engine(	Weight_type, Item_size_type, Item_size_type, Durability_type, Damage_type, Area_type, 
+						Power_type, Max_speed_type, Acceleration_type,
+						Energy_type, Cooling_type,																//Low mode
+						Energy_type, Cooling_type);																//Average mode
+						
 	Base_block_type Get_base() const;
 	Turn_item_type getTurnItem() const;
 	
-	Item_main_engine(Weight_type, Item_size_type, Item_size_type);
-	
+	void addAttributes(ShipAttributes&, Turn_item_type, int) const;
+	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const;
+	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const;
 };
 //-------------------------------------------------------------------
+
 
 
 //===================================================================
@@ -98,12 +107,31 @@ private:
 
 	const Advanced_block_type Advance = outside_engine_block;
 	
+	Power_type power;
+	Max_speed_type maxSpeed;
 	
+	ItemMode maxMode = modeAverage;
+	
+	//===Low mode	
+	Energy_type energyNeedLow;
+	Cooling_type coolingNeedLow;
+	
+	//===Average mode		
+	Energy_type energyNeedAverage;
+	Cooling_type coolingNeedAverage;	
+
 public:
 	
-	Item_help_engine(Weight_type, Item_size_type, Item_size_type);
+	Item_help_engine(	Weight_type, Item_size_type, Item_size_type, Durability_type, Damage_type, Area_type,
+						Power_type, Max_speed_type,
+						Energy_type, Cooling_type,																//Low mode
+						Energy_type, Cooling_type);																//Average mode
 	
 	Advanced_block_type getAdvanceBlock() const;
+	
+	void addAttributes(ShipAttributes&, Turn_item_type, int) const;
+	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const;
+	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const;
 };
 //-------------------------------------------------------------------
 

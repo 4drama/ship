@@ -1,6 +1,16 @@
 #include "permanent_ship_attributes.hpp"
 
 #include <iostream>
+
+MoveEngines::MoveEngines(Position_type position_, Turn_item_type turn, Power_type power, Speed_type speed)
+						:position(position_), turn(turn_), power(power_), speed(speed_)
+{
+	
+};
+
+
+
+
 	
 void PermanentShipAttributes::reckonPotentialWeight()
 {
