@@ -15,7 +15,7 @@ struct ShipAttributes
 	double leftEnginesPower;
 	double rightEnginesPower;
 	
-	Action actionNow = forwardMovement;
+	Action_type actionNow = forwardMovement;
 	double speedNow = 0;	//
 	double accelerationNow = 113;	//(1-(speedNow/permanentAttributes.currentSpeed))*permanentAttributes.accelerationSpeed
 	double brakingSpeedNow = 0;	//speedNow-permanentAttributes.brakingSpeed

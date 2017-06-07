@@ -70,7 +70,7 @@ struct PermanentShipAttributes
 	double brakingSpeed;
 //-------------------------------------------------------------	
 	
-
+	void recountMoveEnginesList();
 	
 	void reckonPotentialWeight();
 	void reckonSpeed();

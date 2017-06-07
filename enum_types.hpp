@@ -36,14 +36,20 @@ enum ItemMode{
 	powerOff = 1,
 	modeLow = 2,
 	modeAverage = 3,
-	mogeHigh = 4,
+	modeHigh = 4,
 };
 
-enum Action
+enum Action_type
 {
-	idle,
-	forwardMovement,
-	backwardMovement
+	idle = 0,
+	forwardMovement = 1,
+	backwardMovement = 2,
+};
+
+enum Attributes_aAdd_or_aRemove_type
+{
+	aAdd = 1,
+	aRemove = 2,
 };
 
 #endif

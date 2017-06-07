@@ -19,14 +19,14 @@ protected:
 	typedef int Max_speed_type;
 	typedef int Acceleration_type;
 	
-	typedef int Energy_type;
-	typedef int Cooling_type;
+//	typedef int Energy_type;	
+//	typedef int Cooling_type;	
 	
-	Weight_type Weight;
+	
 	
 private:	
 	
-	
+	Weight_type Weight;
 	Item_size_type Size_width;
 	Item_size_type Size_height;
 	bool Turn_matter_advance;
@@ -52,26 +52,23 @@ public:
 	Item_size_type Get_height() const;
 	
 protected:	
-	Item(Weight_type, Item_size_type, Item_size_type, bool, Durability_type, Damage_type, Area_type);	
+	Item(Weight_type, Item_size_type, Item_size_type, bool, Durability_type, Damage_type, Area_type);
+	
+	void addWeightToAttributes(ShipAttributes&, Attributes_aAdd_or_aRemove_type) const;
 };
 //-------------------------------------------------------------------
 
-
-
 //===================================================================
-//=====================MAIN_ENGINE===================================
-class Item_main_engine : public Item
+//===============ABSTRACT_RESOURCE_CONSUMING_ITEM_CLASS==============
+class ResourceConsumingItem
 {
+protected:	
+	typedef int Energy_type;
+	typedef int Cooling_type;
+	
 private:
-
-	const Base_block_type Base = engine_block;
-	const Turn_item_type turnItem = down_turn;
 	
-	Power_type power;
-	Max_speed_type maxSpeed;
-	Acceleration_type acceleration;
-	
-	ItemMode maxMode = modeAverage;
+	ItemMode maxMode;
 	
 	//===Low mode	
 	Energy_type energyNeedLow;
@@ -81,6 +78,45 @@ private:
 	Energy_type energyNeedAverage;
 	Cooling_type coolingNeedAverage;
 	
+	//===High mode
+	Energy_type energyNeedHigh;
+	Cooling_type coolingNeedHigh;
+	
+public:	
+	virtual ~ResourceConsumingItem() = 0;	
+	
+protected:
+	ResourceConsumingItem(ItemMode, Energy_type, Cooling_type, Energy_type=0, Cooling_type=0, Energy_type=0, Cooling_type=0);
+	
+	void resourceRecount(ShipAttributes&, ItemMode, ItemMode) const;
+};
+//-------------------------------------------------------------------
+
+
+
+//===================================================================
+//=====================MAIN_ENGINE===================================
+class Item_main_engine : public Item , public ResourceConsumingItem
+{
+private:
+
+	const Base_block_type Base = engine_block;
+	const Turn_item_type turnItem = down_turn;
+	
+	Power_type power;
+	Max_speed_type maxSpeed;
+	Acceleration_type acceleration;
+/*	
+	ItemMode maxMode = modeAverage;
+	
+	//===Low mode	
+	Energy_type energyNeedLow;
+	Cooling_type coolingNeedLow;
+	
+	//===Average mode		
+	Energy_type energyNeedAverage;
+	Cooling_type coolingNeedAverage;
+	*/
 public:
 	
 	Item_main_engine(	Weight_type, Item_size_type, Item_size_type, Durability_type, Damage_type, Area_type, 
@@ -101,7 +137,7 @@ public:
 
 //===================================================================
 //=====================HELP_ENGINE===================================
-class Item_help_engine : public Item
+class Item_help_engine : public Item, public ResourceConsumingItem
 {
 private:
 
@@ -110,7 +146,7 @@ private:
 	Power_type power;
 	Max_speed_type maxSpeed;
 	
-	ItemMode maxMode = modeAverage;
+/*	ItemMode maxMode = modeAverage;
 	
 	//===Low mode	
 	Energy_type energyNeedLow;
@@ -118,7 +154,7 @@ private:
 	
 	//===Average mode		
 	Energy_type energyNeedAverage;
-	Cooling_type coolingNeedAverage;	
+	Cooling_type coolingNeedAverage;	*/
 
 public:
 	

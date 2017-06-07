@@ -63,8 +63,137 @@ Advanced_block_type Item::getAdvanceBlock() const
 {
 	return not_advance_block;
 };
+
+
+void Item::addWeightToAttributes(ShipAttributes& attributes, Attributes_aAdd_or_aRemove_type action) const
+{
+	if(action == aAdd)
+	{
+		attributes.permanentAttributes.currentWeight += Weight;
+	}
+	else if(action == aRemove)
+	{
+		attributes.permanentAttributes.currentWeight -= Weight;
+	}
+};
+
 //-------------------------------------------------------------------
 
+//===================================================================
+//===============ABSTRACT_RESOURCE_CONSUMING_ITEM_CLASS==============
+ResourceConsumingItem::~ResourceConsumingItem()
+{
+	
+};
+
+ResourceConsumingItem::ResourceConsumingItem(	ItemMode maxMode_, 
+												Energy_type energyNeedLow_, Cooling_type coolingNeedLow_,
+												Energy_type energyNeedAverage_, Cooling_type coolingNeedAverage_,
+												Energy_type energyNeedHigh_, Cooling_type coolingNeedHigh_)
+		: maxMode(maxMode_), energyNeedLow(energyNeedLow_), coolingNeedLow(coolingNeedLow_), energyNeedAverage(energyNeedAverage_), coolingNeedAverage(coolingNeedAverage_),
+		energyNeedHigh(energyNeedHigh_), coolingNeedHigh(coolingNeedHigh_)
+{
+/*	std::cerr << std::endl << "energyNeedLow_" << energyNeedLow_<< std::endl;
+	std::cerr << "coolingNeedLow_" << coolingNeedLow_<< std::endl;
+	std::cerr << "energyNeedAverage_" << energyNeedAverage_<< std::endl;
+	std::cerr << "coolingNeedAverage_" << coolingNeedAverage_<< std::endl;
+	std::cerr << "energyNeedHigh_" << energyNeedHigh_<< std::endl;
+	std::cerr << "coolingNeedHigh_" << coolingNeedHigh_<< std::endl << std::endl;*/
+};
+
+void ResourceConsumingItem::resourceRecount(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+{
+/*	std::cerr << std::endl << "energyNeedLow" << energyNeedLow<< std::endl;
+	std::cerr << "coolingNeedLow" << coolingNeedLow<< std::endl;
+	std::cerr << "energyNeedAverage" << energyNeedAverage<< std::endl;
+	std::cerr << "coolingNeedAverage" << coolingNeedAverage<< std::endl;
+	std::cerr << "energyNeedHigh" << energyNeedHigh<< std::endl;
+	std::cerr << "coolingNeedHigh" << coolingNeedHigh<< std::endl << std::endl;*/
+	
+	int energyBefore;
+	int energyNow;
+	int coolingBefore;
+	int coolingNow;
+	
+	if(newMode > maxMode)
+	{
+		std::cerr << "ERROR: ABSTRACT_RESOURCE_CONSUMING_ITEM_CLASS. resourceRecount - Wrong mode" << std::endl;
+		return;
+	}
+	
+	if(oldMode == powerOff)
+	{
+		energyBefore = 0;
+		coolingBefore = 0;
+//		std::cerr << "powerOff energyBefore" << energyBefore<< std::endl;
+//		std::cerr << "powerOff coolingBefore" << coolingNeedLow<< std::endl;
+	}
+	else if(oldMode == modeLow)
+	{
+		energyBefore = energyNeedLow;
+		coolingBefore = coolingNeedLow;
+//		std::cerr << "modeLow energyBefore" << energyBefore<< std::endl;
+//		std::cerr << "modeLow coolingBefore" << coolingNeedLow<< std::endl;
+	}
+	else if(oldMode == modeAverage)
+	{
+		energyBefore = energyNeedAverage;
+		coolingBefore = coolingNeedAverage;
+//		std::cerr << "modeAverage energyBefore" << energyBefore<< std::endl;
+//		std::cerr << "modeAverage coolingBefore" << coolingNeedLow<< std::endl;
+	}
+	else if(oldMode == modeHigh)
+	{
+		energyBefore = energyNeedHigh;
+		coolingBefore = coolingNeedHigh;
+//		std::cerr << "modeHigh energyBefore" << energyBefore<< std::endl;
+//		std::cerr << "modeHigh coolingBefore" << coolingNeedLow<< std::endl;
+	}
+	
+	if(newMode == powerOff)
+	{
+		energyNow = 0;
+		coolingNow = 0;
+//		std::cerr << "powerOff energyNow" << energyNow<< std::endl;
+//		std::cerr << "powerOff coolingNow" << coolingNow<< std::endl;
+	}
+	else if(newMode == modeLow)
+	{
+		energyNow = energyNeedLow;
+		coolingNow = coolingNeedLow;
+//		std::cerr << "modeLow energyNow" << energyNow<< std::endl;
+//		std::cerr << "modeLow coolingNow" << coolingNow<< std::endl;
+	}
+	else if(newMode == modeAverage)
+	{
+		energyNow = energyNeedAverage;
+		coolingNow = coolingNeedAverage;
+//		std::cerr << "modeAverage energyNow" << energyNow<< std::endl;
+//		std::cerr << "modeAverage coolingNow" << coolingNow<< std::endl;
+	}
+	else if(newMode == modeHigh)
+	{
+		energyNow = energyNeedHigh;
+		coolingNow = coolingNeedHigh;
+//		std::cerr << "modeHigh energyNow" << energyNow<< std::endl;
+//		std::cerr << "modeHigh coolingNow" << coolingNow<< std::endl;
+	} 
+	
+	int energyNeedUpdate = energyNow - energyBefore;
+	int coolingNeedUpdate = coolingNow - coolingBefore;
+	
+/*	std::cerr << "energyNeedUpdate" << energyNeedUpdate<< std::endl;
+	std::cerr << "coolingNeedUpdate" << coolingNeedUpdate<< std::endl;	
+	std::cerr << "energyNow" << energyNow<< std::endl;
+	std::cerr << "energyBefore" << energyBefore<< std::endl;	
+	std::cerr << "coolingNow" << coolingNow<< std::endl;
+	std::cerr << "coolingBefore" << coolingBefore<< std::endl;	*/
+	
+	attributes.energyChange -= energyNeedUpdate;
+	attributes.overheatChange += coolingNeedUpdate;
+};
+
+//-------------------------------------------------------------------
 
 //===================================================================
 //=====================MAIN_ENGINE===================================
@@ -72,8 +201,9 @@ Item_main_engine::Item_main_engine(	Weight_type Weight_, Item_size_type Size_wid
 									Power_type power_, Max_speed_type maxSpeed_, Acceleration_type acceleration_,
 									Energy_type energyNeedLow_, Cooling_type coolingNeedLow_,
 									Energy_type energyNeedAverage_, Cooling_type coolingNeedAverage_)
-		: Item(Weight_, Size_width_, Size_height_, 0, durability_, destroyDamage_, destroyArea_),
-		power(power_), maxSpeed(maxSpeed_), acceleration(acceleration_), energyNeedLow(energyNeedLow_), coolingNeedLow(coolingNeedLow_), energyNeedAverage(energyNeedAverage_), coolingNeedAverage(coolingNeedAverage_)
+		:	Item(Weight_, Size_width_, Size_height_, 0, durability_, destroyDamage_, destroyArea_),
+			ResourceConsumingItem(modeAverage, energyNeedLow_, coolingNeedLow_, energyNeedAverage_, coolingNeedAverage_),
+			power(power_), maxSpeed(maxSpeed_), acceleration(acceleration_)
 {
 	
 };
@@ -92,7 +222,8 @@ Turn_item_type Item_main_engine::getTurnItem() const
 //=============Attributes
 void Item_main_engine::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
 {
-	attributes.permanentAttributes.currentWeight += Weight;
+	addWeightToAttributes(attributes, aAdd);
+	//attributes.permanentAttributes.currentWeight += Weight;
 	attributes.permanentAttributes.engineCapacity += power;
 	attributes.permanentAttributes.generalEnginesSpeed += maxSpeed;
 	attributes.permanentAttributes.amountEngines ++;
@@ -102,7 +233,8 @@ void Item_main_engine::addAttributes(ShipAttributes& attributes, Turn_item_type 
 
 void Item_main_engine::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
-	int energyBefore;
+	resourceRecount(attributes, oldMode, newMode);
+/*	int energyBefore;
 	int energyNow;
 	int coolingBefore;
 	int coolingNow;
@@ -143,12 +275,13 @@ void Item_main_engine::recountAttributes(ShipAttributes& attributes, ItemMode ol
 	int coolingNeedUpdate = coolingNow - coolingBefore;
 	
 	attributes.energyChange -= energyNeedUpdate;
-	attributes.overheatChange += coolingNeedUpdate;
+	attributes.overheatChange += coolingNeedUpdate;*/
 };
 
 void Item_main_engine::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
-	int energyNeedUpdate;
+	resourceRecount(attributes, oldMode, powerOff);
+/*	int energyNeedUpdate;
 	int coolingNeedUpdate;
 	
 	if(oldMode == powerOff)
@@ -169,8 +302,10 @@ void Item_main_engine::removeAttributes(ShipAttributes& attributes, Turn_item_ty
 	
 	attributes.energyChange += energyNeedUpdate;
 	attributes.overheatChange -= coolingNeedUpdate;
+*/
 	
-	attributes.permanentAttributes.currentWeight -= Weight;
+	addWeightToAttributes(attributes, aRemove);
+//	attributes.permanentAttributes.currentWeight -= Weight;
 	attributes.permanentAttributes.engineCapacity -= power;
 	attributes.permanentAttributes.generalEnginesSpeed -= maxSpeed;
 	attributes.permanentAttributes.amountEngines --;
@@ -191,8 +326,9 @@ Item_help_engine::Item_help_engine(Weight_type Weight_, Item_size_type Size_widt
 									Power_type power_, Max_speed_type maxSpeed_,
 									Energy_type energyNeedLow_, Cooling_type coolingNeedLow_,
 									Energy_type energyNeedAverage_, Cooling_type coolingNeedAverage_)
-		: Item(Weight_, Size_width_, Size_height_, 1, durability_, destroyDamage_, destroyArea_),
-		power(power_), maxSpeed(maxSpeed_), energyNeedLow(energyNeedLow_), coolingNeedLow(coolingNeedLow_), energyNeedAverage(energyNeedAverage_), coolingNeedAverage(coolingNeedAverage_)
+		:	Item(Weight_, Size_width_, Size_height_, 1, durability_, destroyDamage_, destroyArea_),
+			ResourceConsumingItem(modeAverage, energyNeedLow_, coolingNeedLow_, energyNeedAverage_, coolingNeedAverage_),
+			power(power_), maxSpeed(maxSpeed_)
 {
 	
 };
