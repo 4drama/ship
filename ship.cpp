@@ -1,16 +1,17 @@
 #include "ship.hpp"
 
 #include<iostream>
+#include<iterator>
 
 
-
-Ship::Ship(Block_size_type bsize_, Group_size_type gsize_) : itemsList(bsize_*bsize_/2)
+Ship::Ship(Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weight_type weight_) : name(name_), itemsList(bsize_*bsize_/2)
 {
 	Blocks.resize(bsize_);
 	for(Group_size_type i = 0; i<gsize_; ++i)
-		{
-			Groups.push_back(Group_type(i));
-		};
+	{
+		Groups.push_back(Group_type(i));
+	};
+	currentAttributes.permanentAttributes.currentWeight += weight_;
 };
 
 void Ship::Debug_print()
@@ -44,6 +45,14 @@ void Ship::Debug_print()
 		std::cout<<std::endl;
 	};
 	std::cout << "========================================" << std::endl << std::endl;
+	currentAttributes.debugAttributes();
+//	currentAttributes.recountAttributes();
+	currentAttributes.debugPermanentAttributes();
+};
+
+std::string Ship::getName() const
+{
+	return name;
 };
 
 void Ship::AddShipStructInLine(Line_number_type Line, Ship_struct Block)
@@ -120,11 +129,20 @@ void Ship::Block_reser_struct_item(Block_size_type x, Block_size_type y)
 };
 
 
+void Ship::powerOn()
+{
+	for ( auto it = itemsList.valueList.begin(); it!=itemsList.valueList.end(); it++ )
+	{
+		it->second->swithMode(modeLow);
+	}
+	
+};
 
-void Ship::setItem(Item& Itm, Turn_item_type Turn_, Block_size_type X_call_, Block_size_type Y_call_)
+
+void Ship::setItem(Item* Itm, Turn_item_type Turn_, Block_size_type X_call_, Block_size_type Y_call_)
 {
 //	std::cout << "Debug: Ship::setItem begin" <<std::endl;
-	int key = itemsList.add(new Set_item(*this, Itm, Turn_, X_call_, Y_call_));
+	int key = itemsList.add(new Set_item(*this, *Itm, currentAttributes, Turn_, X_call_, Y_call_));
 
 	if(!keyFlag)
 	{
@@ -132,8 +150,8 @@ void Ship::setItem(Item& Itm, Turn_item_type Turn_, Block_size_type X_call_, Blo
 		return;
 	};
 //	std::cout << "Debug: Ship::setItem step 1" << std::endl;
-	auto width = Itm.Get_width();
-	auto height = Itm.Get_height();
+	auto width = Itm->Get_width();
+	auto height = Itm->Get_height();
 //	std::cout << "Debug: Ship::setItem step 2" << std::endl;
 	auto* a1 = itemsList.find(key);
 	
@@ -177,7 +195,10 @@ void Ship::removeItem(Block_size_type x, Block_size_type y)
 	{				
 		delete Blocks[y][x].Struct_get_item();
 	}*/
-	itemsList.erase(key);
+	if(key != 0)
+	{
+		itemsList.erase(key);
+	}
 };
 	
 void Ship::setStatus()
@@ -188,15 +209,8 @@ void Ship::setStatus()
 	
 Ship::~Ship()
 {
-/*	for(int i = 0, size = Blocks.size(); i<size; ++i)
+/*	for(int i = 0, size = itemsList.size(); i<size; ++i)
 	{
-		for(int b = 0, size = Blocks[i].size(); b<size; ++b)
-		{	
-				if(!Blocks[i][b].Struct_get_item() == 0)
-				{
-					delete Blocks[i][b].Struct_get_item();
-				//	std::cout<< "Delete set item: " << i << " " << b << std::endl;	
-				}			
-		}
+		itemsList.valueList.erase(i);
 	}	*/
 };

@@ -94,6 +94,10 @@ void ShipAttributes::debugAttributes()
 	{
 		std::cout << " " << overheatChange << std::endl;
 	}
+	else
+	{
+		std::cout << std::endl;
+	}
 	
 	std::cout << "Energy: " << energyNow << "/" << energyLimit;
 	if(energyChange > 0)
@@ -103,6 +107,10 @@ void ShipAttributes::debugAttributes()
 	else if(energyChange < 0)
 	{
 		std::cout << " " << energyChange << std::endl;
+	}
+	else
+	{
+		std::cout << std::endl;
 	}
 	
 	std::cout << "Shield: " << shieldNow << "/" << shieldLimit << " +" << shieldChange << std::endl;

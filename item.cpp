@@ -6,8 +6,8 @@
 //===================================================================
 //=====================ABSTRACT_ITEM_CLASS===========================
 Item::Item
-(Weight_type Weight_, Item_size_type Size_width_, Item_size_type Size_height_, bool Turn_matter_advance_, Durability_type durability_, Damage_type destroyDamage_, Area_type destroyArea_)
-:	Weight(Weight_), Size_width(Size_width_), Size_height(Size_height_), Turn_matter_advance(Turn_matter_advance_),
+(Name_type name_, Weight_type Weight_, Item_size_type Size_width_, Item_size_type Size_height_, bool Turn_matter_advance_, Durability_type durability_, Damage_type destroyDamage_, Area_type destroyArea_)
+:	name(name_), Weight(Weight_), Size_width(Size_width_), Size_height(Size_height_), Turn_matter_advance(Turn_matter_advance_),
 	durability(durability_), destroyDamage(destroyDamage_), destroyArea(destroyArea_)
 {
 	
@@ -28,6 +28,11 @@ Item::Item_size_type Item::Get_width() const
 Item::Item_size_type Item::Get_height() const
 {
 	return Size_height;
+};
+
+Item::Durability_type Item::getDurability() const
+{
+	return durability;
 };
 
 Base_block_type Item::Get_base() const
@@ -197,11 +202,11 @@ void ResourceConsumingItem::resourceRecount(ShipAttributes& attributes, ItemMode
 
 //===================================================================
 //=====================MAIN_ENGINE===================================
-Item_main_engine::Item_main_engine(	Weight_type Weight_, Item_size_type Size_width_, Item_size_type Size_height_, Durability_type durability_, Damage_type destroyDamage_, Area_type destroyArea_,
+Item_main_engine::Item_main_engine(	Name_type name_,Weight_type Weight_, Item_size_type Size_width_, Item_size_type Size_height_, Durability_type durability_, Damage_type destroyDamage_, Area_type destroyArea_,
 									Power_type power_, Max_speed_type maxSpeed_, Acceleration_type acceleration_,
 									Energy_type energyNeedLow_, Cooling_type coolingNeedLow_,
 									Energy_type energyNeedAverage_, Cooling_type coolingNeedAverage_)
-		:	Item(Weight_, Size_width_, Size_height_, 0, durability_, destroyDamage_, destroyArea_),
+		:	Item(name_, Weight_, Size_width_, Size_height_, 0, durability_, destroyDamage_, destroyArea_),
 			ResourceConsumingItem(modeAverage, energyNeedLow_, coolingNeedLow_, energyNeedAverage_, coolingNeedAverage_),
 			power(power_), maxSpeed(maxSpeed_), acceleration(acceleration_)
 {
@@ -229,88 +234,29 @@ void Item_main_engine::addAttributes(ShipAttributes& attributes, Turn_item_type 
 	attributes.permanentAttributes.amountEngines ++;
 	attributes.permanentAttributes.potentialAcceleration += acceleration;
 	
+	
+//	std::cout << "DEBUG: Item_main_engine::addAttributes" << std::endl;
+	
 };
 
 void Item_main_engine::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	resourceRecount(attributes, oldMode, newMode);
-/*	int energyBefore;
-	int energyNow;
-	int coolingBefore;
-	int coolingNow;
 	
-	if(oldMode == powerOff)
-	{
-		energyBefore = 0;
-		coolingBefore = 0;
-	}
-	else if(oldMode == modeLow)
-	{
-		energyBefore = energyNeedLow;
-		coolingBefore = coolingNeedLow;
-	}
-	else if(oldMode == modeAverage)
-	{
-		energyBefore = energyNeedAverage;
-		coolingBefore = coolingNeedAverage;
-	}
-	
-	if(newMode == powerOff)
-	{
-		energyNow = 0;
-		coolingNow = 0;
-	}
-	else if(newMode == modeLow)
-	{
-		energyNow = energyNeedLow;
-		coolingNow = coolingNeedLow;
-	}
-	else if(newMode == modeAverage)
-	{
-		energyNow = energyNeedAverage;
-		coolingNow = coolingNeedAverage;
-	}
-	
-	int energyNeedUpdate = energyNow - energyBefore;
-	int coolingNeedUpdate = coolingNow - coolingBefore;
-	
-	attributes.energyChange -= energyNeedUpdate;
-	attributes.overheatChange += coolingNeedUpdate;*/
 };
 
 void Item_main_engine::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	resourceRecount(attributes, oldMode, powerOff);
-/*	int energyNeedUpdate;
-	int coolingNeedUpdate;
-	
-	if(oldMode == powerOff)
-	{
-		energyNeedUpdate = 0;
-		coolingNeedUpdate = 0;
-	}
-	else if(oldMode == modeLow)
-	{
-		energyNeedUpdate = energyNeedLow;
-		coolingNeedUpdate = coolingNeedLow;
-	}
-	else if(oldMode == modeAverage)
-	{
-		energyNeedUpdate = energyNeedAverage;
-		coolingNeedUpdate = coolingNeedAverage;
-	}
-	
-	attributes.energyChange += energyNeedUpdate;
-	attributes.overheatChange -= coolingNeedUpdate;
-*/
-	
+
 	addWeightToAttributes(attributes, aRemove);
-//	attributes.permanentAttributes.currentWeight -= Weight;
+
 	attributes.permanentAttributes.engineCapacity -= power;
 	attributes.permanentAttributes.generalEnginesSpeed -= maxSpeed;
 	attributes.permanentAttributes.amountEngines --;
 	attributes.permanentAttributes.potentialAcceleration -= acceleration;
 	
+//	std::cout << "DEBUG: Item_main_engine::removeAttributes" << std::endl;
 };
 //=====================
 
@@ -322,11 +268,11 @@ void Item_main_engine::removeAttributes(ShipAttributes& attributes, Turn_item_ty
 
 //===================================================================
 //=====================HELP_ENGINE===================================
-Item_help_engine::Item_help_engine(Weight_type Weight_, Item_size_type Size_width_, Item_size_type Size_height_, Durability_type durability_, Damage_type destroyDamage_, Area_type destroyArea_,
+Item_help_engine::Item_help_engine(	Name_type name_, Weight_type Weight_, Item_size_type Size_width_, Item_size_type Size_height_, Durability_type durability_, Damage_type destroyDamage_, Area_type destroyArea_,
 									Power_type power_, Max_speed_type maxSpeed_,
 									Energy_type energyNeedLow_, Cooling_type coolingNeedLow_,
 									Energy_type energyNeedAverage_, Cooling_type coolingNeedAverage_)
-		:	Item(Weight_, Size_width_, Size_height_, 1, durability_, destroyDamage_, destroyArea_),
+		:	Item(name_, Weight_, Size_width_, Size_height_, 1, durability_, destroyDamage_, destroyArea_),
 			ResourceConsumingItem(modeAverage, energyNeedLow_, coolingNeedLow_, energyNeedAverage_, coolingNeedAverage_),
 			power(power_), maxSpeed(maxSpeed_)
 {
@@ -341,17 +287,22 @@ Advanced_block_type Item_help_engine::getAdvanceBlock() const
 //=============Attributes
 void Item_help_engine::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
 {
-	
+	addWeightToAttributes(attributes, aAdd);
+	attributes.permanentAttributes.moveEnginesList.push_back(MoveEngines(position, turn, power, maxSpeed));	
+	attributes.permanentAttributes.recountMoveEnginesList();
 };
 
 void Item_help_engine::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
-	
+	resourceRecount(attributes, oldMode, newMode);
 };
 
 void Item_help_engine::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
-	
+	resourceRecount(attributes, oldMode, powerOff);
+	addWeightToAttributes(attributes, aRemove);
+	attributes.permanentAttributes.removeFromMoveEnginesList(position, turn);	
+	attributes.permanentAttributes.recountMoveEnginesList();
 };
 //=======================
 

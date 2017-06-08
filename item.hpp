@@ -4,11 +4,14 @@
 #include "ship_attributes.hpp"
 #include "enum_types.hpp"
 
+#include "string"
+
 //===================================================================
 //=====================ABSTRACT_ITEM_CLASS===========================
 class Item
 {
 protected:	
+	typedef std::string Name_type;
 	typedef int Weight_type;
 	typedef int Item_size_type;	
 	typedef int Durability_type;
@@ -26,14 +29,15 @@ protected:
 	
 private:	
 	
+	Name_type name;
 	Weight_type Weight;
 	Item_size_type Size_width;
 	Item_size_type Size_height;
 	bool Turn_matter_advance;
 	
-	int durability;
-	int destroyDamage;
-	int destroyArea;
+	Durability_type durability;
+	Damage_type destroyDamage;
+	Area_type destroyArea;
 	
 public:
 	virtual ~Item() = 0;
@@ -50,9 +54,10 @@ public:
 	
 	Item_size_type Get_width() const;
 	Item_size_type Get_height() const;
+	Durability_type getDurability() const;
 	
 protected:	
-	Item(Weight_type, Item_size_type, Item_size_type, bool, Durability_type, Damage_type, Area_type);
+	Item(Name_type, Weight_type, Item_size_type, Item_size_type, bool, Durability_type, Damage_type, Area_type);
 	
 	void addWeightToAttributes(ShipAttributes&, Attributes_aAdd_or_aRemove_type) const;
 };
@@ -106,20 +111,10 @@ private:
 	Power_type power;
 	Max_speed_type maxSpeed;
 	Acceleration_type acceleration;
-/*	
-	ItemMode maxMode = modeAverage;
-	
-	//===Low mode	
-	Energy_type energyNeedLow;
-	Cooling_type coolingNeedLow;
-	
-	//===Average mode		
-	Energy_type energyNeedAverage;
-	Cooling_type coolingNeedAverage;
-	*/
+
 public:
 	
-	Item_main_engine(	Weight_type, Item_size_type, Item_size_type, Durability_type, Damage_type, Area_type, 
+	Item_main_engine(	Name_type, Weight_type, Item_size_type, Item_size_type, Durability_type, Damage_type, Area_type, 
 						Power_type, Max_speed_type, Acceleration_type,
 						Energy_type, Cooling_type,																//Low mode
 						Energy_type, Cooling_type);																//Average mode
@@ -145,20 +140,10 @@ private:
 	
 	Power_type power;
 	Max_speed_type maxSpeed;
-	
-/*	ItemMode maxMode = modeAverage;
-	
-	//===Low mode	
-	Energy_type energyNeedLow;
-	Cooling_type coolingNeedLow;
-	
-	//===Average mode		
-	Energy_type energyNeedAverage;
-	Cooling_type coolingNeedAverage;	*/
 
 public:
 	
-	Item_help_engine(	Weight_type, Item_size_type, Item_size_type, Durability_type, Damage_type, Area_type,
+	Item_help_engine(	Name_type, Weight_type, Item_size_type, Item_size_type, Durability_type, Damage_type, Area_type,
 						Power_type, Max_speed_type,
 						Energy_type, Cooling_type,																//Low mode
 						Energy_type, Cooling_type);																//Average mode

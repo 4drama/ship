@@ -31,46 +31,47 @@ struct PermanentShipAttributes
 //	int currentHP;
 
 //=====================motion==================================
-	double engineCapacity = 3800; //engine capacity(sum all)
+	double engineCapacity = 0; //engine capacity(sum all)
 	double potentialWeight;
-	double currentWeight = 10740;
+	double currentWeight = 0;
 	
-	double generalEnginesSpeed = 1800; // sum engines speed
-	int amountEngines = 2; //amount engines
-	double potentialAcceleration = 200; // engine acceleration (sum all)
+	double generalEnginesSpeed = 0; // sum engines speed
+	int amountEngines = 0; //amount engines
+	double potentialAcceleration = 0; // engine acceleration (sum all)
 	double maxSpeed;
 //	double currentSpeed;
 	double accelerationSpeed;
 	
 	std::vector<MoveEngines> moveEnginesList;
 	
-	double leftTurnEngineCapacity = 1000; //turn engine capacity (sum LeftDown and RightUp)
-	double rightTurnEngineCapacity = 1000; //turn engine capacity (sum LeftUp and RightDown)
-	double generalLeftTurnRateEnginesSpeed = 400; //sum turn engines speed need to left turn
-	int amountLeftTurnEngines = 2; //amount engines need to left turn
-	double generalRightTurnRateEnginesSpeed = 400;
-	int amountRightTurnEngines = 2; 
-	int leftLongToEngines = 2;
-	int rightLongToEngines = 2;
+	double leftTurnEngineCapacity = 0; //turn engine capacity (sum LeftDown and RightUp)
+	double rightTurnEngineCapacity = 0; //turn engine capacity (sum LeftUp and RightDown)
+	double generalLeftTurnRateEnginesSpeed = 0; //sum turn engines speed need to left turn
+	int amountLeftTurnEngines = 0; //amount engines need to left turn
+	double generalRightTurnRateEnginesSpeed = 0;
+	int amountRightTurnEngines = 0; 
+	int leftLongToEngines = 0;
+	int rightLongToEngines = 0;
 	double leftTurnRate;
 	double rightTurnRate;
 	
-	double leftStrafeEngineCapacity = 1000;	 //turn engine capacity (sum Left engines)
-	double rightStrafeEngineCapacity = 1000; //turn engine capacity (sum Right engines)
-	double generalLeftStrafeSpeeds = 400; //sum turn engines speed need to Left Strafe
-	int amountLeftStrafeEngines = 2; //amount engines need to Left Strafe
-	double generalRightStrafeSpeeds = 400;
-	int amountRightStrafeEngines = 2;
+	double leftStrafeEngineCapacity = 0;	 //turn engine capacity (sum Left engines)
+	double rightStrafeEngineCapacity = 0; //turn engine capacity (sum Right engines)
+	double generalLeftStrafeSpeeds = 0; //sum turn engines speed need to Left Strafe
+	int amountLeftStrafeEngines = 0; //amount engines need to Left Strafe
+	double generalRightStrafeSpeeds = 0;
+	int amountRightStrafeEngines = 0;
 	double leftStrafeSpeed;
 	double rightStrafeSpeed;
 	
-	double frontEngineCapacity = 500; // front engine capacity(sum all)
-	double generalFrontEnginesSpeed = 200;//sum front engines speed
-	int amountFrontEngines = 1; //amount front engines
+	double frontEngineCapacity = 0; // front engine capacity(sum all)
+	double generalFrontEnginesSpeed = 0;//sum front engines speed
+	int amountFrontEngines = 0; //amount front engines
 	double brakingSpeed;
 //-------------------------------------------------------------	
 	
 	void recountMoveEnginesList();
+	void removeFromMoveEnginesList(int, Turn_item_type);
 	
 	void reckonPotentialWeight();
 	void reckonSpeed();
