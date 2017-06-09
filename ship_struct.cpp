@@ -36,28 +36,6 @@ Group(Group_), firstAdvance(Advance_), turnTo(turnTo_)
 		First_base = Base_;
 	};
 
-	/*	
-	if(Advance_ == outside_engine_to_left_block)
-	{
-		turnTo = left_turn;
-		firstAdvance = outside_engine_block;
-	}
-	else if(Advance_ == outside_engine_to_right_block)
-	{
-		turnTo = right_turn;
-		firstAdvance = outside_engine_block;
-	}
-	else if(Advance_ == outside_engine_to_up_block)
-	{
-		turnTo = up_turn;
-		firstAdvance = outside_engine_block;
-	}
-	else if(Advance_ == outside_engine_to_down_block)
-	{
-		turnTo = down_turn;
-		firstAdvance = outside_engine_block;
-	}
-	*/
 };
 
 Ship_types::Groups_type::iterator Ship_struct::Get_group()
@@ -65,29 +43,7 @@ Ship_types::Groups_type::iterator Ship_struct::Get_group()
 	return Group;
 };
 
-/*
-Ship_struct Create_block(Base_block_type Base_, Ship_struct::Groups_type::iterator Group_, Advanced_block_type Advance_)
-{
-	
-	return Ship_struct(Base_, Group_, Advance_);
-};
-*/
-/*
-void Ship_struct::Struct_set_item(Set_item& set)
-{
-	Ship_struct::Set_item_pointer = &set;
-};
-	
-void Ship_struct::Struct_destroy_item()
-{
-	Ship_struct::Set_item_pointer = nullptr;	
-};
 
-Set_item* Ship_struct::Struct_get_item()
-{
-	return Ship_struct::Set_item_pointer;
-};
-*/
 Base_block_type Ship_struct::Get_first_type() const
 {
 	return First_base;
@@ -123,10 +79,3 @@ int Ship_struct::getKey() const
 {
 	return keyItem;
 };
-
-/*
-void Ship_struct::Reset_ptr()
-{
-	Set_item_pointer = nullptr;
-};
-*/

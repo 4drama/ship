@@ -20,6 +20,7 @@ private:
 	typedef int Block_size_type;
 	typedef int Line_number_type;
 	typedef int Group_size_type;
+	typedef int Overheat_lmit_type;
 	
 	Name_type name;
 	
@@ -33,7 +34,7 @@ private:
 	
 public:
 
-	Ship(Name_type, Block_size_type, Group_size_type, Weight_type);
+	Ship(Name_type, Block_size_type, Group_size_type, Weight_type, Overheat_lmit_type);
 	void AddShipStructInLine(Line_number_type, Ship_struct);
 	
 	void Debug_print();

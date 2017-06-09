@@ -22,7 +22,7 @@ struct ShipAttributes
 	
 	int overheatLimit = 0;		//
 	int overheatNow = 0;	//
-	int overheatChange = 0;		//
+	int overheatChange = -20;		//
 	
 	int energyLimit = 0;		//
 	int energyNow = 0;		//

@@ -4,7 +4,7 @@
 #include<iterator>
 
 
-Ship::Ship(Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weight_type weight_) : name(name_), itemsList(bsize_*bsize_/2)
+Ship::Ship(Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weight_type weight_, Overheat_lmit_type overheat) : name(name_), itemsList(bsize_*bsize_/2)
 {
 	Blocks.resize(bsize_);
 	for(Group_size_type i = 0; i<gsize_; ++i)
@@ -12,6 +12,7 @@ Ship::Ship(Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weig
 		Groups.push_back(Group_type(i));
 	};
 	currentAttributes.permanentAttributes.currentWeight += weight_;
+	currentAttributes.overheatLimit = overheat;
 };
 
 void Ship::Debug_print()

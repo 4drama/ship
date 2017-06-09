@@ -4,7 +4,7 @@
 
 Ship CreateHawkMK1()
 {
-	Ship Biba_ship("HawkMK1", 22, 9, 2000);
+	Ship Biba_ship("HawkMK1", 22, 9, 2000, 1600);
 	
 	Biba_ship.AddShipStructInLine(0, Ship_struct(empty_block, Biba_ship.Return_group(0), not_advance_block));		
 	Biba_ship.AddShipStructInLine(0, Ship_struct(weapon_block, Biba_ship.Return_group(1), not_advance_block));

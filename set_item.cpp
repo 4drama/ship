@@ -12,6 +12,10 @@ Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, ShipAttributes& att
 	auto width = Item_pointer_.Get_width();
 	auto height = Item_pointer_.Get_height();
 	
+	currectDurability = Item_pointer->getDurability();
+	Item_pointer->addAttributes(*attributesPtr, Turn, position);
+	attributesPtr->recountAttributes();
+	
 	
 	if (Turn_ == left_turn || Turn_ == right_turn )
 	{
@@ -48,10 +52,7 @@ Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, ShipAttributes& att
 	};
 //	std::cout << " end check" <<std::endl;
 	Ship_pointer_.setStatus();
-	
-	currectDurability = Item_pointer->getDurability();
-	Item_pointer->addAttributes(*attributesPtr, Turn, position);
-	attributesPtr->recountAttributes();
+
 //	std::cout << "Debug: Set_item Constructor end" <<std::endl;
 };
 
