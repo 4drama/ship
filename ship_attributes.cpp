@@ -22,9 +22,9 @@ void ShipAttributes::nextStep()
 	{
 	speedNow += -brakingSpeedNow;
 	}
-	else if(actionNow == idle)
+	else if(actionNow == idle && speedNow < 0)
 	{
-		
+		speedNow = 0;
 	}
 	
 	accelerationNow = (1-(speedNow/permanentAttributes.maxSpeed))*permanentAttributes.accelerationSpeed;

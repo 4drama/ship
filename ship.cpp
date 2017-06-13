@@ -3,10 +3,13 @@
 #include<iostream>
 #include<iterator>
 
+#include <algorithm>
 
 Ship::Ship(Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weight_type weight_, Overheat_lmit_type overheat) : name(name_), itemsList(bsize_*bsize_/2)
 {
-	Blocks.resize(bsize_);
+	Blocks.resize(bsize_);	
+	Groups.reserve(gsize_);
+	
 	for(Group_size_type i = 0; i<gsize_; ++i)
 	{
 		Groups.push_back(Group_type(i));
@@ -139,6 +142,14 @@ void Ship::powerOn()
 	
 };
 
+void Ship::powerOff()
+{
+	std::for_each(	itemsList.valueList.begin(), itemsList.valueList.end(), 		
+					[](std::pair<int, Set_item*> i)
+					{
+						i.second->swithMode(ItemMode::powerOff);
+					});
+};
 
 void Ship::setItem(Item* Itm, Turn_item_type Turn_, Block_size_type X_call_, Block_size_type Y_call_)
 {
@@ -184,30 +195,85 @@ void Ship::setItem(Item* Itm, Turn_item_type Turn_, Block_size_type X_call_, Blo
 	//new Set_item(*this, Itm, Tu, x, y);
 };
 
-
-
-void Ship::removeItem(Block_size_type x, Block_size_type y)
-{	
-	int key = Blocks[y][x].getKey();
-	
-//	Blocks[y][x].destroyKey();
-	
-/*	if(!Blocks[y][x].Struct_get_item() == 0)
-	{				
-		delete Blocks[y][x].Struct_get_item();
-	}*/
+void Ship::removeItem(Key_type key)
+{
 	if(key != 0)
 	{
 		itemsList.erase(key);
 	}
+};
+
+void Ship::removeItem(Block_size_type x, Block_size_type y)
+{	
+	int key = Blocks[y][x].getKey();
+	this->removeItem(key);
 };
 	
 void Ship::setStatus()
 {
 	keyFlag = true;
 };
+
+void Ship::showItems() const
+{
+	std::cout << std::endl;
 	
+	std::for_each(	itemsList.valueList.begin(), itemsList.valueList.end(), 		
+					[](std::pair<int, Set_item*> i)
+					{
+						std::cout 	<< "Key: " << i.first << ". Name: " << i.second->getName() << ". Position: " 
+									<< i.second->getPosition().first << " " << i.second->getPosition().second << "." << std::endl;
+					});
 	
+	std::cout << std::endl;
+};
+
+void Ship::itemSetMode(ItemMode mode, Key_type key)
+{
+	auto* setItem = itemsList.find(key);
+	setItem->swithMode(mode);
+};
+
+void Ship::itemSetMode(ItemMode mode, Position_type x, Position_type y)
+{
+	int key = Blocks[y][x].getKey();
+	this->itemSetMode(mode, key);
+};
+
+void Ship::nextStep(int amount)
+{
+	while(amount--)
+	{
+		currentAttributes.nextStep();
+	}
+
+};
+
+void Ship::action(Action_type action)
+{
+	std::for_each(	itemsList.valueList.begin(), itemsList.valueList.end(), 		
+					[action, this](std::pair<int, Set_item*> i)
+					{
+						if(dynamic_cast<Item_main_engine*>(i.second->getItem()))
+						{
+							if(action == forwardMovement)
+							{
+								this->itemSetMode(modeAverage, i.first);
+							}
+							else if(action == idle)
+							{
+								this->itemSetMode(modeLow, i.first);
+							}
+							else if(action == backwardMovement)
+							{
+								this->itemSetMode(modeLow, i.first);
+								//+frontengine
+							}
+						}
+					});
+	currentAttributes.actionNow = action;
+};
+
 Ship::~Ship()
 {
 /*	for(int i = 0, size = itemsList.size(); i<size; ++i)

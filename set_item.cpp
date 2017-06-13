@@ -81,3 +81,18 @@ void Set_item::swithMode(ItemMode newMode)
 	mode = newMode;
 };
 
+std::string Set_item::getName() const
+{
+	return Item_pointer->getName();
+};
+
+std::pair<int, int> Set_item::getPosition() const
+{
+	return Cells[0];
+};
+
+Item* Set_item::getItem()
+{
+	return Item_pointer;
+};
+

@@ -9,6 +9,8 @@
 #include <string>
 
 #include "ship_attributes.hpp"
+#include "enum_types.hpp"
+
 
 class Ship : private Ship_types
 {
@@ -21,6 +23,9 @@ private:
 	typedef int Line_number_type;
 	typedef int Group_size_type;
 	typedef int Overheat_lmit_type;
+	
+	typedef int Key_type;
+	typedef int Position_type;
 	
 	Name_type name;
 	
@@ -35,24 +40,31 @@ private:
 public:
 
 	Ship(Name_type, Block_size_type, Group_size_type, Weight_type, Overheat_lmit_type);
+	
 	void AddShipStructInLine(Line_number_type, Ship_struct);
-	
-	void Debug_print();
-	std::string getName() const;
-	
 	Groups_type::iterator Return_group(Group_size_type);
-//	Blocks_type* Get_blocks();
+	void setStatus();
 	bool Block_check_struct_item(Item&, Block_size_type, Block_size_type, Turn_item_type);
-	
-//	void Block_set_struct_item(Set_item&, Block_size_type, Block_size_type);
-	
 	void Block_reser_struct_item(Block_size_type, Block_size_type);
 	
-	void powerOn();
-	void setItem(Item*, Turn_item_type, Block_size_type, Block_size_type);
-	void removeItem(Block_size_type, Block_size_type);
+	std::string getName() const;
 	
-	void setStatus();
+	void Debug_print();	
+	void showItems() const;	
+	
+	void powerOn();
+	void powerOff();
+	
+	void setItem(Item*, Turn_item_type, Block_size_type, Block_size_type);
+	
+	void removeItem(Key_type);
+	void removeItem(Block_size_type, Block_size_type);
+
+	void itemSetMode(ItemMode, Key_type);
+	void itemSetMode(ItemMode, Position_type, Position_type);
+
+	void nextStep(int);
+	void action(Action_type);
 	
 	~Ship();
 };

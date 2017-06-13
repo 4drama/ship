@@ -15,9 +15,9 @@ struct ShipAttributes
 	double leftEnginesPower;
 	double rightEnginesPower;
 	
-	Action_type actionNow = forwardMovement;
+	Action_type actionNow = idle;
 	double speedNow = 0;	//
-	double accelerationNow = 0;	//(1-(speedNow/permanentAttributes.currentSpeed))*permanentAttributes.accelerationSpeed
+	double accelerationNow = -10;	//(1-(speedNow/permanentAttributes.currentSpeed))*permanentAttributes.accelerationSpeed
 	double brakingSpeedNow = 0;	//speedNow-permanentAttributes.brakingSpeed
 	
 	int overheatLimit = 0;		//

@@ -20,9 +20,17 @@ int main()
 	
 	std::cout << std::endl;
 	
-//	Ship1.removeItem(8, 8);		
-	Ship1.powerOn();
+	Ship1.removeItem(8, 8);		
+	Ship1.powerOn();	
+//	Ship1.powerOff();
+
+	Ship1.itemSetMode(modeAverage, 3, 13);
+	
+	Ship1.action(forwardMovement);	
+	Ship1.nextStep(5);
+	
 	Ship1.Debug_print();
+	Ship1.showItems();
 
 
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();

@@ -36,6 +36,11 @@ Item::Durability_type Item::getDurability() const
 	return durability;
 };
 
+Item::Name_type Item::getName() const
+{
+	return name;
+};
+
 Base_block_type Item::Get_base() const
 {
 	return base;

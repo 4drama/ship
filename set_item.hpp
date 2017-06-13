@@ -11,6 +11,7 @@
 
 #include "enum_types.hpp"
 #include "ship_attributes.hpp"
+#include <string>
 
 class Set_item
 {
@@ -38,6 +39,10 @@ public:
 	
 	void addKeyingStruct(int, int);
 	void swithMode(ItemMode);
+	
+	std::string getName() const;
+	std::pair<int, int> getPosition() const;
+	Item* getItem();
 };
 
 
