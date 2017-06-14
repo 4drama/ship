@@ -3,7 +3,7 @@
 #include <iostream> 
 #include <iterator>
 
-Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, ShipAttributes& attributesPtr_, Turn_item_type Turn_, X_call X_call_, Y_call Y_call_)
+Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, NewShipAttributes& attributesPtr_, Turn_item_type Turn_, X_call X_call_, Y_call Y_call_)
 				: Ship_pointer(&Ship_pointer_), Item_pointer(&Item_pointer_), attributesPtr(&attributesPtr_) , Turn(Turn_), position(Y_call_)
 {
 //	std::cout << "Debug: Set_item Constructor begin" <<std::endl;
@@ -14,7 +14,7 @@ Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, ShipAttributes& att
 	
 	currectDurability = Item_pointer->getDurability();
 	Item_pointer->addAttributes(*attributesPtr, Turn, position);
-	attributesPtr->recountAttributes();
+//	attributesPtr->recountAttributes();
 	
 	
 	if (Turn_ == left_turn || Turn_ == right_turn )
@@ -59,14 +59,20 @@ Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, ShipAttributes& att
 Set_item::~Set_item()
 {
 //	std::cout << "Debug: Set_item Destructor" <<std::endl;
+	if (dynamic_cast<Item_help_engine*>(Item_pointer))
+	{
+		dynamic_cast<Item_help_engine*>(Item_pointer)->removeAttributes(*attributesPtr, Turn, mode, Cells[0]);
+	}
+	else{
 	Item_pointer->removeAttributes(*attributesPtr, Turn, mode, position);
-
+	}
+	
 	for ( auto it = Cells.begin(); it!=Cells.end(); it++ )
 	{
 		//std::cout << it->first << " " << it->second << std::endl;
 		Ship_pointer->Block_reser_struct_item(it->second, it->first);
 	};
-	attributesPtr->recountAttributes();
+//	attributesPtr->recountAttributes();
 };
 
 void Set_item::addKeyingStruct(int x, int y)
@@ -77,7 +83,18 @@ void Set_item::addKeyingStruct(int x, int y)
 
 void Set_item::swithMode(ItemMode newMode)
 {
+	if (newMode == mode)
+	{
+		return;
+	}
+	if (dynamic_cast<Item_help_engine*>(Item_pointer))
+	{
+		dynamic_cast<Item_help_engine*>(Item_pointer)->recountAttributes(*attributesPtr, mode, newMode, Cells[0]);
+	}
+	else
+	{
 	Item_pointer->recountAttributes(*attributesPtr, mode, newMode);
+	}
 	mode = newMode;
 };
 

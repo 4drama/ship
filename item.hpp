@@ -1,7 +1,13 @@
 #ifndef ITEM__
 #define ITEM__
 
-#include "ship_attributes.hpp"
+
+#include <utility>
+
+
+//#include "ship_attributes.hpp"
+#include "new_ship_attributes.hpp"
+
 #include "enum_types.hpp"
 
 #include "string"
@@ -52,9 +58,9 @@ public:
 	virtual Turn_item_type getTurnItem() const;
 	virtual Advanced_block_type getAdvanceBlock() const;
 	
-	virtual void addAttributes(ShipAttributes&, Turn_item_type, int) const;
-	virtual void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const;
-	virtual void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const;
+	virtual void addAttributes(NewShipAttributes&, Turn_item_type, int) const;
+	virtual void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const;
+	virtual void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const;
 	
 	bool Get_turn_matter_advance() const;
 	
@@ -67,7 +73,7 @@ protected:
 	Item(	Name_type, Weight_type, Item_size_type, Item_size_type, bool, Durability_type,
 			Base_block_type = no_matter_block, Advanced_block_type = not_advance_block, Turn_item_type = no_matter_turn);
 	
-	void addWeightToAttributes(ShipAttributes&, Attributes_aAdd_or_aRemove_type) const;
+	void addWeightToAttributes(NewShipAttributes&, Attributes_aAdd_or_aRemove_type) const;
 };
 //-------------------------------------------------------------------
 
@@ -101,7 +107,7 @@ public:
 protected:
 	ResourceConsumingItem(ItemMode, Energy_type, Cooling_type, Energy_type=0, Cooling_type=0, Energy_type=0, Cooling_type=0);
 	
-	void resourceRecount(ShipAttributes&, ItemMode, ItemMode) const;
+	void resourceRecount(NewShipAttributes&, ItemMode, ItemMode) const;
 };
 //-------------------------------------------------------------------
 
@@ -119,7 +125,7 @@ public:
 	virtual ~OnceResourceConsumingItem() = 0;
 protected:
 	OnceResourceConsumingItem(	Energy_type, Cooling_type);
-	void reductionAttributes(	ShipAttributes&);
+	void reductionAttributes(	NewShipAttributes&);
 };
 //-------------------------------------------------------------------
 
@@ -180,9 +186,9 @@ public:
 						Energy_type, Cooling_type,																//Low mode
 						Energy_type, Cooling_type);																//Average mode
 
-	void addAttributes (ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;
+	void addAttributes (NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const override;
 };
 //-------------------------------------------------------------------
 
@@ -197,6 +203,8 @@ private:
 	Power_type power;
 	Max_speed_type maxSpeed;
 
+	void logicAdd(NewShipAttributes&, ItemMode, ItemMode, std::pair<int, int>) const;
+	
 public:
 	
 	Item_help_engine(	Name_type, Weight_type, Item_size_type, Item_size_type, Durability_type,
@@ -204,9 +212,9 @@ public:
 						Energy_type, Cooling_type,																//Low mode
 						Energy_type, Cooling_type);																//Average mode
 
-	void addAttributes(ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;
+	void addAttributes(NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode, std::pair<int, int>) const;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, std::pair<int, int>) const;
 };
 //-------------------------------------------------------------------
 
@@ -224,9 +232,9 @@ public:
 	Item_cabina(	Name_type, Weight_type, Item_size_type, Item_size_type, Durability_type,
 					Energy_type, Cooling_type);
 	
-	void addAttributes(ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;
+	void addAttributes(NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const override;
 	
 };
 //-------------------------------------------------------------------
@@ -244,9 +252,9 @@ public:
 	Item_gate(		Name_type, Weight_type, Item_size_type, Item_size_type, Durability_type,
 					Item_size_type);
 
-	void addAttributes(ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;
+	void addAttributes(NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const override;
 
 };
 //-------------------------------------------------------------------
@@ -265,9 +273,9 @@ public:
 	Item_cargo_cell(	Name_type, Weight_type, Item_size_type, Item_size_type, Durability_type,
 						Item_size_type, Item_size_type);
 	
-	void addAttributes(ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;
+	void addAttributes(NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const override;
 	
 };
 //-------------------------------------------------------------------
@@ -284,9 +292,9 @@ public:
 							Damage_type, Area_type, 
 							Energy_type, Cooling_type);
 	
-	void addAttributes(ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;
+	void addAttributes(NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const override;
 };
 //-------------------------------------------------------------------
 
@@ -305,9 +313,9 @@ public:
 						Energy_type, Cooling_type,
 						Enegry_shield_type, Enegry_shield_type);
 						
-	void addAttributes(ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;
+	void addAttributes(NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const override;
 };
 //-------------------------------------------------------------------
 
@@ -323,9 +331,9 @@ public:
 							Energy_type, Cooling_type,
 							Energy_type, Cooling_type);
 	
-	void addAttributes(ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;								
+	void addAttributes(NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const override;								
 };
 //-------------------------------------------------------------------
 
@@ -341,9 +349,9 @@ public:
 							Damage_type, Area_type,
 							Energy_storage_type);
 	
-	void addAttributes(ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;
+	void addAttributes(NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const override;
 };
 //-------------------------------------------------------------------
 
@@ -359,9 +367,9 @@ public:
 							Energy_type, Cooling_type,
 							WeaponItem::Damage_type, WeaponItem::Area_type, Speed_type);
 
-	void addAttributes(ShipAttributes&, Turn_item_type, int) const override;
-	void recountAttributes(ShipAttributes&, ItemMode, ItemMode) const override;
-	void removeAttributes(ShipAttributes&, Turn_item_type, ItemMode, int) const override;
+	void addAttributes(NewShipAttributes&, Turn_item_type, int) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, int) const override;
 };
 //-------------------------------------------------------------------
 #endif

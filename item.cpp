@@ -51,16 +51,16 @@ Turn_item_type Item::getTurnItem() const
 	return turnItem;
 };
 
-void Item::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	std::cerr << "ERROR: ABSTRACT_ITEM_CLASS. addAttributes " << std::endl;
 };
-void Item::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	std::cerr << "ERROR: ABSTRACT_ITEM_CLASS. recountAttributes " << std::endl;
 };
 
-void Item::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	std::cerr << "ERROR: ABSTRACT_ITEM_CLASS. removeAttributes " << std::endl;
 };
@@ -76,15 +76,15 @@ Advanced_block_type Item::getAdvanceBlock() const
 };
 
 
-void Item::addWeightToAttributes(ShipAttributes& attributes, Attributes_aAdd_or_aRemove_type action) const
+void Item::addWeightToAttributes(NewShipAttributes& attributes, Attributes_aAdd_or_aRemove_type action) const
 {
 	if(action == aAdd)
 	{
-		attributes.permanentAttributes.currentWeight += Weight;
+		attributes.currentWeight += Weight;
 	}
 	else if(action == aRemove)
 	{
-		attributes.permanentAttributes.currentWeight -= Weight;
+		attributes.currentWeight -= Weight;
 	}
 };
 
@@ -129,7 +129,7 @@ ResourceConsumingItem::ResourceConsumingItem(	ItemMode maxMode_,
 	std::cerr << "coolingNeedHigh_" << coolingNeedHigh_<< std::endl << std::endl;*/
 };
 
-void ResourceConsumingItem::resourceRecount(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void ResourceConsumingItem::resourceRecount(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 /*	std::cerr << std::endl << "energyNeedLow" << energyNeedLow<< std::endl;
 	std::cerr << "coolingNeedLow" << coolingNeedLow<< std::endl;
@@ -248,7 +248,7 @@ OnceResourceConsumingItem::OnceResourceConsumingItem(	Energy_type energyReductio
 	
 };
 
-void OnceResourceConsumingItem::reductionAttributes(ShipAttributes& attributes)
+void OnceResourceConsumingItem::reductionAttributes(NewShipAttributes& attributes)
 {
 	attributes.overheatNow += heat;
 	attributes.energyNow -= energyReduction;
@@ -276,36 +276,59 @@ Item_main_engine::Item_main_engine(	Name_type name_,Weight_type Weight_, Item_si
 };
 
 //=============Attributes
-void Item_main_engine::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_main_engine::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);
-	//attributes.permanentAttributes.currentWeight += Weight;
-	attributes.permanentAttributes.engineCapacity += power;
-	attributes.permanentAttributes.generalEnginesSpeed += maxSpeed;
-	attributes.permanentAttributes.amountEngines ++;
-	attributes.permanentAttributes.potentialAcceleration += acceleration;
+//	attributes.mainPower += power;
+//	attributes.permanentAttributes.generalEnginesSpeed += maxSpeed;
+//	attributes.permanentAttributes.amountEngines ++;
+//	attributes.permanentAttributes.potentialAcceleration += acceleration;
 	
 	
 //	std::cout << "DEBUG: Item_main_engine::addAttributes" << std::endl;
 	
 };
 
-void Item_main_engine::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_main_engine::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	resourceRecount(attributes, oldMode, newMode);
 	
+	if((oldMode == powerOff || oldMode == modeLow) && newMode == modeAverage)
+	{
+		attributes.maxSpeed += maxSpeed;
+		attributes.potentialAcceleration += acceleration;
+	}
+	else if(oldMode == modeAverage && (newMode == powerOff || newMode == modeLow))
+	{
+		attributes.maxSpeed -= maxSpeed;
+		attributes.potentialAcceleration -= acceleration;
+	}
+	
+	if(oldMode == powerOff)
+	{
+		attributes.mainPower += power;
+	}
+	else if(newMode == powerOff)
+	{
+		attributes.mainPower -= power;
+	}
+	
+	attributes.reckonForwardingSpeed();
 };
 
-void Item_main_engine::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_main_engine::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	resourceRecount(attributes, oldMode, powerOff);
-
+	if(oldMode != powerOff)
+	{
+		attributes.mainPower -= power;
+	}
 	addWeightToAttributes(attributes, aRemove);
 
-	attributes.permanentAttributes.engineCapacity -= power;
-	attributes.permanentAttributes.generalEnginesSpeed -= maxSpeed;
-	attributes.permanentAttributes.amountEngines --;
-	attributes.permanentAttributes.potentialAcceleration -= acceleration;
+//	attributes.mainPower -= power;
+//	attributes.permanentAttributes.generalEnginesSpeed -= maxSpeed;
+//	attributes.permanentAttributes.amountEngines --;
+//	attributes.permanentAttributes.potentialAcceleration -= acceleration;
 	
 //	std::cout << "DEBUG: Item_main_engine::removeAttributes" << std::endl;
 };
@@ -327,24 +350,120 @@ Item_help_engine::Item_help_engine(	Name_type name_, Weight_type Weight_, Item_s
 };
 
 //=============Attributes
-void Item_help_engine::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_help_engine::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);
-	attributes.permanentAttributes.moveEnginesList.push_back(MoveEngines(position, turn, power, maxSpeed));	
-	attributes.permanentAttributes.recountMoveEnginesList();
+//	???????????????????????????????????????????????????
+	
+	
+	
+//	attributes.permanentAttributes.moveEnginesList.push_back(MoveEngines(position, turn, power, maxSpeed));	
+//	attributes.permanentAttributes.recountMoveEnginesList();
 };
 
-void Item_help_engine::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_help_engine::logicAdd(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode, std::pair<int, int> position) const
+{	
+	double* speedPtr = nullptr;
+	double* powerPtr = nullptr;
+	int* positionPtr = nullptr;
+	
+	if(position.second >= attributes.frontPos.first && position.second <= attributes.frontPos.second)
+	{
+		if(position.first >= attributes.leftPos.first && position.first <= attributes.leftPos.second)
+		{
+			speedPtr = &attributes.leftFrontSpeed;
+			powerPtr = &attributes.leftFrontPower;
+			positionPtr = &attributes.leftFrontPosition;
+		}
+		else if(position.first >= attributes.middlePos.first && position.first <= attributes.middlePos.second)
+		{
+			speedPtr = &attributes.frontEngineSpeed;
+			powerPtr = &attributes.frontEnginePower;
+		}
+		else if(position.first >= attributes.rightPos.first && position.first <= attributes.rightPos.second)
+		{
+			speedPtr = &attributes.rightFrontSpeed;
+			powerPtr = &attributes.rightFrontPower;
+			positionPtr = &attributes.rightFrontPosition;
+		}
+		else
+		{
+			std::cerr << "ERROR: Item_help_engine::logicAdd Front std::pair<" << position.first << ", " << position.second << "> position" << std::endl;
+			return;
+		}
+	}
+	else if(position.second >= attributes.backPos.first && position.second <= attributes.backPos.second)
+	{
+		if(position.first >= attributes.leftPos.first && position.first <= attributes.leftPos.second)
+		{
+			speedPtr = &attributes.leftBackSpeed;
+			powerPtr = &attributes.leftBackPower;
+			positionPtr = &attributes.leftBackPosition;
+		}
+		else if(position.first >= attributes.rightPos.first && position.first <= attributes.rightPos.second)
+		{
+			speedPtr = &attributes.rightBackSpeed;
+			powerPtr = &attributes.rightBackPower;
+			positionPtr = &attributes.rightBackPosition;
+		}
+		else
+		{
+			std::cerr << "ERROR: Item_help_engine::logicAdd Back std::pair<" << position.first << ", " << position.second << "> position" << std::endl;
+			return;
+		}
+	}
+	else
+	{
+		std::cerr << "ERROR: Item_help_engine::logicAdd All" << std::endl;
+		return;
+	}
+	
+	if(oldMode == powerOff && (newMode == modeLow || newMode == modeAverage) )
+	{
+		*powerPtr += power;
+		if(positionPtr != nullptr)
+		{
+			*positionPtr = position.second;
+		}
+	}
+	else if(newMode == powerOff && (oldMode == modeLow || oldMode == modeAverage) )
+	{
+		*powerPtr -= power;
+		if(positionPtr != nullptr)
+		{
+			*positionPtr = attributes.frontPos.second;
+		}
+	}
+	
+	if(newMode == modeAverage && (oldMode == modeLow || oldMode == powerOff) )
+	{
+		*speedPtr += maxSpeed;
+	}
+	else if(oldMode == modeAverage && (newMode == modeLow || newMode == powerOff) )
+	{
+		*speedPtr -= maxSpeed;
+	}
+	
+};
+
+void Item_help_engine::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode, std::pair<int, int> position) const
 {
-	resourceRecount(attributes, oldMode, newMode);
+	resourceRecount(attributes, oldMode, newMode);	
+	logicAdd(attributes, oldMode, newMode, position);
+	attributes.reckonTurnOrStrafeSpeed();
 };
 
-void Item_help_engine::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_help_engine::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, std::pair<int, int> position) const
 {
 	resourceRecount(attributes, oldMode, powerOff);
+	if(oldMode != powerOff)
+	{
+		logicAdd(attributes, oldMode, powerOff, position);
+		attributes.reckonTurnOrStrafeSpeed();
+	}
 	addWeightToAttributes(attributes, aRemove);
-	attributes.permanentAttributes.removeFromMoveEnginesList(position, turn);	
-	attributes.permanentAttributes.recountMoveEnginesList();
+//	attributes.permanentAttributes.removeFromMoveEnginesList(position, turn);	
+//	attributes.permanentAttributes.recountMoveEnginesList();
 };
 //=======================
 //-------------------------------------------------------------------
@@ -362,17 +481,17 @@ Item_cabina::Item_cabina(	Name_type name_, Weight_type Weight_, Item_size_type S
 	
 };
 	
-void Item_cabina::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_cabina::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);
 };
 	
-void Item_cabina::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_cabina::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	resourceRecount(attributes, oldMode, newMode);
 };
 	
-void Item_cabina::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_cabina::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	resourceRecount(attributes, oldMode, powerOff);
 	addWeightToAttributes(attributes, aRemove);
@@ -391,17 +510,17 @@ Item_gate::Item_gate(	Name_type name_, Weight_type Weight_, Item_size_type Size_
 	
 };
 
-void Item_gate::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_gate::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);	
 };
 
-void Item_gate::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_gate::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	
 };
 
-void Item_gate::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_gate::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	addWeightToAttributes(attributes, aRemove);	
 };
@@ -417,17 +536,17 @@ Item_cargo_cell::Item_cargo_cell(	Name_type name_, Weight_type Weight_, Item_siz
 		
 };
 
-void Item_cargo_cell::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_cargo_cell::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);	
 };
 
-void Item_cargo_cell::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_cargo_cell::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	
 };
 
-void Item_cargo_cell::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_cargo_cell::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	addWeightToAttributes(attributes, aRemove);		
 };
@@ -445,17 +564,17 @@ Item_power_generator::Item_power_generator(		Name_type name_, Weight_type Weight
 	
 };
 
-void Item_power_generator::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_power_generator::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);	
 };
 
-void Item_power_generator::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_power_generator::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	resourceRecount(attributes, oldMode, newMode);
 };
 
-void Item_power_generator::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_power_generator::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	resourceRecount(attributes, oldMode, powerOff);
 	addWeightToAttributes(attributes, aRemove);			
@@ -478,13 +597,13 @@ Item_energy_shield::Item_energy_shield(	Name_type name_, Weight_type Weight_, It
 	
 };
 
-void Item_energy_shield::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_energy_shield::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);
 	attributes.shieldLimit += maxShield;
 };
 
-void Item_energy_shield::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_energy_shield::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	if(oldMode == newMode)
 	{
@@ -515,7 +634,7 @@ void Item_energy_shield::recountAttributes(ShipAttributes& attributes, ItemMode 
 
 };
 
-void Item_energy_shield::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_energy_shield::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	recountAttributes(attributes, oldMode, powerOff);
 	addWeightToAttributes(attributes, aRemove);
@@ -535,17 +654,17 @@ Item_active_cooling::Item_active_cooling(	Name_type name_, Weight_type Weight_, 
 	
 };
 
-void Item_active_cooling::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_active_cooling::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);
 };
 
-void Item_active_cooling::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_active_cooling::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	resourceRecount(attributes, oldMode, newMode);
 };
 
-void Item_active_cooling::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_active_cooling::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	recountAttributes(attributes, oldMode, powerOff);
 	addWeightToAttributes(attributes, aRemove);
@@ -566,18 +685,18 @@ Item_energy_storage::Item_energy_storage(	Name_type name_, Weight_type Weight_, 
 	
 };
 
-void Item_energy_storage::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_energy_storage::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);
 	attributes.energyLimit += accumulator;
 };
 
-void Item_energy_storage::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_energy_storage::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	
 };
 
-void Item_energy_storage::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_energy_storage::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	addWeightToAttributes(attributes, aRemove);
 	attributes.energyLimit -= accumulator;
@@ -599,17 +718,17 @@ Item_ballistic_weapon::Item_ballistic_weapon(	Name_type name_, Weight_type Weigh
 	
 };
 
-void Item_ballistic_weapon::addAttributes(ShipAttributes& attributes, Turn_item_type turn, int position) const
+void Item_ballistic_weapon::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, int position) const
 {
 	addWeightToAttributes(attributes, aAdd);
 };
 
-void Item_ballistic_weapon::recountAttributes(ShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
+void Item_ballistic_weapon::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode) const
 {
 	
 };
 
-void Item_ballistic_weapon::removeAttributes(ShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
+void Item_ballistic_weapon::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, int position) const
 {
 	addWeightToAttributes(attributes, aRemove);
 };

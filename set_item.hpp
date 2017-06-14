@@ -10,8 +10,10 @@
 #include <utility>
 
 #include "enum_types.hpp"
-#include "ship_attributes.hpp"
+//#include "ship_attributes.hpp"
 #include <string>
+
+#include "new_ship_attributes.hpp"
 
 class Set_item
 {
@@ -23,7 +25,7 @@ private:
 	Cells_type Cells;
 	Ship* Ship_pointer;
 	Item* Item_pointer;
-	ShipAttributes* attributesPtr;
+	NewShipAttributes* attributesPtr;
 	Turn_item_type Turn;
 	
 	ItemMode mode = powerOff;
@@ -34,7 +36,7 @@ public:
 	
 	Set_item(const Set_item&) = delete ;
 	
-	Set_item(Ship&, Item&, ShipAttributes&, Turn_item_type, X_call, Y_call);
+	Set_item(Ship&, Item&, NewShipAttributes&, Turn_item_type, X_call, Y_call);
 	~Set_item();
 	
 	void addKeyingStruct(int, int);

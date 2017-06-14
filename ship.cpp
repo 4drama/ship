@@ -14,7 +14,7 @@ Ship::Ship(Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weig
 	{
 		Groups.push_back(Group_type(i));
 	};
-	currentAttributes.permanentAttributes.currentWeight += weight_;
+	currentAttributes.currentWeight += weight_;
 	currentAttributes.overheatLimit = overheat;
 };
 
@@ -49,9 +49,9 @@ void Ship::Debug_print()
 		std::cout<<std::endl;
 	};
 	std::cout << "========================================" << std::endl << std::endl;
-	currentAttributes.debugAttributes();
-//	currentAttributes.recountAttributes();
-	currentAttributes.debugPermanentAttributes();
+//	currentAttributes.debugAttributes();
+//	currentAttributes.debugPermanentAttributes();
+	currentAttributes.printDebug();
 };
 
 std::string Ship::getName() const
@@ -151,6 +151,73 @@ void Ship::powerOff()
 					});
 };
 
+
+
+void Ship::addItemKeyToAttributes(Key_type key, Item* itemPtr, Block_size_type x, Block_size_type y)
+{
+	if(dynamic_cast<Item_main_engine*>(itemPtr))
+	{
+		if(x >= currentAttributes.leftPos.first && x <= currentAttributes.leftPos.second)
+		{
+			currentAttributes.leftMainEngines.push_back(key);
+			return;
+		}
+		else if(x >= currentAttributes.middlePos.first && x <= currentAttributes.middlePos.second)
+		{
+			currentAttributes.middleMainEngines.push_back(key);
+			return;
+		}
+		else if(x >= currentAttributes.rightPos.first && x <= currentAttributes.rightPos.second)
+		{
+			currentAttributes.rightMainEngines.push_back(key);
+			return;
+		}
+	}
+	else if (dynamic_cast<Item_help_engine*>(itemPtr))
+	{
+		if(y >= currentAttributes.frontPos.first && y <= currentAttributes.frontPos.second)
+		{
+			if(x >= currentAttributes.leftPos.first && x <= currentAttributes.leftPos.second)
+			{
+				currentAttributes.leftFrontHelpEngines.push_back(key);
+				return;
+			}
+			else if(x >= currentAttributes.middlePos.first && x <= currentAttributes.middlePos.second)
+			{
+				currentAttributes.frontHelpEngines.push_back(key);
+				return;
+			}
+			else if(x >= currentAttributes.rightPos.first && x <= currentAttributes.rightPos.second)
+			{
+				currentAttributes.rightFrontHelpEngines.push_back(key);
+				return;
+			}
+		}
+		else if(y >= currentAttributes.backPos.first && y <= currentAttributes.backPos.second)
+		{
+			if(x >= currentAttributes.leftPos.first && x <= currentAttributes.leftPos.second)
+			{
+				currentAttributes.leftBackHelpEngines.push_back(key);
+				return;
+			}
+			else if(x >= currentAttributes.rightPos.first && x <= currentAttributes.rightPos.second)
+			{
+				currentAttributes.rightBackHelpEngines.push_back(key);
+				return;
+			}
+		}
+	}
+	else
+	{
+		
+	}
+};
+
+void Ship::deleteItemKeyToAttributes(Key_type key, Item* itemPtr)
+{
+	
+};
+
 void Ship::setItem(Item* Itm, Turn_item_type Turn_, Block_size_type X_call_, Block_size_type Y_call_)
 {
 //	std::cout << "Debug: Ship::setItem begin" <<std::endl;
@@ -161,6 +228,7 @@ void Ship::setItem(Item* Itm, Turn_item_type Turn_, Block_size_type X_call_, Blo
 		itemsList.erase(key);
 		return;
 	};
+	addItemKeyToAttributes(key, Itm, X_call_, Y_call_);
 //	std::cout << "Debug: Ship::setItem step 1" << std::endl;
 	auto width = Itm->Get_width();
 	auto height = Itm->Get_height();
@@ -248,7 +316,7 @@ void Ship::nextStep(int amount)
 	}
 
 };
-
+/*
 void Ship::action(Action_type action)
 {
 	std::for_each(	itemsList.valueList.begin(), itemsList.valueList.end(), 		
@@ -271,8 +339,8 @@ void Ship::action(Action_type action)
 							}
 						}
 					});
-	currentAttributes.actionNow = action;
-};
+//	currentAttributes.actionNow = action;
+};*/
 
 Ship::~Ship()
 {

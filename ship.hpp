@@ -8,7 +8,10 @@
 #include <iterator>
 #include <string>
 
-#include "ship_attributes.hpp"
+#include <utility>
+
+#include "new_ship_attributes.hpp"
+//#include "ship_attributes.hpp"
 #include "enum_types.hpp"
 
 
@@ -35,7 +38,11 @@ private:
 	ml1::KeyList<Set_item> itemsList;
 	bool keyFlag = false;
 	
-	ShipAttributes currentAttributes;
+//	ShipAttributes currentAttributes;
+	NewShipAttributes currentAttributes;
+	
+	void addItemKeyToAttributes(Key_type, Item*, Block_size_type, Block_size_type);
+	void deleteItemKeyToAttributes(Key_type, Item*);
 	
 public:
 
@@ -64,7 +71,7 @@ public:
 	void itemSetMode(ItemMode, Position_type, Position_type);
 
 	void nextStep(int);
-	void action(Action_type);
+//	void action(Action_type);
 	
 	~Ship();
 };
