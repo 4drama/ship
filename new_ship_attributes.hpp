@@ -3,6 +3,11 @@
 
 #include <vector>
 
+#include "enum_types.hpp"
+#include "resource_status.hpp"
+
+struct Resource_status;
+
 struct NewShipAttributes
 {
 	typedef int Key_type;
@@ -52,7 +57,7 @@ struct NewShipAttributes
 	
 //======================================================
 //=====================ATTRIBUTES=======================
-	double currentWeight = 0;				//update in set or delete items
+	double currentWeight = 0;				//update in set or delete or power off/on items
 	double mainPower = 0;
 	double frontEnginePower = 0;
 	double leftFrontPower = 0;
@@ -67,7 +72,10 @@ struct NewShipAttributes
 	
 	
 //=============================
-	double maxSpeed = 0;
+	double leftEngineSpeed = 0;
+	double middleEngineSpeed = 0;
+	double rightEngineSpeed = 0;
+//	double maxSpeed = 0;
 	double potentialAcceleration = 0;		//update in change mode
 	double frontEngineSpeed = 0;
 	double leftFrontSpeed = 0;
@@ -75,6 +83,8 @@ struct NewShipAttributes
 	double rightFrontSpeed = 0;
 	double rightBackSpeed = 0;
 
+	double mainEngineTurn = 0;
+	double helpEngineTurn = 0;	
 	
 	double forwardingAccelerationSpeed = 0;	
 	double forwardingSpeed = 0;
@@ -102,7 +112,7 @@ struct NewShipAttributes
 	void reckonForwardingSpeed();
 	void reckonTurnOrStrafeSpeed();
 	void printDebug() const;
-	void nextStep();
+	Resource_status nextStep(); // need instead enum return struct 
 //------------------------------------------------------
 };
 

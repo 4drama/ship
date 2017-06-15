@@ -6,13 +6,14 @@
 
 void NewShipAttributes::reckonForwardingSpeed()
 {	
-	if(maxSpeed != 0 && potentialAcceleration != 0)
+	if(	(leftEngineSpeed != 0 || middleEngineSpeed != 0 || rightEngineSpeed != 0 ) &&
+		potentialAcceleration != 0)
 	{
 		double rateWeight = currentWeight/(mainPower*4)*100;
 	//	std::cerr << "DEBUG: rateWeight " << rateWeight << std::endl;
 		double rateSpeed = (pow((-rateWeight/30.2+1.5),3)/2+3)*21;
 	//	std::cerr << "DEBUG: rateSpeed " << rateSpeed << std::endl;
-		double potentialSpeed = maxSpeed/(leftMainEngines.size()+middleMainEngines.size()+rightMainEngines.size());
+		double potentialSpeed = (leftEngineSpeed+middleEngineSpeed+rightEngineSpeed)/(leftMainEngines.size()+middleMainEngines.size()+rightMainEngines.size());
 	//	std::cerr << "DEBUG: potentialSpeed " << potentialSpeed << std::endl;
 		forwardingSpeed = rateSpeed/100*potentialSpeed;
 		forwardingAccelerationSpeed = potentialAcceleration*rateSpeed/100;
@@ -43,6 +44,34 @@ void NewShipAttributes::reckonForwardingSpeed()
 		forwardingAccelerationSpeed = 0;
 		forwardingSpeed = 0;
 	}
+	
+	if(leftEngineSpeed != 0 && rightEngineSpeed == 0)
+	{
+		double turnRate = (1-currentWeight/((mainPower)*20))*0.05;
+		double rateSpeed = (leftEngineSpeed)/(leftMainEngines.size())*turnRate;
+		if(rateSpeed > 0) 
+		{
+			mainEngineTurn = rateSpeed;
+			turnRateSpeed = helpEngineTurn+mainEngineTurn;
+			return;
+		}
+	}
+	else if(rightEngineSpeed != 0 && leftEngineSpeed == 0)
+	{
+		double turnRate = (1-currentWeight/((mainPower)*20))*0.05;
+		double rateSpeed = (rightEngineSpeed)/(rightMainEngines.size())*turnRate;
+		if(rateSpeed < 0) 
+		{
+			mainEngineTurn = -rateSpeed;
+			turnRateSpeed = helpEngineTurn+mainEngineTurn;
+			return;
+		}
+	}
+	else
+	{
+		mainEngineTurn = 0;
+		turnRateSpeed = helpEngineTurn+mainEngineTurn;
+	}
 };
 
 void NewShipAttributes::reckonTurnOrStrafeSpeed()
@@ -58,7 +87,8 @@ void NewShipAttributes::reckonTurnOrStrafeSpeed()
 		if(rateSpeed > 0) 
 		{
 			strafeSpeed = 0;
-			turnRateSpeed = rateSpeed;
+			helpEngineTurn = rateSpeed;
+			turnRateSpeed = helpEngineTurn+mainEngineTurn;
 			return;
 		}
 	}
@@ -73,7 +103,8 @@ void NewShipAttributes::reckonTurnOrStrafeSpeed()
 		if(rateSpeed > 0) 
 		{
 			strafeSpeed = 0;
-			turnRateSpeed = -rateSpeed;
+			helpEngineTurn = -rateSpeed;
+			turnRateSpeed = helpEngineTurn+mainEngineTurn;
 			return;
 		}
 	}
@@ -84,7 +115,8 @@ void NewShipAttributes::reckonTurnOrStrafeSpeed()
 		if(strSpeed > 0) 
 		{
 			strafeSpeed = strSpeed;
-			turnRateSpeed = 0;
+			helpEngineTurn = 0;
+			turnRateSpeed = helpEngineTurn+mainEngineTurn;
 			return;
 		}
 	}
@@ -95,14 +127,16 @@ void NewShipAttributes::reckonTurnOrStrafeSpeed()
 		if(strSpeed > 0) 
 		{
 			strafeSpeed = -strSpeed;
-			turnRateSpeed = 0;
+			helpEngineTurn = 0;
+			turnRateSpeed = helpEngineTurn+mainEngineTurn;
 			return;
 		}
 	}
 	else
 	{
 	strafeSpeed = 0;
-	turnRateSpeed = 0;
+	helpEngineTurn = 0;
+	turnRateSpeed = helpEngineTurn+mainEngineTurn;
 	}
 };
 
@@ -128,7 +162,7 @@ void NewShipAttributes::printDebug() const
 	std::cout << "Right back engines position: " << rightBackPosition << std::endl;
 	std::cout << std::endl;
 	std::cout << "     Used attributes:" << std::endl;
-	std::cout << "Max speed: " << maxSpeed << std::endl;
+	std::cout << "Max speed: " << leftEngineSpeed+middleEngineSpeed+rightEngineSpeed << std::endl;
 	std::cout << "Potential acceleration: " << potentialAcceleration << std::endl;
 	std::cout << "Front engines speed: " << frontEngineSpeed << std::endl;
 	std::cout << "Left front engines speed: " << leftFrontSpeed << std::endl;
@@ -175,37 +209,35 @@ void NewShipAttributes::printDebug() const
 	std::cout << std::endl;
 };
 
-void NewShipAttributes::nextStep()
+Resource_status NewShipAttributes::nextStep()
 {
-	//=================position================
-
-
-//================speed====================	
-/*	if(actionNow == forwardMovement)
-	{
-		speedNow += accelerationNow;
-	}
-	else if(actionNow == backwardMovement)
-	{
-	speedNow += -brakingSpeedNow;
-	}
-	else if(actionNow == idle && speedNow < 0)
-	{
-		speedNow = 0;
-	}
 	
-	accelerationNow = (1-(speedNow/permanentAttributes.maxSpeed))*permanentAttributes.accelerationSpeed;
-*/	
+	Resource_status status;
+	status.shieldKeys = &energyShields;
+//=============shield=====================	
+	shieldNow += shieldChange;	
+	if(shieldNow < 0)
+	{
+		shieldNow = 0;
+		status.shieldStatus =  Resource_status::Shield_status_type::shieldStatusNotFull;
+	}
+	else if(shieldNow > shieldLimit)
+	{
+		shieldNow = shieldLimit;
+		status.shieldStatus = Resource_status::Shield_status_type::shieldStatusFull;
+	}
+
 //==============overheat===================	
 	overheatNow += overheatChange;	
 	if(overheatNow < 0)
 	{
 		overheatNow = 0;
+		status.overheatStatus = Resource_status::Overheat_status_type::overheatStatusGood;
 	}
 	else if(overheatNow > overheatLimit)
 	{
 		overheatNow = overheatLimit;
-		//OVERHEATING
+		status.overheatStatus = Resource_status::Overheat_status_type::overheatStatusBad;
 	}
 
 //==============energy=====================	
@@ -213,22 +245,14 @@ void NewShipAttributes::nextStep()
 	if(energyNow < 0)
 	{
 		energyNow = 0;
-		//POWER OFF
+		status.energyStatus = Resource_status::Energy_status_type::energyStatusBad;
 	}
 	else if(energyNow > energyLimit)
 	{
 		energyNow = energyLimit;
+		status.energyStatus = Resource_status::Energy_status_type::energyStatusGood;
 	}
 
-//=============shield=====================	
-	shieldNow += shieldChange;	
-	if(shieldNow < 0)
-	{
-		shieldNow = 0;
-	}
-	else if(shieldNow > shieldLimit)
-	{
-		shieldNow = shieldLimit;
-	}
+	return status;
 };
 

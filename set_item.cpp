@@ -1,7 +1,7 @@
 #include "set_item.hpp"
 
 #include <iostream> 
-#include <iterator>
+#include <iterator> 
 
 Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, NewShipAttributes& attributesPtr_, Turn_item_type Turn_, X_call X_call_, Y_call Y_call_)
 				: Ship_pointer(&Ship_pointer_), Item_pointer(&Item_pointer_), attributesPtr(&attributesPtr_) , Turn(Turn_), position(Y_call_)
@@ -13,7 +13,7 @@ Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, NewShipAttributes& 
 	auto height = Item_pointer_.Get_height();
 	
 	currectDurability = Item_pointer->getDurability();
-	Item_pointer->addAttributes(*attributesPtr, Turn, position);
+	Item_pointer->addAttributes(*attributesPtr, Turn, std::make_pair(X_call_, Y_call_));
 //	attributesPtr->recountAttributes();
 	
 	
@@ -59,13 +59,9 @@ Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, NewShipAttributes& 
 Set_item::~Set_item()
 {
 //	std::cout << "Debug: Set_item Destructor" <<std::endl;
-	if (dynamic_cast<Item_help_engine*>(Item_pointer))
-	{
-		dynamic_cast<Item_help_engine*>(Item_pointer)->removeAttributes(*attributesPtr, Turn, mode, Cells[0]);
-	}
-	else{
-	Item_pointer->removeAttributes(*attributesPtr, Turn, mode, position);
-	}
+
+	Item_pointer->removeAttributes(*attributesPtr, Turn, mode, Cells[0]);
+
 	
 	for ( auto it = Cells.begin(); it!=Cells.end(); it++ )
 	{
@@ -87,14 +83,9 @@ void Set_item::swithMode(ItemMode newMode)
 	{
 		return;
 	}
-	if (dynamic_cast<Item_help_engine*>(Item_pointer))
-	{
-		dynamic_cast<Item_help_engine*>(Item_pointer)->recountAttributes(*attributesPtr, mode, newMode, Cells[0]);
-	}
-	else
-	{
-	Item_pointer->recountAttributes(*attributesPtr, mode, newMode);
-	}
+
+	Item_pointer->recountAttributes(*attributesPtr, mode, newMode, Cells[0]);
+
 	mode = newMode;
 };
 

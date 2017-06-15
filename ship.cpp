@@ -207,9 +207,41 @@ void Ship::addItemKeyToAttributes(Key_type key, Item* itemPtr, Block_size_type x
 			}
 		}
 	}
+	else if(dynamic_cast<Item_energy_shield*>(itemPtr))
+	{
+		currentAttributes.energyShields.push_back(key);
+	}
+	else if(dynamic_cast<Item_cabina*>(itemPtr))
+	{
+		currentAttributes.cabins.push_back(key);
+	}
+	else if(dynamic_cast<Item_gate*>(itemPtr))
+	{
+		currentAttributes.gates.push_back(key);
+	}
+	else if(dynamic_cast<Item_cargo_cell*>(itemPtr))
+	{
+		currentAttributes.cargoCells.push_back(key);
+	}
+	else if(dynamic_cast<Item_power_generator*>(itemPtr))
+	{
+		currentAttributes.powerGenerators.push_back(key);
+	}
+	else if(dynamic_cast<Item_active_cooling*>(itemPtr))
+	{
+		currentAttributes.activeCoolings.push_back(key);
+	}
+	else if(dynamic_cast<Item_energy_storage*>(itemPtr))
+	{
+		currentAttributes.enegryStorage.push_back(key);
+	}
+	else if(dynamic_cast<Item_ballistic_weapon*>(itemPtr))
+	{
+		currentAttributes.ballisticWeapon.push_back(key);
+	}
 	else
 	{
-		
+
 	}
 };
 
@@ -310,9 +342,24 @@ void Ship::itemSetMode(ItemMode mode, Position_type x, Position_type y)
 
 void Ship::nextStep(int amount)
 {
+	
 	while(amount--)
 	{
-		currentAttributes.nextStep();
+		Resource_status status = currentAttributes.nextStep();
+		if(	status.overheatStatus == Resource_status::Overheat_status_type::overheatStatusBad ||
+			status.energyStatus == Resource_status::Energy_status_type::energyStatusBad)
+		{
+			this->powerOff();
+		}
+		
+		if(status.shieldStatus == Resource_status::Shield_status_type::shieldStatusFull)
+		{
+			std::for_each(	status.shieldKeys->begin(), status.shieldKeys->end(),
+			[this](int key)
+			{
+				this->itemSetMode(modeLow, key);
+			});
+		}
 	}
 
 };

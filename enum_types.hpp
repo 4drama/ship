@@ -51,5 +51,13 @@ enum Attributes_aAdd_or_aRemove_type
 	aAdd = 1,
 	aRemove = 2,
 };
+/*
+enum Resource_status_type
+{
+	good = 0,
+	overheat = 1,
+	noEnergy = 2,
+	shieldFull = 3,
+};*/
 
 #endif
