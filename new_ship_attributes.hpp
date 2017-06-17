@@ -48,11 +48,11 @@ struct NewShipAttributes
 
 //======================================================
 //=====================POSITION_TYPES===================
-	std::pair<int, int> leftPos{0, 2};
-	std::pair<int, int>	middlePos{3, 6};
-	std::pair<int, int>	rightPos{7, 9};
-	std::pair<int, int>	frontPos{0, 10};
-	std::pair<int, int> backPos{11, 21};
+	std::pair<int, int> leftPos{0, 0};
+	std::pair<int, int>	middlePos{0, 0};
+	std::pair<int, int>	rightPos{0, 0};
+	std::pair<int, int>	frontPos{0, 0};
+	std::pair<int, int> backPos{0, 0};
 //------------------------------------------------------
 	
 //======================================================
@@ -91,17 +91,17 @@ struct NewShipAttributes
 	double strafeSpeed = 0;
 	double turnRateSpeed = 0;
 //=============================	
-	int overheatLimit = 0;
-	int overheatNow = 0;
-	int overheatChange = -20;
+	double overheatLimit = 0;
+	double overheatNow = 0;
+	double overheatChange = -20;
 	
-	int energyLimit = 0;
-	int energyNow = 0;
-	int energyChange = 0;
+	double energyLimit = 0;
+	double energyNow = 0;
+	double energyChange = 0;
 	
-	int shieldLimit = 0;
-	int shieldNow = 0;
-	int shieldChange = 0;
+	double shieldLimit = 0;
+	double shieldNow = 0;
+	double shieldChange = 0;
 	
 	int hpLimit;
 	int hpNow;
@@ -112,7 +112,7 @@ struct NewShipAttributes
 	void reckonForwardingSpeed();
 	void reckonTurnOrStrafeSpeed();
 	void printDebug() const;
-	Resource_status nextStep(); // need instead enum return struct 
+	Resource_status nextStep(int);
 //------------------------------------------------------
 };
 

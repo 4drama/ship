@@ -11,17 +11,20 @@
 #include <utility>
 
 #include "new_ship_attributes.hpp"
-//#include "ship_attributes.hpp"
 #include "enum_types.hpp"
 
+#include "space_object.hpp"
 
-class Ship : private Ship_types
+const int update_frequency = 1;
+
+class Set_item;
+
+class Ship : private Ship_types, public SpaceObject
 {
 private:
 	typedef std::string Name_type;
 	typedef int Weight_type;
 	typedef std::vector<std::vector<Ship_struct> > Blocks_type;
-//	typedef std::vector<Group_type> Groups_type;//			Перенесено в абстрактный класс
 	typedef int Block_size_type;
 	typedef int Line_number_type;
 	typedef int Group_size_type;
@@ -29,6 +32,13 @@ private:
 	
 	typedef int Key_type;
 	typedef int Position_type;
+	
+	typedef std::pair<int, int> Left_side_type;
+	typedef std::pair<int, int> Middle_side_type;
+	typedef std::pair<int, int> Right_side_type;
+	
+	typedef std::pair<int, int> Front_side_type;
+	typedef std::pair<int, int> Back_side_type;
 	
 	Name_type name;
 	
@@ -38,21 +48,24 @@ private:
 	ml1::KeyList<Set_item> itemsList;
 	bool keyFlag = false;
 	
-//	ShipAttributes currentAttributes;
 	NewShipAttributes currentAttributes;
 	
-	void addItemKeyToAttributes(Key_type, Item*, Block_size_type, Block_size_type);
-	void deleteItemKeyToAttributes(Key_type, Item*);
+	void addOrRemoveItemKeyToAttributes(Key_type, Item*, Block_size_type, Block_size_type, Attributes_aAdd_or_aRemove_type);
+	
+	friend Set_item;	
+	void setStatus();
+	bool Block_check_struct_item(Item&, Block_size_type, Block_size_type, Turn_item_type);
+	void Block_reser_struct_item(Block_size_type, Block_size_type);	
+	void itemSetAllMode(ItemMode, std::vector<NewShipAttributes::Key_type>&);
+	void coordinateReckon();
 	
 public:
 
-	Ship(Name_type, Block_size_type, Group_size_type, Weight_type, Overheat_lmit_type);
+	Ship(Name_type, Block_size_type, Group_size_type, Weight_type, Overheat_lmit_type, Left_side_type, Middle_side_type, Right_side_type, Front_side_type, Back_side_type);
 	
 	void AddShipStructInLine(Line_number_type, Ship_struct);
 	Groups_type::iterator Return_group(Group_size_type);
-	void setStatus();
-	bool Block_check_struct_item(Item&, Block_size_type, Block_size_type, Turn_item_type);
-	void Block_reser_struct_item(Block_size_type, Block_size_type);
+
 	
 	std::string getName() const;
 	
@@ -70,8 +83,9 @@ public:
 	void itemSetMode(ItemMode, Key_type);
 	void itemSetMode(ItemMode, Position_type, Position_type);
 
+	void moveCommand(Move_commands_type);
+	
 	void nextStep(int);
-//	void action(Action_type);
 	
 	~Ship();
 };

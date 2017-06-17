@@ -4,8 +4,11 @@
 #include<iterator>
 
 #include <algorithm>
+#include <cmath>
 
-Ship::Ship(Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weight_type weight_, Overheat_lmit_type overheat) : name(name_), itemsList(bsize_*bsize_/2)
+Ship::Ship(	Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weight_type weight_, Overheat_lmit_type overheat,
+			Left_side_type left, Middle_side_type middle, Right_side_type right, Front_side_type front, Back_side_type back)
+		: 	name(name_), itemsList(bsize_*bsize_/2)
 {
 	Blocks.resize(bsize_);	
 	Groups.reserve(gsize_);
@@ -16,6 +19,12 @@ Ship::Ship(Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weig
 	};
 	currentAttributes.currentWeight += weight_;
 	currentAttributes.overheatLimit = overheat;
+	
+	currentAttributes.leftPos = left;
+	currentAttributes.middlePos = middle;
+	currentAttributes.rightPos = right;
+	currentAttributes.frontPos = front;
+	currentAttributes.backPos = back;
 };
 
 void Ship::Debug_print()
@@ -52,6 +61,10 @@ void Ship::Debug_print()
 //	currentAttributes.debugAttributes();
 //	currentAttributes.debugPermanentAttributes();
 	currentAttributes.printDebug();
+	
+	std::cout << std::fixed << "Position : x=" << xCurrent << " y=" << yCurrent << std::endl;
+	std::cout << "Azimuth : " << azimuth << std::endl;
+	std::cout << "Change position : x=" << xChange << " y=" << yChange << std::endl;
 };
 
 std::string Ship::getName() const
@@ -153,24 +166,23 @@ void Ship::powerOff()
 
 
 
-void Ship::addItemKeyToAttributes(Key_type key, Item* itemPtr, Block_size_type x, Block_size_type y)
+void Ship::addOrRemoveItemKeyToAttributes(Key_type key, Item* itemPtr, Block_size_type x, Block_size_type y, Attributes_aAdd_or_aRemove_type action)
 {
+	std::vector<Key_type>* currentKeysList = nullptr;
+	
 	if(dynamic_cast<Item_main_engine*>(itemPtr))
 	{
 		if(x >= currentAttributes.leftPos.first && x <= currentAttributes.leftPos.second)
 		{
-			currentAttributes.leftMainEngines.push_back(key);
-			return;
+			currentKeysList = &currentAttributes.leftMainEngines;
 		}
 		else if(x >= currentAttributes.middlePos.first && x <= currentAttributes.middlePos.second)
 		{
-			currentAttributes.middleMainEngines.push_back(key);
-			return;
+			currentKeysList = &currentAttributes.middleMainEngines;
 		}
 		else if(x >= currentAttributes.rightPos.first && x <= currentAttributes.rightPos.second)
 		{
-			currentAttributes.rightMainEngines.push_back(key);
-			return;
+			currentKeysList = &currentAttributes.rightMainEngines;
 		}
 	}
 	else if (dynamic_cast<Item_help_engine*>(itemPtr))
@@ -179,74 +191,78 @@ void Ship::addItemKeyToAttributes(Key_type key, Item* itemPtr, Block_size_type x
 		{
 			if(x >= currentAttributes.leftPos.first && x <= currentAttributes.leftPos.second)
 			{
-				currentAttributes.leftFrontHelpEngines.push_back(key);
-				return;
+				currentKeysList = &currentAttributes.leftFrontHelpEngines;
 			}
 			else if(x >= currentAttributes.middlePos.first && x <= currentAttributes.middlePos.second)
 			{
-				currentAttributes.frontHelpEngines.push_back(key);
-				return;
+				currentKeysList = &currentAttributes.frontHelpEngines;
 			}
 			else if(x >= currentAttributes.rightPos.first && x <= currentAttributes.rightPos.second)
 			{
-				currentAttributes.rightFrontHelpEngines.push_back(key);
-				return;
+				currentKeysList = &currentAttributes.rightFrontHelpEngines;
 			}
 		}
 		else if(y >= currentAttributes.backPos.first && y <= currentAttributes.backPos.second)
 		{
 			if(x >= currentAttributes.leftPos.first && x <= currentAttributes.leftPos.second)
 			{
-				currentAttributes.leftBackHelpEngines.push_back(key);
-				return;
+				currentKeysList = &currentAttributes.leftBackHelpEngines;
 			}
 			else if(x >= currentAttributes.rightPos.first && x <= currentAttributes.rightPos.second)
 			{
-				currentAttributes.rightBackHelpEngines.push_back(key);
-				return;
+				currentKeysList = &currentAttributes.rightBackHelpEngines;
 			}
 		}
 	}
 	else if(dynamic_cast<Item_energy_shield*>(itemPtr))
 	{
-		currentAttributes.energyShields.push_back(key);
+		currentKeysList = &currentAttributes.energyShields;
 	}
 	else if(dynamic_cast<Item_cabina*>(itemPtr))
 	{
-		currentAttributes.cabins.push_back(key);
+		currentKeysList = &currentAttributes.cabins;
 	}
 	else if(dynamic_cast<Item_gate*>(itemPtr))
 	{
-		currentAttributes.gates.push_back(key);
+		currentKeysList = &currentAttributes.gates;
 	}
 	else if(dynamic_cast<Item_cargo_cell*>(itemPtr))
 	{
-		currentAttributes.cargoCells.push_back(key);
+		currentKeysList = &currentAttributes.cargoCells;
 	}
 	else if(dynamic_cast<Item_power_generator*>(itemPtr))
 	{
-		currentAttributes.powerGenerators.push_back(key);
+		currentKeysList = &currentAttributes.powerGenerators;
 	}
 	else if(dynamic_cast<Item_active_cooling*>(itemPtr))
 	{
-		currentAttributes.activeCoolings.push_back(key);
+		currentKeysList = &currentAttributes.activeCoolings;
 	}
 	else if(dynamic_cast<Item_energy_storage*>(itemPtr))
 	{
-		currentAttributes.enegryStorage.push_back(key);
+		currentKeysList = &currentAttributes.enegryStorage;
 	}
 	else if(dynamic_cast<Item_ballistic_weapon*>(itemPtr))
 	{
-		currentAttributes.ballisticWeapon.push_back(key);
+		currentKeysList = &currentAttributes.ballisticWeapon;
 	}
 	else
 	{
-
+		std::cerr << "ERROR: Ship::addOrRemoveItemKeyToAttributes. Invalid type." << std::endl;
 	}
-};
-
-void Ship::deleteItemKeyToAttributes(Key_type key, Item* itemPtr)
-{
+	
+	if(action == aAdd)
+	{
+		currentKeysList->push_back(key);
+	}
+	else if(action == aRemove)
+	{
+		auto it = std::find_if (currentKeysList->begin(), currentKeysList->end(), 
+		[key](int i)
+		{return i == key;} );		
+		currentKeysList->erase(it);
+//		std::cerr << "DELETE :" << key << " " << &it << std::endl;
+	}
 	
 };
 
@@ -260,7 +276,7 @@ void Ship::setItem(Item* Itm, Turn_item_type Turn_, Block_size_type X_call_, Blo
 		itemsList.erase(key);
 		return;
 	};
-	addItemKeyToAttributes(key, Itm, X_call_, Y_call_);
+	addOrRemoveItemKeyToAttributes(key, Itm, X_call_, Y_call_, aAdd);
 //	std::cout << "Debug: Ship::setItem step 1" << std::endl;
 	auto width = Itm->Get_width();
 	auto height = Itm->Get_height();
@@ -299,6 +315,12 @@ void Ship::removeItem(Key_type key)
 {
 	if(key != 0)
 	{
+		auto currentItem = itemsList.find(key);
+		auto position = currentItem->getPosition();
+		auto item = currentItem->getItem();
+		
+		addOrRemoveItemKeyToAttributes(key, item, position.first, position.second, aRemove);
+		
 		itemsList.erase(key);
 	}
 };
@@ -340,12 +362,184 @@ void Ship::itemSetMode(ItemMode mode, Position_type x, Position_type y)
 	this->itemSetMode(mode, key);
 };
 
+void Ship::itemSetAllMode(ItemMode mode, std::vector<NewShipAttributes::Key_type>& keys)
+{
+	std::for_each(	keys.begin(), keys.end(), 		
+					[this, mode](NewShipAttributes::Key_type key)
+					{
+						this->itemSetMode(mode, key);
+					});
+};
+
+void Ship::moveCommand(Move_commands_type command)
+{
+	
+	if (command == stayFull)
+	{
+		this->itemSetAllMode(modeLow, currentAttributes.leftMainEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.middleMainEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightMainEngines);
+		
+		this->itemSetAllMode(modeLow, currentAttributes.frontHelpEngines);
+		
+		this->itemSetAllMode(modeLow, currentAttributes.leftFrontHelpEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightBackHelpEngines);
+		
+		this->itemSetAllMode(modeLow, currentAttributes.leftBackHelpEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightFrontHelpEngines);
+	}
+	else if(command == stayMove)
+	{
+		this->itemSetAllMode(modeLow, currentAttributes.leftMainEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.middleMainEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightMainEngines);		
+	}
+	else if(command == stayTurn)
+	{
+		this->itemSetAllMode(modeLow, currentAttributes.leftFrontHelpEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightBackHelpEngines);
+		
+		this->itemSetAllMode(modeLow, currentAttributes.leftBackHelpEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightFrontHelpEngines);
+	}
+	else if(command == moveForward)
+	{
+		this->itemSetAllMode(modeAverage, currentAttributes.leftMainEngines);
+		this->itemSetAllMode(modeAverage, currentAttributes.middleMainEngines);
+		this->itemSetAllMode(modeAverage, currentAttributes.rightMainEngines);	
+		
+		this->itemSetAllMode(modeLow, currentAttributes.frontHelpEngines);	
+	}
+	else if(command == moveBackward)
+	{
+		this->itemSetAllMode(modeLow, currentAttributes.leftMainEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.middleMainEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightMainEngines);	
+		
+		this->itemSetAllMode(modeAverage, currentAttributes.frontHelpEngines);		
+	}
+	else if(command == moveLeft)
+	{
+		this->itemSetAllMode(modeLow, currentAttributes.leftMainEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.middleMainEngines);
+		this->itemSetAllMode(modeAverage, currentAttributes.rightMainEngines);
+		
+		this->itemSetAllMode(modeLow, currentAttributes.frontHelpEngines);	
+	}
+	else if(command == moveRight)
+	{
+		this->itemSetAllMode(modeAverage, currentAttributes.leftMainEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.middleMainEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightMainEngines);
+		
+		this->itemSetAllMode(modeLow, currentAttributes.frontHelpEngines);	
+	}
+	else if(command == turnLeft)
+	{
+		this->itemSetAllMode(modeAverage, currentAttributes.leftBackHelpEngines);
+		this->itemSetAllMode(modeAverage, currentAttributes.rightFrontHelpEngines);	
+
+		this->itemSetAllMode(modeLow, currentAttributes.leftFrontHelpEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightBackHelpEngines);			
+	}
+	else if(command == turnRight)
+	{
+		this->itemSetAllMode(modeAverage, currentAttributes.leftFrontHelpEngines);
+		this->itemSetAllMode(modeAverage, currentAttributes.rightBackHelpEngines);	
+
+		this->itemSetAllMode(modeLow, currentAttributes.leftBackHelpEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightFrontHelpEngines);	
+	}
+	else if(command == strafeLeft)
+	{
+		this->itemSetAllMode(modeAverage, currentAttributes.rightFrontHelpEngines);
+		this->itemSetAllMode(modeAverage, currentAttributes.rightBackHelpEngines);	
+
+		this->itemSetAllMode(modeLow, currentAttributes.leftFrontHelpEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.leftBackHelpEngines);			
+	}
+	else if(command == strafeRight)
+	{
+		this->itemSetAllMode(modeAverage, currentAttributes.leftFrontHelpEngines);
+		this->itemSetAllMode(modeAverage, currentAttributes.leftBackHelpEngines);	
+
+		this->itemSetAllMode(modeLow, currentAttributes.rightFrontHelpEngines);
+		this->itemSetAllMode(modeLow, currentAttributes.rightBackHelpEngines);					
+	}
+	else
+	{
+		std::cerr << "ERROR: Ship::moveCommand. Invalid command" << std::endl;
+	}
+};
+
+
+void Ship::coordinateReckon()
+{
+	double oldSpeed = this->getSpeed();
+	
+	double forwardingSpeed = currentAttributes.forwardingSpeed;
+	
+	double accelerationSpeed;
+	
+	if(forwardingSpeed == 0)
+	{
+		accelerationSpeed = 0;
+	}
+	else
+	{
+		accelerationSpeed = (1-(oldSpeed/forwardingSpeed))*currentAttributes.forwardingAccelerationSpeed;
+	}
+	
+	const double pi = 3.14159265358979323846;
+	
+	double horizontallyXChange = ((accelerationSpeed/1000)/update_frequency)*cos((90-azimuth)* pi / 180);
+	double horizontallyYChange = ((accelerationSpeed/1000)/update_frequency)*sin((90-azimuth)* pi / 180);
+	
+	double verticallyXChange = ((currentAttributes.strafeSpeed/1000)/update_frequency)*cos((90-(90-azimuth))* pi / 180);
+	double verticallyYChange = ((currentAttributes.strafeSpeed/1000)/update_frequency)*sin((90-(90-azimuth))* pi / 180)*-1;
+	
+	double oldXChange = xChange;
+	double oldYChange = yChange;
+	
+	xChange = horizontallyXChange+verticallyXChange+(oldXChange*(1-0.1/update_frequency));
+	yChange = horizontallyYChange+verticallyYChange+(oldYChange*(1-0.1/update_frequency));
+	
+	xCurrent += xChange;
+	yCurrent += yChange;
+	
+	azimuth = static_cast<int>(azimuth + (currentAttributes.turnRateSpeed/1.5)/update_frequency)%360;
+
+/*	std::cerr <<"forwardingSpeed " << currentAttributes.forwardingSpeed <<std::endl;
+	std::cerr <<"forwardingAccelerationSpeed " << currentAttributes.forwardingAccelerationSpeed << std::endl;
+	
+	std::cerr <<"oldSpeed " << oldSpeed << std::endl;	
+	std::cerr <<"accelerationSpeed " << accelerationSpeed << std::endl; 
+
+	std::cerr <<"horizontallyXChange " << horizontallyXChange << std::endl; 
+	std::cerr <<"horizontallyYChange " << horizontallyYChange << std::endl;
+	
+	std::cerr <<"verticallyXChange " << verticallyXChange << std::endl; 
+	std::cerr <<"verticallyYChange " << verticallyYChange << std::endl;
+	
+	std::cerr <<"oldXChange " << oldXChange << std::endl; 
+	std::cerr <<"oldYChange " << oldYChange << std::endl;
+	
+	std::cerr <<"xChange " << xChange << std::endl; 
+	std::cerr <<"yChange " << yChange << std::endl; 	
+
+	std::cerr <<"xCurrent " << xCurrent << std::endl; 
+	std::cerr <<"yCurrent " << yCurrent << std::endl; 
+
+	std::cerr <<"azimuth " << azimuth << std::endl << std::endl; */
+	
+};
+
 void Ship::nextStep(int amount)
 {
 	
 	while(amount--)
 	{
-		Resource_status status = currentAttributes.nextStep();
+		Resource_status status = currentAttributes.nextStep(update_frequency);
 		if(	status.overheatStatus == Resource_status::Overheat_status_type::overheatStatusBad ||
 			status.energyStatus == Resource_status::Energy_status_type::energyStatusBad)
 		{
@@ -360,6 +554,8 @@ void Ship::nextStep(int amount)
 				this->itemSetMode(modeLow, key);
 			});
 		}
+		
+		this->coordinateReckon();
 	}
 
 };

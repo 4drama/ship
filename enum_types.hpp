@@ -39,11 +39,18 @@ enum ItemMode{
 	modeHigh = 4,
 };
 
-enum Action_type
-{
-	idle = 0,
-	forwardMovement = 1,
-	backwardMovement = 2,
+enum Move_commands_type {
+	stayFull = 1,
+	stayMove = 2,
+	stayTurn = 3,
+	moveForward = 4,
+	moveBackward = 5,
+	moveLeft = 6,
+	moveRight = 7,
+	turnLeft = 8,
+	turnRight = 9,
+	strafeLeft = 10,
+	strafeRight = 11,
 };
 
 enum Attributes_aAdd_or_aRemove_type
@@ -51,13 +58,5 @@ enum Attributes_aAdd_or_aRemove_type
 	aAdd = 1,
 	aRemove = 2,
 };
-/*
-enum Resource_status_type
-{
-	good = 0,
-	overheat = 1,
-	noEnergy = 2,
-	shieldFull = 3,
-};*/
 
 #endif

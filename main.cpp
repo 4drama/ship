@@ -1,15 +1,14 @@
-#include "collector.hpp"
-#include "set_item.hpp"
 #include <iostream>
-
 #include <chrono>
 
-#include "ship_attributes.hpp"
+#include "ship.hpp"
 #include "item_list.hpp"
 #include "ship_preset.hpp"
+#include "collector.hpp"
 
 int main()
 {
+	
 	std::chrono::steady_clock::time_point startCreate = std::chrono::steady_clock::now();
 
 	ItemList items;
@@ -26,17 +25,21 @@ int main()
 //	Ship1.powerOff();
 
 	Ship1.nextStep(5);
-
+/*
 	Ship1.itemSetMode(modeAverage, 0, 13);
 	Ship1.itemSetMode(modeAverage, 7, 13);
-	
-	Ship1.itemSetMode(modeAverage, 3, 13);
-	
+		
 //	Ship1.itemSetMode(modeAverage, 8, 7);
 //	Ship1.itemSetMode(modeAverage, 0, 11);
 	
 	Ship1.itemSetMode(modeAverage, 0, 7);
 	Ship1.itemSetMode(modeAverage, 8, 11);
+*/	
+
+	Ship1.itemSetMode(modeAverage, 3, 13);
+
+	Ship1.moveCommand(moveForward);
+	Ship1.moveCommand(turnLeft);
 //	Ship1.removeItem(8, 8);	
 //	Ship1.action(forwardMovement);	
 	Ship1.nextStep(5);

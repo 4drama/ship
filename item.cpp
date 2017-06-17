@@ -477,6 +477,7 @@ void Item_help_engine::recountAttributes(NewShipAttributes& attributes, ItemMode
 	resourceRecount(attributes, oldMode, newMode);	
 	logicAdd(attributes, oldMode, newMode, position);
 	attributes.reckonTurnOrStrafeSpeed();
+	attributes.reckonForwardingSpeed();
 };
 
 void Item_help_engine::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, std::pair<int, int> position) const
@@ -486,6 +487,7 @@ void Item_help_engine::removeAttributes(NewShipAttributes& attributes, Turn_item
 	{
 		logicAdd(attributes, oldMode, powerOff, position);
 		attributes.reckonTurnOrStrafeSpeed();
+		attributes.reckonForwardingSpeed();
 	}
 	addWeightToAttributes(attributes, aRemove);
 //	attributes.permanentAttributes.removeFromMoveEnginesList(position, turn);	

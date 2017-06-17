@@ -10,7 +10,6 @@
 #include <utility>
 
 #include "enum_types.hpp"
-//#include "ship_attributes.hpp"
 #include <string>
 
 #include "new_ship_attributes.hpp"

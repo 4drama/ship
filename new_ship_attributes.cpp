@@ -28,12 +28,14 @@ void NewShipAttributes::reckonForwardingSpeed()
 	}
 	else if(frontEngineSpeed != 0 && frontEnginePower != 0)
 	{
+		
+		
 		double rateBackward = (1-currentWeight/(frontEnginePower*40))/2;
 		double BackwardSpeed = frontEngineSpeed/frontHelpEngines.size()*rateBackward;
 		
 		forwardingSpeed = -BackwardSpeed;
-		
-		if(BackwardSpeed > 0)
+
+		if(BackwardSpeed < 0)
 		{
 			forwardingAccelerationSpeed = 0;
 			forwardingSpeed = 0;
@@ -60,7 +62,7 @@ void NewShipAttributes::reckonForwardingSpeed()
 	{
 		double turnRate = (1-currentWeight/((mainPower)*20))*0.05;
 		double rateSpeed = (rightEngineSpeed)/(rightMainEngines.size())*turnRate;
-		if(rateSpeed < 0) 
+		if(-rateSpeed < 0) 
 		{
 			mainEngineTurn = -rateSpeed;
 			turnRateSpeed = helpEngineTurn+mainEngineTurn;
@@ -209,13 +211,13 @@ void NewShipAttributes::printDebug() const
 	std::cout << std::endl;
 };
 
-Resource_status NewShipAttributes::nextStep()
+Resource_status NewShipAttributes::nextStep(int divider)
 {
 	
 	Resource_status status;
 	status.shieldKeys = &energyShields;
 //=============shield=====================	
-	shieldNow += shieldChange;	
+	shieldNow += shieldChange/divider;	
 	if(shieldNow < 0)
 	{
 		shieldNow = 0;
@@ -228,7 +230,7 @@ Resource_status NewShipAttributes::nextStep()
 	}
 
 //==============overheat===================	
-	overheatNow += overheatChange;	
+	overheatNow += overheatChange/divider;	
 	if(overheatNow < 0)
 	{
 		overheatNow = 0;
@@ -241,7 +243,7 @@ Resource_status NewShipAttributes::nextStep()
 	}
 
 //==============energy=====================	
-	energyNow += energyChange;	
+	energyNow += energyChange/divider;	
 	if(energyNow < 0)
 	{
 		energyNow = 0;
