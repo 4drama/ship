@@ -5,7 +5,7 @@
 #include "item_list.hpp"
 
 void HawkMK1preset1(Ship&, ItemList&);
-
+void HawkMK1preset1(Ship*, ItemList&);
 
 
 #endif

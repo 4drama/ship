@@ -7,6 +7,8 @@ protected:
 	typedef double Coordinate_type;
 	typedef double Azimuth_type;
 	
+	Coordinate_type boxSize = 0;
+	
 	Coordinate_type xCurrent = 0;
 	Coordinate_type yCurrent = 0;
 	
@@ -18,7 +20,18 @@ protected:
 	double getSpeed();
 
 public:
-//	void nextStep(int); override in ship
+	virtual void nextStep(int);
+
+	void setPosition(Coordinate_type, Coordinate_type, Azimuth_type);
+	
+	double getX();
+	double getY();
+	double getAz();
+	
 };
+
+void set_update_frequency(int);
+
+int get_update_frequency();
 
 #endif

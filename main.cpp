@@ -6,55 +6,45 @@
 #include "ship_preset.hpp"
 #include "collector.hpp"
 
+#include "object_list.hpp"
+
+#include <memory>
+
 int main()
 {
-	
+		
 	std::chrono::steady_clock::time_point startCreate = std::chrono::steady_clock::now();
 
-	ItemList items;
+	set_update_frequency(1);
+	ItemList items;	
 	
-	Ship Ship1 = CreateHawkMK1();	
-	HawkMK1preset1(Ship1, items);	
+	
+	objectList spaceObjects;
+	auto ship2 = spaceObjects.addObject(CreateHawkMK1());
+	HawkMK1preset1(*ship2, items);
+	ship2->setPosition(4, 4, 180);
+	
 	std::chrono::steady_clock::time_point endCreate = std::chrono::steady_clock::now();
-	
 	std::cout << std::endl;	
-	
 	std::chrono::steady_clock::time_point startUse = std::chrono::steady_clock::now();	
 	
-	Ship1.powerOn();	
-//	Ship1.powerOff();
-
-	Ship1.nextStep(5);
-/*
-	Ship1.itemSetMode(modeAverage, 0, 13);
-	Ship1.itemSetMode(modeAverage, 7, 13);
-		
-//	Ship1.itemSetMode(modeAverage, 8, 7);
-//	Ship1.itemSetMode(modeAverage, 0, 11);
+	ship2->powerOn();
 	
-	Ship1.itemSetMode(modeAverage, 0, 7);
-	Ship1.itemSetMode(modeAverage, 8, 11);
-*/	
-
-	Ship1.itemSetMode(modeAverage, 3, 13);
-
-	Ship1.moveCommand(moveForward);
-	Ship1.moveCommand(turnLeft);
-//	Ship1.removeItem(8, 8);	
-//	Ship1.action(forwardMovement);	
-	Ship1.nextStep(5);
-
+	spaceObjects.nextStep(5);
+	ship2->itemSetMode(modeAverage, 3, 13);
+	ship2->moveCommand(moveForward);
+	spaceObjects.nextStep(5);
+	
 	std::chrono::steady_clock::time_point endUse = std::chrono::steady_clock::now();
 	
-	Ship1.Debug_print();
-	Ship1.showItems();
-
-
+	ship2->Debug_print();
+	ship2->showItems();
+	
 	std::cout	<< std::endl << "Printing took: Create - " 
 				<< std::chrono::duration_cast<std::chrono::microseconds>(endCreate - startCreate).count()
 				<< "us, Use - "
 				<< std::chrono::duration_cast<std::chrono::microseconds>(endUse - startUse).count()
-				<< "us." << std::endl;  
+				<< "us." << std::endl; 	
 	
 	return 0;
 };

@@ -15,7 +15,7 @@
 
 #include "space_object.hpp"
 
-const int update_frequency = 1;
+extern int update_frequency;
 
 class Set_item;
 
@@ -61,10 +61,9 @@ private:
 	
 public:
 
-	Ship(Name_type, Block_size_type, Group_size_type, Weight_type, Overheat_lmit_type, Left_side_type, Middle_side_type, Right_side_type, Front_side_type, Back_side_type);
+	Ship(Name_type, Block_size_type, Block_size_type, Group_size_type, Weight_type, Overheat_lmit_type, Left_side_type, Middle_side_type, Right_side_type, Front_side_type, Back_side_type);
 	
 	void AddShipStructInLine(Line_number_type, Ship_struct);
-	Groups_type::iterator Return_group(Group_size_type);
 
 	
 	std::string getName() const;
@@ -85,7 +84,7 @@ public:
 
 	void moveCommand(Move_commands_type);
 	
-	void nextStep(int);
+	void nextStep(int) override;
 	
 	~Ship();
 };

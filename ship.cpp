@@ -6,16 +6,17 @@
 #include <algorithm>
 #include <cmath>
 
-Ship::Ship(	Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Weight_type weight_, Overheat_lmit_type overheat,
+Ship::Ship(	Name_type name_, Block_size_type bsize_, Block_size_type bsize_2, Group_size_type gsize_, Weight_type weight_, Overheat_lmit_type overheat,
 			Left_side_type left, Middle_side_type middle, Right_side_type right, Front_side_type front, Back_side_type back)
-		: 	name(name_), itemsList(bsize_*bsize_/2)
+		: 	name(name_), itemsList(bsize_*bsize_2/2)
 {
 	Blocks.resize(bsize_);	
 	Groups.reserve(gsize_);
 	
 	for(Group_size_type i = 0; i<gsize_; ++i)
 	{
-		Groups.push_back(Group_type(i));
+	//	Groups.push_back(Group_type(i)); 
+		Groups.push_back(std::make_shared<Group_type>(i));
 	};
 	currentAttributes.currentWeight += weight_;
 	currentAttributes.overheatLimit = overheat;
@@ -25,11 +26,14 @@ Ship::Ship(	Name_type name_, Block_size_type bsize_, Group_size_type gsize_, Wei
 	currentAttributes.rightPos = right;
 	currentAttributes.frontPos = front;
 	currentAttributes.backPos = back;
+	
+	boxSize = sqrt(pow(bsize_*0.05,2)+pow(bsize_2*0.05,2))/2;
+//	std::cerr << "Ship::Ship" << std::endl;
 };
 
 void Ship::Debug_print()
 {
-	std::cout << std::endl << "==============DEBUG_PRINT:==============" << std::endl;
+	std::cout << std::endl << "==============DEBUG_PRINT:==============" << std::dec << std::endl;
 	
 	for(int i = 0, size = Blocks.size(); i<size; ++i)
 	{
@@ -62,7 +66,8 @@ void Ship::Debug_print()
 //	currentAttributes.debugPermanentAttributes();
 	currentAttributes.printDebug();
 	
-	std::cout << std::fixed << "Position : x=" << xCurrent << " y=" << yCurrent << std::endl;
+	std::cout << std::fixed << "Box size : " << boxSize*2 << " x " << boxSize*2 << std::endl;
+	std::cout << "Position : x=" << xCurrent << " y=" << yCurrent << std::endl;
 	std::cout << "Azimuth : " << azimuth << std::endl;
 	std::cout << "Change position : x=" << xChange << " y=" << yChange << std::endl;
 };
@@ -75,21 +80,15 @@ std::string Ship::getName() const
 void Ship::AddShipStructInLine(Line_number_type Line, Ship_struct Block)
 {
 	Blocks[Line].push_back(Block);
+	
+	int number = Blocks[Line][(Blocks[Line].size()-1)].groupNumber;
+	
+	auto it = std::find_if (Groups.begin(), Groups.end(), 
+		[number](std::shared_ptr<Group_type> i)
+		{return i->Get_number() == number;} );	
+	
+	Blocks[Line][(Blocks[Line].size()-1)].Group = *it;
 };
-
-Ship_types::Groups_type::iterator Ship::Return_group(Group_size_type Number)
-{
-	Ship_types::Groups_type::iterator it;
-	it = Groups.begin() + Number;
-	return it;
-};
-
-/*
-Ship::Blocks_type* Ship::Get_blocks()
-{
-	return &Blocks;
-};
-*/
 
 bool Ship::Block_check_struct_item(Item& Item_pointer_, Block_size_type X_call_, Block_size_type Y_call_, Turn_item_type Turn_)
 {
