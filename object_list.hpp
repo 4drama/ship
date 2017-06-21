@@ -7,7 +7,7 @@
 
 #include "space_object.hpp"
 
-class objectList
+class ObjectList
 {
 private:
 	std::vector<std::shared_ptr<SpaceObject> > list;

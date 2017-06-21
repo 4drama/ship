@@ -56,12 +56,23 @@ Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, NewShipAttributes& 
 //	std::cout << "Debug: Set_item Constructor end" <<std::endl;
 };
 
+
 Set_item::~Set_item()
 {
 //	std::cout << "Debug: Set_item Destructor" <<std::endl;
+//	std::cout << Item_pointer << ' ' << &attributesPtr << ' ' << Turn << ' ' << mode <<std::endl;
+	
+	if(Cells.empty())
+	{
+		Item_pointer->removeAttributes(*attributesPtr, Turn, mode, std::make_pair(0,0));
+	}
+	else
+	{
+		Item_pointer->removeAttributes(*attributesPtr, Turn, mode, Cells[0]);
+	}
+	
 
-	Item_pointer->removeAttributes(*attributesPtr, Turn, mode, Cells[0]);
-
+//	std::cout << "Debug: Set_item Destructor, Item_pointer->removeAttributes end" <<std::endl;
 	
 	for ( auto it = Cells.begin(); it!=Cells.end(); it++ )
 	{

@@ -379,9 +379,8 @@ Item_help_engine::Item_help_engine(	Name_type name_, Weight_type Weight_, Item_s
 void Item_help_engine::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, std::pair<int, int> position) const
 {
 	addWeightToAttributes(attributes, aAdd);
-//	???????????????????????????????????????????????????
 	
-	
+//	std::cerr << this << std::endl;
 	
 //	attributes.permanentAttributes.moveEnginesList.push_back(MoveEngines(position, turn, power, maxSpeed));	
 //	attributes.permanentAttributes.recountMoveEnginesList();
@@ -482,6 +481,7 @@ void Item_help_engine::recountAttributes(NewShipAttributes& attributes, ItemMode
 
 void Item_help_engine::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, std::pair<int, int> position) const
 {
+//	std::cerr << "DEBUG: Item_help_engine::removeAttributes" << std::endl;
 	resourceRecount(attributes, oldMode, powerOff);
 	if(oldMode != powerOff)
 	{

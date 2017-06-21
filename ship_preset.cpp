@@ -33,7 +33,7 @@ void HawkMK1preset1(Ship& ship, ItemList& list)
 		ship.setItem(list(3851), up_turn, 7, 0);
 	}
 };
-
+/*
 void HawkMK1preset1(Ship* ship, ItemList& list)
 {
 	if(ship->getName() == "HawkMK1")
@@ -65,4 +65,4 @@ void HawkMK1preset1(Ship* ship, ItemList& list)
 		ship->setItem(list(3851), up_turn, 1, 0);
 		ship->setItem(list(3851), up_turn, 7, 0);
 	}
-};
+};*/

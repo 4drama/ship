@@ -11,15 +11,14 @@
 #include <memory>
 
 int main()
-{
-		
+{		
 	std::chrono::steady_clock::time_point startCreate = std::chrono::steady_clock::now();
 
 	set_update_frequency(1);
-	ItemList items;	
 	
+	ItemList items;		
+	ObjectList spaceObjects;
 	
-	objectList spaceObjects;
 	auto ship2 = spaceObjects.addObject(CreateHawkMK1());
 	HawkMK1preset1(*ship2, items);
 	ship2->setPosition(4, 4, 180);

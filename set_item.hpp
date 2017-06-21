@@ -44,6 +44,7 @@ public:
 	std::string getName() const;
 	std::pair<int, int> getPosition() const;
 	Item* getItem();
+
 };
 
 

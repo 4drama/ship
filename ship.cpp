@@ -269,9 +269,11 @@ void Ship::setItem(Item* Itm, Turn_item_type Turn_, Block_size_type X_call_, Blo
 {
 //	std::cout << "Debug: Ship::setItem begin" <<std::endl;
 	int key = itemsList.add(new Set_item(*this, *Itm, currentAttributes, Turn_, X_call_, Y_call_));
-
+	
+	
 	if(!keyFlag)
 	{
+//		std::cerr << &currentAttributes << std::endl;
 		itemsList.erase(key);
 		return;
 	};

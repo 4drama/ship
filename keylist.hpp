@@ -76,7 +76,10 @@ void ml1::KeyList<T>::erase(int key)
 {
 	auto it = std::find_if (valueList.begin(), valueList.end(), 
 		[key](std::pair<int, T*> i)
-		{return i.first == key;} );
+		{
+//			std::cerr << i.first << " " << key << std::endl;
+			return i.first == key;
+		} );	
 	delete it->second;
 	valueList.erase(it);
 	freeKeys.push(key);
