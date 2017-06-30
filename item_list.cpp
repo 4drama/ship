@@ -16,7 +16,7 @@ ItemList::ItemList()
 	list.push_back(std::make_pair(3550, new Item_energy_storage("tdACCUMULATOR1052", 50, 1, 2, 150, 100, 1, 180)));
 	list.push_back(std::make_pair(3551, new Item_energy_storage("tdACCUMULATOR1053", 100, 1, 3, 200, 150, 1, 300)));
 	list.push_back(std::make_pair(3851, new Item_ballistic_weapon("Energy boll HG12 gun 1B", 550, 2, 6, 700, 250, 4, 180, 160, 120, 2, 1800)));
-	
+	list.push_back(std::make_pair(4150, new Item_radiator("RADIATORx2drr", 150, 1, 2, 350, 300)));	
 };
 	
 Item* ItemList::operator()(int id)

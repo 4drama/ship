@@ -57,7 +57,7 @@ private:
 	bool Block_check_struct_item(Item&, Block_size_type, Block_size_type, Turn_item_type);
 	void Block_reser_struct_item(Block_size_type, Block_size_type);	
 	void itemSetAllMode(ItemMode, std::vector<NewShipAttributes::Key_type>&);
-	void coordinateReckon();
+	
 	
 public:
 
@@ -84,7 +84,9 @@ public:
 
 	void moveCommand(Move_commands_type);
 	
-	void nextStep(int) override;
+//	void nextStep(int) override;
+	void coordinateReckon() override;
+	void attributesReckon() override;
 	
 	~Ship();
 };

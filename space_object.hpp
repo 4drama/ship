@@ -20,13 +20,16 @@ protected:
 	double getSpeed();
 
 public:
-	virtual void nextStep(int);
+//	virtual void nextStep(int);
+	virtual void coordinateReckon();
+	virtual void attributesReckon();
 
 	void setPosition(Coordinate_type, Coordinate_type, Azimuth_type);
 	
 	double getX();
 	double getY();
 	double getAz();
+	double getBox();
 	
 };
 

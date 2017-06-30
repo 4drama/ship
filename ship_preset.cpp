@@ -27,8 +27,11 @@ void HawkMK1preset1(Ship& ship, ItemList& list)
 		ship.setItem(list(3550), up_turn, 9, 5);
 		ship.setItem(list(3551), up_turn, 2, 7);
 		ship.setItem(list(3551), up_turn, 7, 7);
-		ship.setItem(list(3551), left_turn, 2, 12);
-		ship.setItem(list(3551), left_turn, 5, 12);
+//		ship.setItem(list(3551), left_turn, 2, 12);
+//		ship.setItem(list(3551), left_turn, 5, 12);
+		ship.setItem(list(4150), left_turn, 2, 12);
+		ship.setItem(list(3550), left_turn, 4, 12);
+		ship.setItem(list(4150), left_turn, 6, 12);
 		ship.setItem(list(3851), up_turn, 1, 0);
 		ship.setItem(list(3851), up_turn, 7, 0);
 	}

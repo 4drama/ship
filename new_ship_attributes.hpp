@@ -44,6 +44,8 @@ struct NewShipAttributes
 	Vector_keys_type enegryStorage;
 //============Ballistic_weapon=====
 	Vector_keys_type ballisticWeapon;	
+//============Radiatiors===========	
+	Vector_keys_type radiators;
 //------------------------------------------------------
 
 //======================================================

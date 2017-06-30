@@ -761,3 +761,31 @@ void Item_ballistic_weapon::removeAttributes(NewShipAttributes& attributes, Turn
 	addWeightToAttributes(attributes, aRemove);
 };
 //-------------------------------------------------------------------
+
+//===================================================================
+//=====================RADIATOR======================================
+Item_radiator::Item_radiator(	Name_type name_, Weight_type Weight_, Item_size_type Size_width_, Item_size_type Size_height_, Durability_type durability_,
+											Cooling_storage_type heat_)
+										:	Item(name_, Weight_, Size_width_, Size_height_, 0, durability_, inside_block, not_advance_block, no_matter_turn),
+											heat(heat_)
+{
+	
+};
+
+void Item_radiator::addAttributes(NewShipAttributes& attributes, Turn_item_type turn, std::pair<int, int> position) const
+{
+	addWeightToAttributes(attributes, aAdd);
+	attributes.overheatLimit += heat;
+};
+
+void Item_radiator::recountAttributes(NewShipAttributes& attributes, ItemMode oldMode, ItemMode newMode, std::pair<int, int> position) const
+{
+	
+};
+
+void Item_radiator::removeAttributes(NewShipAttributes& attributes, Turn_item_type turn, ItemMode oldMode, std::pair<int, int> position) const
+{
+	addWeightToAttributes(attributes, aRemove);
+	attributes.overheatLimit -= heat;
+};
+//-------------------------------------------------------------------

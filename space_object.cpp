@@ -5,9 +5,19 @@
 
 int update_frequency = 100;
 
-void SpaceObject::nextStep(int)
+/*void SpaceObject::nextStep(int)
 {
 	std::cerr << "ERROR: SpaceObject::nextStep." << std::endl;
+};*/
+
+void SpaceObject::coordinateReckon()
+{
+	std::cerr << "ERROR: SpaceObject::coordinateReckon." << std::endl;
+};
+
+void SpaceObject::attributesReckon()
+{
+	std::cerr << "ERROR: SpaceObject::attributesReckon." << std::endl;
 };
 
 double SpaceObject::getSpeed()
@@ -37,6 +47,10 @@ double SpaceObject::getAz()
 	return azimuth;
 };
 
+double SpaceObject::getBox()
+{
+	return boxSize;
+};
 
 void set_update_frequency(int i)
 {

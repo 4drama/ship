@@ -29,6 +29,7 @@ protected:
 	typedef int Acceleration_type;
 	typedef int Enegry_shield_type;
 	typedef int Energy_storage_type;
+	typedef int Cooling_storage_type;
 	
 //	typedef int Energy_type;	
 //	typedef int Cooling_type;	
@@ -369,6 +370,22 @@ public:
 							Energy_type, Cooling_type,
 							WeaponItem::Damage_type, WeaponItem::Area_type, Speed_type);
 
+	void addAttributes(NewShipAttributes&, Turn_item_type, std::pair<int, int>) const override;
+	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode, std::pair<int, int>) const override;
+	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, std::pair<int, int>) const override;
+};
+//-------------------------------------------------------------------
+
+//===================================================================
+//=====================RADIATOR======================================
+class Item_radiator final: public Item
+{
+private:
+	Cooling_storage_type heat;
+public:	
+	Item_radiator(	Name_type, Weight_type, Item_size_type, Item_size_type, Durability_type,
+							Cooling_storage_type);
+	
 	void addAttributes(NewShipAttributes&, Turn_item_type, std::pair<int, int>) const override;
 	void recountAttributes(NewShipAttributes&, ItemMode, ItemMode, std::pair<int, int>) const override;
 	void removeAttributes(NewShipAttributes&, Turn_item_type, ItemMode, std::pair<int, int>) const override;

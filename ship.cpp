@@ -245,6 +245,10 @@ void Ship::addOrRemoveItemKeyToAttributes(Key_type key, Item* itemPtr, Block_siz
 	{
 		currentKeysList = &currentAttributes.ballisticWeapon;
 	}
+	else if(dynamic_cast<Item_radiator*>(itemPtr))
+	{
+		currentKeysList = &currentAttributes.radiators;
+	}
 	else
 	{
 		std::cerr << "ERROR: Ship::addOrRemoveItemKeyToAttributes. Invalid type." << std::endl;
@@ -535,7 +539,27 @@ void Ship::coordinateReckon()
 	
 };
 
-void Ship::nextStep(int amount)
+void Ship::attributesReckon()
+{
+	Resource_status status = currentAttributes.nextStep(update_frequency);
+	
+	if(	status.overheatStatus == Resource_status::Overheat_status_type::overheatStatusBad ||
+		status.energyStatus == Resource_status::Energy_status_type::energyStatusBad)
+	{
+		this->powerOff();
+	}
+	
+	if(status.shieldStatus == Resource_status::Shield_status_type::shieldStatusFull)
+	{
+		std::for_each(	status.shieldKeys->begin(), status.shieldKeys->end(),
+		[this](int key)
+		{
+			this->itemSetMode(modeLow, key);
+		});
+	}
+};
+
+/*void Ship::nextStep(int amount)
 {
 	
 	while(amount--)
@@ -559,7 +583,8 @@ void Ship::nextStep(int amount)
 		this->coordinateReckon();
 	}
 
-};
+};*/
+
 /*
 void Ship::action(Action_type action)
 {
