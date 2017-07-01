@@ -10,12 +10,16 @@ class ObjectList
 {
 private:
 	std::vector<std::shared_ptr<SpaceObject> > list;
+	
+	void attributesReckon();
+	void coordinateReckon();
+	
 public:
 
 	template <class T>
 	std::shared_ptr<T> addObject(T&& obj);
 	
-	void nextStep(int count);	
+	void nextStep();	
 	
 };
 

@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall -std=c++14 -g
 LDFLAGS=
-SOURCES=main.cpp item.cpp ship_struct.cpp ship.cpp collector.cpp set_item.cpp item_list.cpp ship_preset.cpp new_ship_attributes.cpp space_object.cpp object_list.cpp collision.cpp
+SOURCES=main.cpp item.cpp ship_struct.cpp ship.cpp collector.cpp set_item.cpp item_list.cpp ship_preset.cpp new_ship_attributes.cpp space_object.cpp object_list.cpp collision.cpp collision_zone.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=ship
 

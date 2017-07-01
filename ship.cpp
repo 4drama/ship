@@ -8,7 +8,7 @@
 
 Ship::Ship(	Name_type name_, Block_size_type bsize_, Block_size_type bsize_2, Group_size_type gsize_, Weight_type weight_, Overheat_lmit_type overheat,
 			Left_side_type left, Middle_side_type middle, Right_side_type right, Front_side_type front, Back_side_type back)
-		: 	name(name_), itemsList(bsize_*bsize_2/2)
+		: 	name(name_), height(bsize_), width(bsize_2), itemsList(bsize_*bsize_2/2)
 {
 	Blocks.resize(bsize_);	
 	Groups.reserve(gsize_);
@@ -542,6 +542,7 @@ void Ship::coordinateReckon()
 void Ship::attributesReckon()
 {
 	Resource_status status = currentAttributes.nextStep(update_frequency);
+	collReadyFlag = false;
 	
 	if(	status.overheatStatus == Resource_status::Overheat_status_type::overheatStatusBad ||
 		status.energyStatus == Resource_status::Energy_status_type::energyStatusBad)
@@ -556,6 +557,19 @@ void Ship::attributesReckon()
 		{
 			this->itemSetMode(modeLow, key);
 		});
+	}
+};
+
+void Ship::prepareCollision()
+{
+	if (collReadyFlag == true)
+	{
+		return;
+	}
+	else
+	{
+		this->zones.createFourZones(Point{this->xCurrent, this->yCurrent}, this->azimuth, height, width, 0.05);
+		collReadyFlag = true;
 	}
 };
 

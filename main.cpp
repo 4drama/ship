@@ -33,8 +33,6 @@ int main()
 	ship1->powerOn();
 	ship2->powerOn();
 	
-	spaceObjects.nextStep(5);
-	
 	ship1->moveCommand(moveForward);	
 	
 	ship2->itemSetMode(modeAverage, 3, 13);
@@ -44,7 +42,7 @@ int main()
 	
 	while(amount--)
 	{
-		spaceObjects.nextStep(1);
+		spaceObjects.nextStep();
 	}
 	
 	std::chrono::steady_clock::time_point endUse = std::chrono::steady_clock::now();

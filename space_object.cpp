@@ -20,6 +20,11 @@ void SpaceObject::attributesReckon()
 	std::cerr << "ERROR: SpaceObject::attributesReckon." << std::endl;
 };
 
+void SpaceObject::prepareCollision()
+{
+	std::cerr << "ERROR: SpaceObject::prepareCollision." << std::endl;
+};
+
 double SpaceObject::getSpeed()
 {
 	return sqrt(pow(xChange,2)+pow(yChange,2));

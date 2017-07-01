@@ -41,12 +41,15 @@ private:
 	typedef std::pair<int, int> Back_side_type;
 	
 	Name_type name;
-	
+	Block_size_type height;
+	Block_size_type width;
+		
 	Blocks_type Blocks;
 	Groups_type Groups;
 	
 	ml1::KeyList<Set_item> itemsList;
 	bool keyFlag = false;
+	bool collReadyFlag = false;
 	
 	NewShipAttributes currentAttributes;
 	
@@ -87,6 +90,7 @@ public:
 //	void nextStep(int) override;
 	void coordinateReckon() override;
 	void attributesReckon() override;
+	void prepareCollision() override;
 	
 	~Ship();
 };

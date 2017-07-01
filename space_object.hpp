@@ -1,6 +1,8 @@
 #ifndef SPACE_OBJECT__
 #define SPACE_OBJECT__
 
+#include "collision_zone.hpp"
+
 class SpaceObject
 {
 protected:
@@ -17,12 +19,15 @@ protected:
 	
 	Azimuth_type azimuth = 0;
 	
+	CollisionZone zones;
+	
 	double getSpeed();
 
 public:
 //	virtual void nextStep(int);
 	virtual void coordinateReckon();
 	virtual void attributesReckon();
+	virtual void prepareCollision();
 
 	void setPosition(Coordinate_type, Coordinate_type, Azimuth_type);
 	
