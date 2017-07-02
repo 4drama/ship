@@ -7,21 +7,6 @@
 
 const double pi = 3.14159265358979323846;
 
-Rectangle::Rectangle(Point p1, Point p2, Point p3, Point p4)
-{
-	side1.first = p1;
-	side1.last = p2;
-	
-	side2.first = p2;
-	side2.last = p3;
-	
-	side3.first = p3;
-	side3.last = p4;
-	
-	side4.first = p4;
-	side4.last = p1;
-};
-
 void CollisionZone::createFourZones(Point centre, double azimuth, int height, int width, double cellSize)
 {
 	Zones.clear();

@@ -3,27 +3,7 @@
 
 #include <vector>
 
-struct Point
-{
-	double x;
-	double y;
-};
-
-struct Line
-{	
-	Point first;
-	Point last;	
-};
-
-struct Rectangle
-{
-	Line side1;
-	Line side2;
-	Line side3;
-	Line side4;
-	
-	Rectangle(Point, Point, Point, Point);
-};
+#include "geometry.hpp"
 
 class CollisionZone
 {
@@ -32,4 +12,5 @@ private:
 public:
 	void createFourZones(Point centre, double azimuth, int height, int width, double cellSize);
 };
+
 #endif
