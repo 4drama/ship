@@ -15,7 +15,8 @@
 
 #include "space_object.hpp"
 
-extern int update_frequency;
+//extern int update_frequency;
+//extern double shipCellSize;
 
 class Set_item;
 

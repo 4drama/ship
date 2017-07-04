@@ -11,17 +11,7 @@
 #include <memory>
 
 int main()
-{		
-	Rectangle A(Point{0,0}, Point{0,1}, Point{1,1}, Point{1,0});
-	Rectangle B(Point{2,2}, Point{2,0.5}, Point{0,0.5}, Point{0,2});
-	Rectangle C(Point{2,2}, Point{2,4}, Point{4,4}, Point{4,2});
-	
-	bool AB = intersectionRectangle(A, B);	
-	bool AC = intersectionRectangle(A, C);	
-	
-	std::cout << "Collision AB = " << AB << std::endl;
-	std::cout << "Collision AC = " << AC << std::endl;
-	
+{	
 	std::chrono::steady_clock::time_point startCreate = std::chrono::steady_clock::now();
 
 	set_update_frequency(5);
@@ -67,6 +57,5 @@ int main()
 				<< "us, Use - "
 				<< std::chrono::duration_cast<std::chrono::microseconds>(endUse - startUse).count()
 				<< "us." << std::endl; 	
-	
 	return 0;
 };

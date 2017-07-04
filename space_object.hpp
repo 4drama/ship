@@ -3,6 +3,10 @@
 
 #include "collision_zone.hpp"
 
+//double shipCellSize = 0.05;
+extern int update_frequency;
+extern double shipCellSize;
+
 class SpaceObject
 {
 protected:
@@ -35,7 +39,7 @@ public:
 	double getY();
 	double getAz();
 	double getBox();
-	
+	CollisionZone* getZones();
 };
 
 void set_update_frequency(int);

@@ -23,15 +23,27 @@ void ObjectList::coordinateReckon()
 		});
 };
 
+/*void collisionReckon()
+{
+	
+};*/
+
 void ObjectList::nextStep()
 {
 	this->attributesReckon();	
-		
+	this->coordinateReckon();
+	
 	auto collisionList = createCollisionList();
 	
 	collisionListCheck(collisionList, list);
-	collisionBoxCheck(collisionList);
 	
-	//only if ship not collising. NEED REMAKE. NOT WORK
-	this->coordinateReckon();
+	std::for_each(	collisionList.begin(), collisionList.end(), 		
+		[](auto i)
+		{
+			i.collisionReckon();
+		});
+		
+	
+//	collisionBoxCheck(collisionList);
+	
 };

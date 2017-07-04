@@ -13,6 +13,7 @@ private:
 	
 	void attributesReckon();
 	void coordinateReckon();
+//	void collisionReckon();
 	
 public:
 

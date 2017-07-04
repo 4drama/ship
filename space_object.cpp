@@ -4,6 +4,7 @@
 #include <iostream>
 
 int update_frequency = 100;
+double shipCellSize = 0.05;
 
 /*void SpaceObject::nextStep(int)
 {
@@ -28,6 +29,11 @@ void SpaceObject::prepareCollision()
 double SpaceObject::getSpeed()
 {
 	return sqrt(pow(xChange,2)+pow(yChange,2));
+};
+
+CollisionZone* SpaceObject::getZones()
+{
+	return &zones;
 };
 
 void SpaceObject::setPosition(Coordinate_type x, Coordinate_type y, Azimuth_type az)

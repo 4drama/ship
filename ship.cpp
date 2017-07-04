@@ -27,7 +27,7 @@ Ship::Ship(	Name_type name_, Block_size_type bsize_, Block_size_type bsize_2, Gr
 	currentAttributes.frontPos = front;
 	currentAttributes.backPos = back;
 	
-	boxSize = sqrt(pow(bsize_*0.05,2)+pow(bsize_2*0.05,2))/2;
+	boxSize = sqrt(pow(bsize_*shipCellSize,2)+pow(bsize_2*shipCellSize,2))/2;
 //	std::cerr << "Ship::Ship" << std::endl;
 };
 
@@ -568,7 +568,7 @@ void Ship::prepareCollision()
 	}
 	else
 	{
-		this->zones.createFourZones(Point{this->xCurrent, this->yCurrent}, this->azimuth, height, width, 0.05);
+		this->zones.createFourZones(Point{this->xCurrent, this->yCurrent}, this->azimuth, height, width, shipCellSize);
 		collReadyFlag = true;
 	}
 };

@@ -7,6 +7,26 @@ struct Point
 	double y;
 };
 
+struct Distance
+{
+	double x;
+	double y;
+};
+
+Point operator+( const Point& lhs, const Distance& rhs);
+
+class Azimuth
+{
+private:
+	double value;
+public:
+	Azimuth(const double&);
+	void set(const double&);
+	double get() const;
+};
+
+
+
 struct Line
 {	
 	Point first;
@@ -37,6 +57,8 @@ struct Vect
 Vect operator*( const Vect& lhs, const Vect& rhs);
 
 bool midVect (const Vect& mid, const Vect& left, const Vect& right);
+
+Point pointFromDistance(const Point&, const Azimuth&, const Distance&);
 
 bool intersectionLine(const Line& first, const Line& second);
 

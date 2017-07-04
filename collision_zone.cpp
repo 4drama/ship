@@ -9,6 +9,9 @@ const double pi = 3.14159265358979323846;
 
 void CollisionZone::createFourZones(Point centre, double azimuth, int height, int width, double cellSize)
 {
+	xSize = (width+1)/2;
+	ySize = (height+1)/2;
+	
 	Zones.clear();
 	Zones.reserve(4);
 	
@@ -20,10 +23,11 @@ void CollisionZone::createFourZones(Point centre, double azimuth, int height, in
 	double heightAngle = azimuth;	
 	double x2y1x = heightHptz*sin((heightAngle)* pi / 180);
 	double x2y1y = heightHptz*cos((heightAngle)* pi / 180);
+//	std:: cout << x2y1x << " " <<  x2y1y << std::endl;
 	x2y1.x = centre.x + x2y1x;
 	x2y1.y = centre.y + x2y1y;
 	x2y3.x = centre.x - x2y1x;
-	x2y3.y = centre.y - x2y1x;
+	x2y3.y = centre.y - x2y1y;
 	
 	Point x1y2;
 	Point x3y2;
@@ -31,6 +35,7 @@ void CollisionZone::createFourZones(Point centre, double azimuth, int height, in
 	double widthAngle = 90-azimuth;
 	double x1y2x = widthHptz*sin((widthAngle)* pi / 180);
 	double x1y2y = widthHptz*cos((widthAngle)* pi / 180);
+//	std:: cout << x1y2x << " " <<  x1y2y << std::endl;
 	x1y2.x = centre.x + x1y2x;
 	x1y2.y = centre.y + x1y2y;
 	x3y2.x = centre.x - x1y2x;
@@ -74,3 +79,13 @@ void CollisionZone::createFourZones(Point centre, double azimuth, int height, in
 													<<  x3y3.x << "," << x3y3.y << ") ("
 													<<  x2y3.x << "," << x2y3.y << ")" << std::endl << std::endl;
 };
+
+/*Rectangle& CollisionZone::operator[] (int x)
+{
+	return Zones[x];
+};*/
+
+/*std::vector<Rectangle>* CollisionZone::getVector()
+{
+	return &Zones;
+};*/

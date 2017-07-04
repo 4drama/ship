@@ -8,9 +8,18 @@
 class CollisionZone
 {
 private:
-	std::vector<Rectangle> Zones; 	
+	
 public:
+
+	std::vector<Rectangle> Zones;
+	
+	int xSize;
+	int ySize;
+	
 	void createFourZones(Point centre, double azimuth, int height, int width, double cellSize);
+	
+//	Rectangle& operator[] (int x);
+//	std::vector<Rectangle>* getVector();
 };
 
 #endif
