@@ -562,6 +562,7 @@ void Ship::attributesReckon()
 
 void Ship::prepareCollision()
 {
+	
 	if (collReadyFlag == true)
 	{
 		return;

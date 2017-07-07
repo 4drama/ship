@@ -12,14 +12,14 @@ Collision::Collision	(	std::shared_ptr<SpaceObject> firstObj_, std::shared_ptr<S
 
 void Collision::collisionBox()
 {
-	indexsColl.resize(10);
+	indexsColl.reserve(10);
 	
 	firstObj->prepareCollision();
 	secondObj->prepareCollision();
 	
 	auto* firstZones = firstObj->getZones();
 	auto* secondZones = secondObj->getZones();
-		
+	
 	for(int i = 0, size = firstZones->Zones.size(); i<size; ++i)
 	{
 		for(int j = 0, size = secondZones->Zones.size(); j<size; ++j)
@@ -28,51 +28,131 @@ void Collision::collisionBox()
 			if (collisionCheck)
 			{
 				indexsColl.push_back(std::make_pair(i, j));
+				
+				this->addUnique(i ,uniqueBoxCollisionFirst);
+				this->addUnique(j ,uniqueBoxCollisionSecond);
+				
 				std::cout << "CollisionBox : [" << i << "][" << j << "]" << std::endl; 
 			}
 		};
 	};
 };
 
-void Collision::createPoints()
+void Collision::addPoints(const Index& begin, const Index& end, const int boxNumber, const std::shared_ptr<SpaceObject>& object, std::vector<Points_pairs_type>& boxs)
 {
-//	CollisionZone.xSize
-//	firstObj.ySize
-//	pointFromDistance(const Point&, const Azimuth&, const Distance&)
+	std::cout << std::endl << "Collision::addPoints " << boxNumber << " begin: " << begin.i << " " <<begin.j << " end: " << end.i << " " << end.j << std::endl;
 	
-//	std:: cout << firstObj->getZones()->xSize << " " << firstObj->getZones()->ySize << std::endl;
+	int sz = (begin.i+1-end.i)*(end.j + 1 - begin.j);	
+	boxs[boxNumber].reserve(std::move(sz));
 	
-	for (int i = 0, size = firstObj->getZones()->xSize; i < size; ++i)
+	for (int i = begin.i, size = end.i - 1; i > size; --i)
 	{
-		for (int j = 0, size2 = firstObj->getZones()->ySize; j < size2; ++j)
+		for (int j =  begin.j, size2 = end.j + 1 ; j < size2; ++j)
 		{
-			auto p1 = pointFromDistance( firstObj->getZones()->Zones[0].side1.first, Azimuth(firstObj->getAz()+180), Distance{((pSize/2)+(i*pSize)), ((pSize/2)+(j*pSize))});
-		//	firstBoxs[0].push_back(p1);
-			std::cout << "Add point: [" << i << ":" << j <<"] [" << p1.x << ":" << p1.y << "]" << std::endl << std::endl;
+			auto p1 = pointFromDistance( object->getZones()->Zones[boxNumber].side1.first, Azimuth(object->getAz()+180), Distance{((pSize/2)+(i*pSize)), ((pSize/2)+(j*pSize))});
+			boxs[boxNumber].push_back(std::make_pair(Index{i,j} ,p1));
+			std::cout << "Add point: [" << i << ":" << j <<"] [" << p1.x << ":" << p1.y << "]" << std::endl;
 		}
 	}
+};
+
+void Collision::addUnique(const int n, std::vector<int>& uBox)
+{
+	auto It = std::find(uBox.begin(), uBox.end(), n);
+							
+	if(It == uBox.end())
+	{
+		uBox.push_back(n);
+		std::cout << "add unique:" << n << std::endl;
+	};
+};
+
+void Collision::addCollisions(const std::pair<int,int>& boxIndexs)
+{
+/*	struct CollisionBox
+	{
+		Point begin, end;
+		
+		CollisionBox(const Point& p, const double size)
+		{
+			double halfSize = size/2;
+			begin = Point{p.x+halfSize, p.y-halfSize};
+			end = Point{p.x-halfSize, p.y+halfSize};
+		}
+	};*/
 	
+//	collisionPairs.reserve(20);
+	
+	for(int i = 0, size = firstBoxs[boxIndexs.first].size(); i<size; ++i)
+	{
+		for(int j = 0, size = secondBoxs[boxIndexs.second].size(); j<size; ++j)
+		{
+//			CollisionBox firstCell(firstBoxs[boxIndexs.first][i].second, pSize);
+//			CollisionBox secondCell(secondBoxs[boxIndexs.second][j].second, pSize);
+			auto firstCellPoint = firstBoxs[boxIndexs.first][i].second;
+			auto secondCellPoint = secondBoxs[boxIndexs.second][j].second;
+			
+			bool check = collisionBoxCheck ( firstCellPoint.x, firstCellPoint.y, pSize/2, secondCellPoint.x, secondCellPoint.y, pSize/2);
+			
+			if(check)
+			{
+				collisionPairs.push_back(std::make_pair(firstBoxs[boxIndexs.first][i].first, secondBoxs[boxIndexs.second][j].first));
+			}
+			
+		}
+		
+	}
+	
+};
+
+void Collision::createPoints()
+{
+	firstBoxs.resize(firstObj->getZones()->size);
+	secondBoxs.resize(secondObj->getZones()->size);
+	
+	std::for_each(	uniqueBoxCollisionFirst.begin(), uniqueBoxCollisionFirst.end(), 
+							[this](int n)
+							{
+								this->addPoints(this->firstObj->getZones()->indexs[n].first, this->firstObj->getZones()->indexs[n].second, n, this->firstObj, this->firstBoxs);
+							});
+	
+	std::for_each(	uniqueBoxCollisionSecond.begin(), uniqueBoxCollisionSecond.end(), 
+							[this](int n)
+							{
+								this->addPoints(this->secondObj->getZones()->indexs[n].first, this->secondObj->getZones()->indexs[n].second, n, this->secondObj, this->secondBoxs);
+							});
 };
 
 void Collision::collisionReckon()
 {
 	this->collisionBox();
 	this->createPoints();
+	
+	std::for_each(	indexsColl.begin(), indexsColl.end(), 
+							[this](auto& pair)
+							{
+								std::cout << '[' << pair.first << ',' << pair.second << ']' << std::endl;
+								this->addCollisions(pair);
+							});
+							
+	std::for_each(	collisionPairs.begin(), collisionPairs.end(), 
+							[](auto& cellPair)
+							{
+								std::cout << '[' << cellPair.first.i << ',' << cellPair.first.j << "]&[" << cellPair.second.i << ',' << cellPair.second.j << ']' << std::endl;
+							});
 };
 
 bool checkEqual(const Collision& first, const Collision& second)
 {
-	if	(
-		(first.firstObj == second.firstObj && first.secondObj == second.secondObj)	||
-		(first.firstObj == second.secondObj && first.secondObj == second.firstObj)
-		)
-		{
-			return true;
-		}
+	if(	(first.firstObj == second.firstObj && first.secondObj == second.secondObj)||
+		(first.firstObj == second.secondObj && first.secondObj == second.firstObj)	)
+	{
+		return true;
+	}
 	else
-		{
-			return false;
-		}	
+	{
+		return false;
+	}	
 };
 
 bool collisionBoxCheck (	double obj1_x, double obj1_y, double obj1_box,

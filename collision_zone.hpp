@@ -5,6 +5,12 @@
 
 #include "geometry.hpp"
 
+struct Index
+{
+	int i;
+	int j;
+};
+
 class CollisionZone
 {
 private:
@@ -12,6 +18,10 @@ private:
 public:
 
 	std::vector<Rectangle> Zones;
+	
+	std::vector<std::pair<Index,Index> > indexs;
+	
+	int size;
 	
 	int xSize;
 	int ySize;

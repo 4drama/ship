@@ -9,8 +9,16 @@ const double pi = 3.14159265358979323846;
 
 void CollisionZone::createFourZones(Point centre, double azimuth, int height, int width, double cellSize)
 {
-	xSize = (width+1)/2;
-	ySize = (height+1)/2;
+	size = 4;
+	indexs.resize(4);
+	
+	xSize = (width)/2;
+	ySize = (height)/2;
+	
+	indexs[0] = std::make_pair(Index{width-1, 0}, Index{width-xSize, height-1-ySize});
+	indexs[1] = std::make_pair(Index{width-1, height-ySize}, Index{width-xSize, height-1});
+	indexs[2] = std::make_pair(Index{width-1-xSize, 0}, Index{0, height-1-ySize});
+	indexs[3] = std::make_pair(Index{width-1-xSize, height-ySize}, Index{0, height-1});
 	
 	Zones.clear();
 	Zones.reserve(4);

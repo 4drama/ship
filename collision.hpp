@@ -5,6 +5,8 @@
 #include "space_object.hpp"
 #include <memory>
 
+//#include <utility>
+
 class Collision;
 
 namespace{
@@ -18,17 +20,29 @@ class Collision
 {
 private:
 	typedef std::vector<Point> points;
-
+	typedef std::vector<std::pair<Index, Point> > Points_pairs_type;
+	
 	std::shared_ptr<SpaceObject> firstObj;
 	std::shared_ptr<SpaceObject> secondObj;
 	
 	std::vector<std::pair<int,int> > indexsColl;
+	
+	std::vector<int> uniqueBoxCollisionFirst;
+	std::vector<int> uniqueBoxCollisionSecond;
+	
 	double pSize = 0.05;
 	
-	std::vector<points> firstBoxs;
-	std::vector<points> secondBoxs;
+	std::vector<Points_pairs_type> firstBoxs;
+	std::vector<Points_pairs_type> secondBoxs;
+	
+	std::vector<std::pair<Index, Index> > collisionPairs;
 	
 	friend bool checkEqual(const Collision& first, const Collision& second);
+	
+	void addPoints(const Index& begin, const Index& end, const int boxNumber, const std::shared_ptr<SpaceObject>& object, std::vector<Points_pairs_type>& boxs);
+	void addUnique(const int n, std::vector<int>& uBox);
+	void addCollisions(const std::pair<int,int>& boxIndexs);
+	
 public:
 	Collision(std::shared_ptr<SpaceObject> firstObj_, std::shared_ptr<SpaceObject> secondObj_);	
 	
