@@ -117,9 +117,9 @@ Point pointFromDistance(const Point& p, const Azimuth& az, const Distance& dist)
 	Azimuth newAngle(90 - az.get() - helpAngle);
 	Distance newDist{	gptnz *	cos (newAngle.get()*pi/180),
 						gptnz * sin (newAngle.get()*pi/180)};
-//	std::cout << " gptnz - " << gptnz << "; 90 - " << az.get() << " - " << helpAngle << " = " << newAngle.get() << std::endl;				
-//	std::cout << " dist [" << dist.x << ":" << dist.y << "]" << std::endl;
-//	std::cout << " point [" << p.x << ":" << p.y << "] newDist [" << newDist.x << ":" << newDist.y << "]" << std::endl;
+/*	std::cout << " Gepotinuza : " << gptnz << "; 90 - " << az.get() << " - " << helpAngle << " = " << newAngle.get() << std::endl;				
+	std::cout << " Distance  [" << dist.x << ":" << dist.y << "]" << std::endl;
+	std::cout << " Point     [" << p.x << ":" << p.y << "] -> [" << newDist.x << ":" << newDist.y << "]" << std::endl;*/
 	return newPoint = p + newDist;
 };
 

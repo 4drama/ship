@@ -40,18 +40,18 @@ void Collision::collisionBox()
 
 void Collision::addPoints(const Index& begin, const Index& end, const int boxNumber, const std::shared_ptr<SpaceObject>& object, std::vector<Points_pairs_type>& boxs)
 {
-	std::cout << std::endl << "Collision::addPoints " << boxNumber << " begin: " << begin.i << " " <<begin.j << " end: " << end.i << " " << end.j << std::endl;
+	std::cout << std::endl << "Collision::addPoints " << boxNumber << " begin: " << begin.i << " " << begin.j << " end: " << end.i << " " << end.j << std::endl;
 	
-	int sz = (begin.i+1-end.i)*(end.j + 1 - begin.j);	
+	int sz = (end.i+1-begin.i)*(end.j + 1 - begin.j);	
 	boxs[boxNumber].reserve(std::move(sz));
 	
-	for (int i = begin.i, size = end.i - 1; i > size; --i)
+	for (int i = begin.i, size = end.i + 1; i < size; ++i)
 	{
 		for (int j =  begin.j, size2 = end.j + 1 ; j < size2; ++j)
 		{
-			auto p1 = pointFromDistance( object->getZones()->Zones[boxNumber].side1.first, Azimuth(object->getAz()+180), Distance{((pSize/2)+(i*pSize)), ((pSize/2)+(j*pSize))});
-			boxs[boxNumber].push_back(std::make_pair(Index{i,j} ,p1));
-			std::cout << "Add point: [" << i << ":" << j <<"] [" << p1.x << ":" << p1.y << "]" << std::endl;
+			auto p1 = pointFromDistance( object->getZones()->Zones[boxNumber].side1.first, Azimuth(object->getAz()+90), Distance{((pSize/2)+(i*pSize)), ((pSize/2)+(j*pSize))});
+			boxs[boxNumber].push_back(std::make_pair(Index{i,j}, p1));
+		//	std::cout << "Add point: [" << i << ":" << j <<"] [" << p1.x << ":" << p1.y << "]" << std::endl << std::endl;
 		}
 	}
 };
@@ -83,22 +83,33 @@ void Collision::addCollisions(const std::pair<int,int>& boxIndexs)
 	
 //	collisionPairs.reserve(20);
 	
+	Point firstCellPoint;
+	Point secondCellPoint;
+	
 	for(int i = 0, size = firstBoxs[boxIndexs.first].size(); i<size; ++i)
 	{
 		for(int j = 0, size = secondBoxs[boxIndexs.second].size(); j<size; ++j)
 		{
 //			CollisionBox firstCell(firstBoxs[boxIndexs.first][i].second, pSize);
 //			CollisionBox secondCell(secondBoxs[boxIndexs.second][j].second, pSize);
-			auto firstCellPoint = firstBoxs[boxIndexs.first][i].second;
-			auto secondCellPoint = secondBoxs[boxIndexs.second][j].second;
+			firstCellPoint = firstBoxs[boxIndexs.first][i].second;
+			secondCellPoint = secondBoxs[boxIndexs.second][j].second;
 			
+		/*	std::cout 	<< "Check obj1: [" << firstBoxs[boxIndexs.first][i].first.i << ',' << firstBoxs[boxIndexs.first][i].first.j
+						<< "] [" << firstCellPoint.x << ',' << firstCellPoint.y << ']' << std::endl;
+			std::cout 	<< "Check obj2: [" << secondBoxs[boxIndexs.second][j].first.i << ',' << secondBoxs[boxIndexs.second][j].first.j
+						<< "] [" << secondCellPoint.x << ',' << secondCellPoint.y << ']' << std::endl;*/
+						
 			bool check = collisionBoxCheck ( firstCellPoint.x, firstCellPoint.y, pSize/2, secondCellPoint.x, secondCellPoint.y, pSize/2);
 			
 			if(check)
 			{
 				collisionPairs.push_back(std::make_pair(firstBoxs[boxIndexs.first][i].first, secondBoxs[boxIndexs.second][j].first));
+			//	std::cout << "collision true" << std::endl << std::endl;
+				return ;
 			}
 			
+		//	std::cout << "collision false" << std::endl << std::endl;
 		}
 		
 	}
