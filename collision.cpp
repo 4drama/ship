@@ -49,7 +49,7 @@ void Collision::addPoints(const Index& begin, const Index& end, const int boxNum
 	{
 		for (int j =  begin.j, size2 = end.j + 1 ; j < size2; ++j)
 		{
-			auto p1 = pointFromDistance( object->getZones()->Zones[boxNumber].side1.first, Azimuth(object->getAz()+90), Distance{((pSize/2)+(i*pSize)), ((pSize/2)+(j*pSize))});
+			auto p1 = pointFromDistance( object->getZones()->Zones[0].side1.first, Azimuth(object->getAz()+90), Distance{((pSize/2)+(i*pSize)), ((pSize/2)+(j*pSize))});
 			boxs[boxNumber].push_back(std::make_pair(Index{i,j}, p1));
 		//	std::cout << "Add point: [" << i << ":" << j <<"] [" << p1.x << ":" << p1.y << "]" << std::endl << std::endl;
 		}
@@ -106,10 +106,14 @@ void Collision::addCollisions(const std::pair<int,int>& boxIndexs)
 			{
 				collisionPairs.push_back(std::make_pair(firstBoxs[boxIndexs.first][i].first, secondBoxs[boxIndexs.second][j].first));
 			//	std::cout << "collision true" << std::endl << std::endl;
-				return ;
+			
+			
+			}
+			else
+			{
+			//	std::cout << "collision false" << std::endl << std::endl;
 			}
 			
-		//	std::cout << "collision false" << std::endl << std::endl;
 		}
 		
 	}

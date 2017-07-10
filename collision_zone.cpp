@@ -27,6 +27,7 @@ void CollisionZone::createFourZones(Point centre, double azimuth, int heightGen,
 	double width = (widthGen/2)*cellSize;
 	
 	double halfDiagonal = sqrt(pow(height,2)+pow(width,2));
+	double helpAngle = asin (width / halfDiagonal) * 180.0 / pi;
 	
 	Point x1y1, x2y1, x3y1;
 	Point x1y2, x2y2, x3y2;
@@ -40,23 +41,23 @@ void CollisionZone::createFourZones(Point centre, double azimuth, int heightGen,
 	x2y3.x = centre.x + height*sin((180+azimuth)* pi / 180);
 	x2y3.y = centre.y + height*cos((180+azimuth)* pi / 180);
 	
-	x1y2.x = centre.x + width*sin((90+azimuth)* pi / 180);
-	x1y2.y = centre.y + width*cos((90+azimuth)* pi / 180);
+	x1y2.x = centre.x + width*sin((270+azimuth)* pi / 180);
+	x1y2.y = centre.y + width*cos((270+azimuth)* pi / 180);
 	
-	x3y2.x = centre.x + width*sin((270+azimuth)* pi / 180);
-	x3y2.y = centre.y + width*cos((270+azimuth)* pi / 180);	
+	x3y2.x = centre.x + width*sin((90+azimuth)* pi / 180);
+	x3y2.y = centre.y + width*cos((90+azimuth)* pi / 180);	
 	
-	x1y1.x = centre.x + halfDiagonal*sin((315+azimuth)* pi / 180);
-	x1y1.y = centre.y + halfDiagonal*cos((315+azimuth)* pi / 180);
+	x1y1.x = centre.x + halfDiagonal*sin((0-helpAngle+azimuth)* pi / 180);
+	x1y1.y = centre.y + halfDiagonal*cos((0-helpAngle+azimuth)* pi / 180);
 	
-	x3y1.x = centre.x + halfDiagonal*sin((45+azimuth)* pi / 180);
-	x3y1.y = centre.y + halfDiagonal*cos((45+azimuth)* pi / 180);
+	x3y1.x = centre.x + halfDiagonal*sin((0+helpAngle+azimuth)* pi / 180);
+	x3y1.y = centre.y + halfDiagonal*cos((0+helpAngle+azimuth)* pi / 180);
 	
-	x1y3.x = centre.x + halfDiagonal*sin((135+azimuth)* pi / 180);
-	x1y3.y = centre.y + halfDiagonal*cos((135+azimuth)* pi / 180);
+	x1y3.x = centre.x + halfDiagonal*sin((180+helpAngle+azimuth)* pi / 180);
+	x1y3.y = centre.y + halfDiagonal*cos((180+helpAngle+azimuth)* pi / 180);
 
-	x3y3.x = centre.x + halfDiagonal*sin((225+azimuth)* pi / 180);
-	x3y3.y = centre.y + halfDiagonal*cos((225+azimuth)* pi / 180);	
+	x3y3.x = centre.x + halfDiagonal*sin((180-helpAngle+azimuth)* pi / 180);
+	x3y3.y = centre.y + halfDiagonal*cos((180-helpAngle+azimuth)* pi / 180);	
 	
 	Zones.push_back(Rectangle(x1y1, x2y1, x2y2, x1y2));
 	Zones.push_back(Rectangle(x1y2, x2y2, x2y3, x1y3));
