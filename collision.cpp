@@ -81,7 +81,7 @@ void Collision::addCollisions(const std::pair<int,int>& boxIndexs)
 		}
 	};*/
 	
-//	collisionPairs.reserve(20);
+	collisionPairs.reserve(20);
 	
 	Point firstCellPoint;
 	Point secondCellPoint;
@@ -138,6 +138,74 @@ void Collision::createPoints()
 							});
 };
 
+void Collision::reckonChangeCoordinate()
+{
+	Point		object1{firstObj->getX(), firstObj->getY()},
+				object2{secondObj->getX(), secondObj->getY()};
+	
+	double distance = sqrt(pow((object1.x - object2.x),2)+pow((object1.y - object2.y),2));
+	
+	Distance	distObj1ch{firstObj->getXch(), firstObj->getYch()},
+				distObj2ch{secondObj->getXch(), secondObj->getYch()};
+	
+	Point		object1ch = object1 + distObj1ch,
+				object2ch = object2 + distObj2ch;
+	
+	bool		obj1Hit = (sqrt(pow((object1ch.x - object2.x),2)+pow((object1ch.y - object2.y),2))	<	distance),
+				obj2Hit = (sqrt(pow((object1.x - object2ch.x),2)+pow((object1.y - object2ch.y),2))	<	distance);
+	
+	double		obj1Weight = firstObj->getWeight(),
+				obj2Weight = secondObj->getWeight();
+	
+	double		totalWeight = obj1Weight + obj2Weight;
+	
+	double		obj1Percent = obj1Weight / totalWeight,
+				obj2Percent = obj2Weight / totalWeight;
+	
+	if(obj1Hit && obj2Hit)
+	{
+		Distance	obj1chAfterHit{distObj1ch.x * obj1Percent , distObj1ch.y * obj1Percent},
+					obj2chAfterHit{distObj2ch.x * obj2Percent , distObj2ch.y * obj2Percent};
+	
+		firstObj->setChangeCoordinate(obj1chAfterHit.x + obj2chAfterHit.x, obj1chAfterHit.y + obj2chAfterHit.y);
+		secondObj->setChangeCoordinate(obj1chAfterHit.x + obj2chAfterHit.x, obj1chAfterHit.y + obj2chAfterHit.y);
+	}
+	else if(obj1Hit)
+	{
+		Distance	obj1chAfterHit{distObj1ch.x * obj1Percent , distObj1ch.y * obj1Percent};
+		
+		firstObj->setChangeCoordinate(obj1chAfterHit.x, obj1chAfterHit.y);
+		secondObj->setChangeCoordinate(distObj2ch.x + obj1chAfterHit.x, distObj2ch.y + obj1chAfterHit.y);
+	}
+	else if(obj2Hit)
+	{
+		Distance	obj2chAfterHit{distObj2ch.x * obj2Percent , distObj2ch.y * obj2Percent};
+		
+		firstObj->setChangeCoordinate(distObj1ch.x + obj2chAfterHit.x, distObj1ch.y + obj2chAfterHit.y);
+		secondObj->setChangeCoordinate(obj2chAfterHit.x, obj2chAfterHit.y);
+	}
+	else
+	{
+		std::cerr << "ERROR: NOT ONE OBJECT NOT HIT IN COLLISION." << std::endl;
+	}
+};
+
+void Collision::reckonTrueCollision()
+{
+	std::for_each(	collisionPairs.begin(), collisionPairs.end(), 
+							[this](auto& cellPair)
+							{
+							//	std::cout << '[' << cellPair.first.i << ',' << cellPair.first.j << "]&[" << cellPair.second.i << ',' << cellPair.second.j << ']';
+								trueCollisionPairs.reserve(10);
+								if(firstObj->cellEmpty(cellPair.first) == false && secondObj->cellEmpty(cellPair.second) == false)
+								{
+									trueCollisionPairs.push_back(cellPair);
+							//		std::cout << " true" ;
+								}
+							//	std::cout << std::endl;
+							});
+};
+
 void Collision::collisionReckon()
 {
 	this->collisionBox();
@@ -146,15 +214,23 @@ void Collision::collisionReckon()
 	std::for_each(	indexsColl.begin(), indexsColl.end(), 
 							[this](auto& pair)
 							{
-								std::cout << '[' << pair.first << ',' << pair.second << ']' << std::endl;
+							//	std::cout << '[' << pair.first << ',' << pair.second << ']' << std::endl;
 								this->addCollisions(pair);
 							});
-							
-	std::for_each(	collisionPairs.begin(), collisionPairs.end(), 
-							[](auto& cellPair)
-							{
-								std::cout << '[' << cellPair.first.i << ',' << cellPair.first.j << "]&[" << cellPair.second.i << ',' << cellPair.second.j << ']' << std::endl;
-							});
+	
+	this->reckonTrueCollision();
+	
+	if(!trueCollisionPairs.empty())
+	{
+		firstObj->coordinateBack();
+		secondObj->coordinateBack();
+		
+		this->reckonChangeCoordinate();		//not testing correctness
+		
+		// damaged cells
+		
+	}
+
 };
 
 bool checkEqual(const Collision& first, const Collision& second)

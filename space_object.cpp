@@ -16,6 +16,12 @@ void SpaceObject::coordinateReckon()
 	std::cerr << "ERROR: SpaceObject::coordinateReckon." << std::endl;
 };
 
+void SpaceObject::coordinateBack()
+{
+	xCurrent -= xChange;
+	yCurrent -= yChange;
+};
+
 void SpaceObject::attributesReckon()
 {
 	std::cerr << "ERROR: SpaceObject::attributesReckon." << std::endl;
@@ -51,6 +57,22 @@ double SpaceObject::getX()
 double SpaceObject::getY()
 {
 	return yCurrent;
+};
+
+double SpaceObject::getXch() const
+{
+	return xChange;
+};
+
+double SpaceObject::getYch() const
+{
+	return yChange;
+};
+
+void SpaceObject::setChangeCoordinate(Coordinate_type x, Coordinate_type y)
+{
+	xChange = x;
+	yChange = y;
 };
 
 double SpaceObject::getAz()

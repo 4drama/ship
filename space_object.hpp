@@ -30,15 +30,28 @@ protected:
 public:
 //	virtual void nextStep(int);
 	virtual void coordinateReckon();
+			void coordinateBack();
+	
 	virtual void attributesReckon();
 	virtual void prepareCollision();
+	
+	virtual bool cellEmpty(const Index&) const = 0;
 
 	void setPosition(Coordinate_type, Coordinate_type, Azimuth_type);
 	
 	double getX();
 	double getY();
+	
+	double getXch() const;
+	double getYch() const;
+	
+	void setChangeCoordinate(Coordinate_type x, Coordinate_type y);
+	
 	double getAz();
 	double getBox();
+	
+	virtual double getWeight() const = 0;
+	
 	CollisionZone* getZones();
 };
 

@@ -574,6 +574,16 @@ void Ship::prepareCollision()
 	}
 };
 
+bool Ship::cellEmpty(const Index& index) const
+{
+	return (Blocks[index.i][index.j].Get_first_type() == empty_block);
+};
+
+double Ship::getWeight() const
+{
+	return currentAttributes.currentWeight;
+};
+
 /*void Ship::nextStep(int amount)
 {
 	

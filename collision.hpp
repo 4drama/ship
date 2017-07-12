@@ -36,6 +36,7 @@ private:
 	std::vector<Points_pairs_type> secondBoxs;
 	
 	std::vector<std::pair<Index, Index> > collisionPairs;
+	std::vector<std::pair<Index, Index> > trueCollisionPairs;
 	
 	friend bool checkEqual(const Collision& first, const Collision& second);
 	
@@ -43,13 +44,16 @@ private:
 	void addUnique(const int n, std::vector<int>& uBox);
 	void addCollisions(const std::pair<int,int>& boxIndexs);
 	
-public:
-	Collision(std::shared_ptr<SpaceObject> firstObj_, std::shared_ptr<SpaceObject> secondObj_);	
-	
+	void reckonTrueCollision();
 	void collisionBox();
 	void createPoints();
+	void reckonChangeCoordinate();
 	
+public:
+
+	Collision(std::shared_ptr<SpaceObject> firstObj_, std::shared_ptr<SpaceObject> secondObj_);		
 	void collisionReckon();
+	
 };
 
 bool checkEqual(const Collision& first, const Collision& second);

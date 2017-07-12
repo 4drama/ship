@@ -92,6 +92,9 @@ public:
 	void coordinateReckon() override;
 	void attributesReckon() override;
 	void prepareCollision() override;
+	bool cellEmpty(const Index&) const override;
+	
+	double getWeight() const override;
 	
 	~Ship();
 };

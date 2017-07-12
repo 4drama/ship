@@ -14,7 +14,7 @@ int main()
 {	
 	std::chrono::steady_clock::time_point startCreate = std::chrono::steady_clock::now();
 
-	set_update_frequency(5);
+	set_update_frequency(10);
 	
 	ItemList items;		
 	ObjectList spaceObjects;
