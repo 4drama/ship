@@ -93,6 +93,11 @@ public:
 	void attributesReckon() override;
 	void prepareCollision() override;
 	bool cellEmpty(const Index&) const override;
+	Point getZeroPosition() const override;
+	Point getIndexPosition(const Index&) const override;
+//	void cellDamaged(const Index& cell, const Point& coordinate, const double&& damage) override;
+	void cellDamaged(const Index& cell, const double& damage) override;
+
 	
 	double getWeight() const override;
 	

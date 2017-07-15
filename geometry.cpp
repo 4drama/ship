@@ -40,6 +40,11 @@ Vect::Vect(double i_, double j_, double k_)
 	
 };
 
+double distanceRange(const Distance& dist)
+{
+	return sqrt(pow(dist.x,2)+pow(dist.y,2));
+};
+
 Vect operator*( const Vect& lhs, const Vect& rhs)
 {
 	double i = (lhs.j*rhs.k)-(rhs.j*lhs.k);

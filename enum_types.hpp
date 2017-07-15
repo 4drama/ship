@@ -59,4 +59,10 @@ enum Attributes_aAdd_or_aRemove_type
 	aRemove = 2,
 };
 
+enum Status_type
+{
+	destroed = 0,
+	whole = 1,	
+};
+
 #endif

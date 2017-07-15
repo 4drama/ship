@@ -49,6 +49,8 @@ private:
 	Turn_item_type turnTo = no_matter_turn;
 
 	int keyItem = 0;
+	
+	Status_type	status = whole;
 public:
 	std::shared_ptr<Group_type> Group;
 	int groupNumber;
@@ -60,7 +62,9 @@ public:
 	void setKey(int);
 	void destroyKey();
 	int getKey() const;
-
+	Status_type getStatus() const;
+	void setStatus(const Status_type);
+	
 	Base_block_type Get_first_type() const;
 	Base_block_type Get_second_type() const;
 	Turn_item_type getTurnTo() const;

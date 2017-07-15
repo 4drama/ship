@@ -36,7 +36,9 @@ public:
 	virtual void prepareCollision();
 	
 	virtual bool cellEmpty(const Index&) const = 0;
-
+//	virtual void cellDamaged(const Index& cell, const Point& coordinate, const double&& damage) = 0;
+	virtual void cellDamaged(const Index& cell, const double& damage) = 0;
+	
 	void setPosition(Coordinate_type, Coordinate_type, Azimuth_type);
 	
 	double getX();
@@ -51,6 +53,8 @@ public:
 	double getBox();
 	
 	virtual double getWeight() const = 0;
+	virtual Point getZeroPosition() const = 0;
+	virtual Point getIndexPosition(const Index&) const = 0;
 	
 	CollisionZone* getZones();
 };

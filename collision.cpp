@@ -50,8 +50,10 @@ void Collision::addPoints(const Index& begin, const Index& end, const int boxNum
 		for (int j =  begin.j, size2 = end.j + 1 ; j < size2; ++j)
 		{
 			auto p1 = pointFromDistance( object->getZones()->Zones[0].side1.first, Azimuth(object->getAz()+90), Distance{((pSize/2)+(i*pSize)), ((pSize/2)+(j*pSize))});
+		//	auto p2 = object->getIndexPosition(Index{i, j});
 			boxs[boxNumber].push_back(std::make_pair(Index{i,j}, p1));
-		//	std::cout << "Add point: [" << i << ":" << j <<"] [" << p1.x << ":" << p1.y << "]" << std::endl << std::endl;
+		//	std::cout << "Add point: [" << i << ":" << j <<"] [" << p1.x << ":" << p1.y << "]" << std::endl;
+		//	std::cout << "Add point: [" << i << ":" << j <<"] [" << p2.x << ":" << p2.y << "]" << std::endl << std::endl;
 		}
 	}
 };
@@ -104,7 +106,9 @@ void Collision::addCollisions(const std::pair<int,int>& boxIndexs)
 			
 			if(check)
 			{
-				collisionPairs.push_back(std::make_pair(firstBoxs[boxIndexs.first][i].first, secondBoxs[boxIndexs.second][j].first));
+				collisionPairs.push_back(std::make_tuple(	firstBoxs[boxIndexs.first][i].first, firstBoxs[boxIndexs.first][i].second,
+															secondBoxs[boxIndexs.second][j].first, secondBoxs[boxIndexs.second][j].second));
+			
 			//	std::cout << "collision true" << std::endl << std::endl;
 			
 			
@@ -161,14 +165,19 @@ void Collision::reckonChangeCoordinate()
 	
 	double		obj1Percent = obj1Weight / totalWeight,
 				obj2Percent = obj2Weight / totalWeight;
+
+	Distance range{distObj1ch.x - distObj2ch.x, distObj1ch.y - distObj2ch.y};			
+	collisionSpeed = distanceRange(range);
 	
 	if(obj1Hit && obj2Hit)
 	{
 		Distance	obj1chAfterHit{distObj1ch.x * obj1Percent , distObj1ch.y * obj1Percent},
 					obj2chAfterHit{distObj2ch.x * obj2Percent , distObj2ch.y * obj2Percent};
-	
+		
 		firstObj->setChangeCoordinate(obj1chAfterHit.x + obj2chAfterHit.x, obj1chAfterHit.y + obj2chAfterHit.y);
 		secondObj->setChangeCoordinate(obj1chAfterHit.x + obj2chAfterHit.x, obj1chAfterHit.y + obj2chAfterHit.y);
+		
+		hits = twain;
 	}
 	else if(obj1Hit)
 	{
@@ -176,6 +185,8 @@ void Collision::reckonChangeCoordinate()
 		
 		firstObj->setChangeCoordinate(obj1chAfterHit.x, obj1chAfterHit.y);
 		secondObj->setChangeCoordinate(distObj2ch.x + obj1chAfterHit.x, distObj2ch.y + obj1chAfterHit.y);
+		
+		hits = first;
 	}
 	else if(obj2Hit)
 	{
@@ -183,6 +194,8 @@ void Collision::reckonChangeCoordinate()
 		
 		firstObj->setChangeCoordinate(distObj1ch.x + obj2chAfterHit.x, distObj1ch.y + obj2chAfterHit.y);
 		secondObj->setChangeCoordinate(obj2chAfterHit.x, obj2chAfterHit.y);
+		
+		hits = second;
 	}
 	else
 	{
@@ -193,16 +206,41 @@ void Collision::reckonChangeCoordinate()
 void Collision::reckonTrueCollision()
 {
 	std::for_each(	collisionPairs.begin(), collisionPairs.end(), 
-							[this](auto& cellPair)
+							[this](auto& cellTuple)
 							{
 							//	std::cout << '[' << cellPair.first.i << ',' << cellPair.first.j << "]&[" << cellPair.second.i << ',' << cellPair.second.j << ']';
 								trueCollisionPairs.reserve(10);
-								if(firstObj->cellEmpty(cellPair.first) == false && secondObj->cellEmpty(cellPair.second) == false)
+								if(firstObj->cellEmpty(std::get<0>(cellTuple)) == false && secondObj->cellEmpty(std::get<2>(cellTuple)) == false)
 								{
-									trueCollisionPairs.push_back(cellPair);
+									trueCollisionPairs.push_back(cellTuple);
 							//		std::cout << " true" ;
 								}
 							//	std::cout << std::endl;
+							});
+};
+void Collision::damagedCells()
+{
+	double weight;
+	
+	if(hits == first) weight = firstObj->getWeight();
+	else if(hits == second) weight = secondObj->getWeight();
+	else if(hits == twain) weight = firstObj->getWeight() + secondObj->getWeight();
+	else std::cerr << "ERROR: Collision::damagedCells(). hits" << std::endl;
+	
+//	Distance range{firstObj->getXch() - secondObj->getXch(), firstObj->getYch() - secondObj->getYch()};
+//	double speed = distanceRange(range);
+	double time = 1/(double)update_frequency;
+	
+	double generalDamage = (weight * (collisionSpeed / time))	/	30;
+
+	std::cout << "DAMAGED: " << weight << '*' << '(' << collisionSpeed << '/'<< time << ") /30 = " << generalDamage << std::endl;
+	
+	double damage = (generalDamage)	/	(trueCollisionPairs.size()-1);
+	std::for_each(	trueCollisionPairs.begin(), trueCollisionPairs.end(), 
+							[this, &damage](auto& pair)
+							{
+								this->firstObj->cellDamaged(std::get<0>(pair), damage);
+								this->secondObj->cellDamaged(std::get<2>(pair), damage);
 							});
 };
 
@@ -224,10 +262,11 @@ void Collision::collisionReckon()
 	{
 		firstObj->coordinateBack();
 		secondObj->coordinateBack();
+
 		
 		this->reckonChangeCoordinate();		//not testing correctness
 		
-		// damaged cells
+		this->damagedCells();
 		
 	}
 

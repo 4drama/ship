@@ -5,6 +5,7 @@
 #include "space_object.hpp"
 #include <memory>
 
+#include <tuple>
 //#include <utility>
 
 class Collision;
@@ -35,8 +36,11 @@ private:
 	std::vector<Points_pairs_type> firstBoxs;
 	std::vector<Points_pairs_type> secondBoxs;
 	
-	std::vector<std::pair<Index, Index> > collisionPairs;
-	std::vector<std::pair<Index, Index> > trueCollisionPairs;
+	std::vector<std::tuple<Index, Point, Index, Point> > collisionPairs;
+	std::vector<std::tuple<Index, Point, Index, Point> > trueCollisionPairs;
+	
+	double collisionSpeed;
+	enum Hit_flag{first, second, twain} hits;
 	
 	friend bool checkEqual(const Collision& first, const Collision& second);
 	
@@ -48,6 +52,7 @@ private:
 	void collisionBox();
 	void createPoints();
 	void reckonChangeCoordinate();
+	void damagedCells();
 	
 public:
 

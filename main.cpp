@@ -42,7 +42,10 @@ int main()
 	
 	while(amount--)
 	{
+		std::cout << "Count: " << amount << std::endl;
+		std::cout << std::fixed << "Ship1: X change" << ship1->getXch() << ". Y change" << ship1->getYch() <<std::endl;
 		spaceObjects.nextStep();
+		std::cout << std::endl;
 	}
 	
 	std::chrono::steady_clock::time_point endUse = std::chrono::steady_clock::now();

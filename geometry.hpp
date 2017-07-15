@@ -54,6 +54,8 @@ struct Vect
 	Vect(double, double, double);
 };
 
+double distanceRange(const Distance&);
+
 Vect operator*( const Vect& lhs, const Vect& rhs);
 
 bool midVect (const Vect& mid, const Vect& left, const Vect& right);

@@ -12,7 +12,9 @@ Set_item::Set_item(Ship& Ship_pointer_, Item& Item_pointer_, NewShipAttributes& 
 	auto width = Item_pointer_.Get_width();
 	auto height = Item_pointer_.Get_height();
 	
-	currectDurability = Item_pointer->getDurability();
+	durability = Item_pointer->getDurability();
+	currentDurability = durability;
+	
 	Item_pointer->addAttributes(*attributesPtr, Turn, std::make_pair(X_call_, Y_call_));
 //	attributesPtr->recountAttributes();
 	
@@ -115,3 +117,18 @@ Item* Set_item::getItem()
 	return Item_pointer;
 };
 
+void Set_item::damaged(const double damage)
+{
+	currentDurability -= damage;
+	if(currentDurability <= 0) this->destroy();
+};
+
+void Set_item::destroy()
+{
+	std::cout << "ITEM DESTROED." << Cells[0].first << ' ' << Cells[0].second << std::endl;
+	for ( auto it = Cells.begin(); it!=Cells.end(); it++ )
+	{
+		Ship_pointer->Blocks[it->second][it->first].setStatus(destroed);
+	};
+	Ship_pointer->removeItem(Cells[0].first, Cells[0].second);
+};

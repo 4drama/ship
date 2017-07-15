@@ -18,7 +18,6 @@ Group_type::Number_type Group_type::Get_number()
 	return Number;
 };
 
-
 Ship_struct::Ship_struct(Base_block_type Base_, int Group_, Advanced_block_type Advance_,  Turn_item_type turnTo_):
 firstAdvance(Advance_), turnTo(turnTo_), groupNumber(Group_)
 {
@@ -83,4 +82,14 @@ void Ship_struct::destroyKey()
 int Ship_struct::getKey() const
 {
 	return keyItem;
+};
+
+Status_type Ship_struct::getStatus() const
+{
+	return status;
+};
+
+void Ship_struct::setStatus(const Status_type st)
+{
+	status = st;
 };

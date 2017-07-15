@@ -28,7 +28,9 @@ private:
 	Turn_item_type Turn;
 	
 	ItemMode mode = powerOff;
-	int currectDurability;
+	int durability;
+	double currentDurability;
+	
 	int position;
 	
 public:
@@ -45,6 +47,8 @@ public:
 	std::pair<int, int> getPosition() const;
 	Item* getItem();
 
+	void damaged(const double);
+	void destroy();
 };
 
 

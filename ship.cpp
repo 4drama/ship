@@ -118,6 +118,10 @@ bool Ship::Block_check_struct_item(Item& Item_pointer_, Block_size_type X_call_,
 		(
 			Blocks[Y_call_][X_call_].getKey() == 0
 		)
+		&&
+		(
+			Blocks[Y_call_][X_call_].getStatus() == whole
+		)
 	)
 	{
 		return true;
@@ -576,7 +580,26 @@ void Ship::prepareCollision()
 
 bool Ship::cellEmpty(const Index& index) const
 {
-	return (Blocks[index.i][index.j].Get_first_type() == empty_block);
+	if (Blocks[index.i][index.j].Get_first_type() == empty_block || Blocks[index.i][index.j].getStatus() == destroed) return true;
+	else return false;
+};
+
+Point Ship::getZeroPosition() const
+{
+	return pointFromDistance(Point{xCurrent, yCurrent}, Azimuth(azimuth+270), Distance{ (double)height/2*shipCellSize, (double)width/2*shipCellSize});
+};
+
+Point Ship::getIndexPosition(const Index& cell) const
+{
+	return pointFromDistance( this->getZeroPosition(), Azimuth(azimuth+90), Distance{((shipCellSize/2)+(cell.i*shipCellSize)), ((shipCellSize/2)+(cell.j*shipCellSize))});
+};
+
+void Ship::cellDamaged(const Index& cell, const double& damage)
+{
+	if (Blocks[cell.i][cell.j].getStatus() == destroed) return;
+	int key = Blocks[cell.i][cell.j].getKey();	
+	auto* setItem = itemsList.find(key);
+	setItem->damaged(damage);
 };
 
 double Ship::getWeight() const
