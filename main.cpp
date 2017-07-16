@@ -19,8 +19,8 @@ int main()
 	ItemList items;		
 	ObjectList spaceObjects;
 	
-	auto ship1 = spaceObjects.addObject(CreateHawkMK1());
-	auto ship2 = spaceObjects.addObject(CreateHawkMK1());
+	auto ship1 = spaceObjects.addObject(CreateHawkMK1(&spaceObjects));
+	auto ship2 = spaceObjects.addObject(CreateHawkMK1(&spaceObjects));
 	HawkMK1preset1(*ship1, items);
 	HawkMK1preset1(*ship2, items);
 	ship1->setPosition(0, 4, 180);

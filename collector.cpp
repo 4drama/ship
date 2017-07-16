@@ -1,9 +1,9 @@
 #include "collector.hpp"
 
-Ship CreateHawkMK1()
+Ship CreateHawkMK1(ObjectList* list)
 {
 	
-	Ship Biba_ship("HawkMK1", 22, 10, 9, 2000, 600, std::make_pair(0,2), std::make_pair(3,6), std::make_pair(7,9), std::make_pair(0,10), std::make_pair(11,21));
+	Ship Biba_ship("HawkMK1", 22, 10, 9, 2000, 600, std::make_pair(0,2), std::make_pair(3,6), std::make_pair(7,9), std::make_pair(0,10), std::make_pair(11,21), list);
 	
 	Biba_ship.AddShipStructInLine(0, Ship_struct(empty_block, 0, not_advance_block));		
 	Biba_ship.AddShipStructInLine(0, Ship_struct(weapon_block, 1, not_advance_block));

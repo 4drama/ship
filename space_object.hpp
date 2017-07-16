@@ -7,11 +7,15 @@
 extern int update_frequency;
 extern double shipCellSize;
 
+class ObjectList;
+
 class SpaceObject
 {
 protected:
 	typedef double Coordinate_type;
 	typedef double Azimuth_type;
+	
+	ObjectList* list;
 	
 	Coordinate_type boxSize = 0;
 	
@@ -28,6 +32,9 @@ protected:
 	double getSpeed();
 
 public:
+
+	SpaceObject(ObjectList*, int, int, double);
+
 //	virtual void nextStep(int);
 	virtual void coordinateReckon();
 			void coordinateBack();

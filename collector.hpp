@@ -5,7 +5,7 @@
 
 
 
-Ship CreateHawkMK1();
+Ship CreateHawkMK1(ObjectList*);
 
 
 

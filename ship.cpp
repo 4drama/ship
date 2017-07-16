@@ -7,8 +7,8 @@
 #include <cmath>
 
 Ship::Ship(	Name_type name_, Block_size_type bsize_, Block_size_type bsize_2, Group_size_type gsize_, Weight_type weight_, Overheat_lmit_type overheat,
-			Left_side_type left, Middle_side_type middle, Right_side_type right, Front_side_type front, Back_side_type back)
-		: 	name(name_), height(bsize_), width(bsize_2), itemsList(bsize_*bsize_2/2)
+			Left_side_type left, Middle_side_type middle, Right_side_type right, Front_side_type front, Back_side_type back, ObjectList* list)
+		: 	SpaceObject(list, bsize_, bsize_2, shipCellSize),	name(name_), height(bsize_), width(bsize_2), itemsList(bsize_*bsize_2/2)
 {
 	Blocks.resize(bsize_);	
 	Groups.reserve(gsize_);
@@ -27,7 +27,7 @@ Ship::Ship(	Name_type name_, Block_size_type bsize_, Block_size_type bsize_2, Gr
 	currentAttributes.frontPos = front;
 	currentAttributes.backPos = back;
 	
-	boxSize = sqrt(pow(bsize_*shipCellSize,2)+pow(bsize_2*shipCellSize,2))/2;
+//	boxSize = sqrt(pow(bsize_*shipCellSize,2)+pow(bsize_2*shipCellSize,2))/2;
 //	std::cerr << "Ship::Ship" << std::endl;
 };
 
@@ -566,7 +566,6 @@ void Ship::attributesReckon()
 
 void Ship::prepareCollision()
 {
-	
 	if (collReadyFlag == true)
 	{
 		return;
@@ -597,9 +596,15 @@ Point Ship::getIndexPosition(const Index& cell) const
 void Ship::cellDamaged(const Index& cell, const double& damage)
 {
 	if (Blocks[cell.i][cell.j].getStatus() == destroed) return;
+	
+	currentAttributes.shieldNow -= damage;
+	if (currentAttributes.shieldNow >= 0) return;
+	double pierceDamage = abs(currentAttributes.shieldNow);
+	currentAttributes.shieldNow = 0;
+	
 	int key = Blocks[cell.i][cell.j].getKey();	
 	auto* setItem = itemsList.find(key);
-	setItem->damaged(damage);
+	setItem->damaged(pierceDamage);
 };
 
 double Ship::getWeight() const

@@ -6,6 +6,12 @@
 int update_frequency = 100;
 double shipCellSize = 0.05;
 
+SpaceObject::SpaceObject(	ObjectList* list_, int size, int size_2, double CellSize)
+						:	list(list_)
+{
+	boxSize = sqrt(pow(size*CellSize,2)+pow(size_2*CellSize,2))/2;
+};
+
 /*void SpaceObject::nextStep(int)
 {
 	std::cerr << "ERROR: SpaceObject::nextStep." << std::endl;

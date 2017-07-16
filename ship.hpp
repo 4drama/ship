@@ -65,7 +65,7 @@ private:
 	
 public:
 
-	Ship(Name_type, Block_size_type, Block_size_type, Group_size_type, Weight_type, Overheat_lmit_type, Left_side_type, Middle_side_type, Right_side_type, Front_side_type, Back_side_type);
+	Ship(Name_type, Block_size_type, Block_size_type, Group_size_type, Weight_type, Overheat_lmit_type, Left_side_type, Middle_side_type, Right_side_type, Front_side_type, Back_side_type, ObjectList*);
 	
 	void AddShipStructInLine(Line_number_type, Ship_struct);
 
